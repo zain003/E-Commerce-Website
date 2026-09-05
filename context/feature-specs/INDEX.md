@@ -1,0 +1,48 @@
+# Feature Specifications Index & Status Tracker
+
+Running tracker for all feature spec files, build order, layers, dependencies, and verification status.
+
+---
+
+## Specs Tracker Matrix
+
+| Status | File ID | Layer | Priority | Feature Name | Depends On | Test Report Link |
+|---|---|---|---|---|---|---|
+| ⏳ Not Started | [`000-shared-contracts.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/000-shared-contracts.md) | Core | P0 | Core Contracts & Data Models | None | N/A |
+| ⏳ Not Started | [`FEAT-001-BE-auth.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-001-BE-auth.md) | Backend | P0 | Auth & Account Service | `000-shared-contracts.md` | - |
+| ⏳ Not Started | [`FEAT-001-FE-auth.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-001-FE-auth.md) | Frontend | P0 | Auth & Account UI | `FEAT-001-BE-auth.md` | - |
+| ⏳ Not Started | [`FEAT-001-VERIFY-auth.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-001-VERIFY-auth.md) | Verify | P0 | Auth Verification | `FEAT-001-BE`, `FEAT-001-FE` | - |
+| ⏳ Not Started | [`FEAT-002-BE-products.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-002-BE-products.md) | Backend | P0 | Products & Category API | `000-shared-contracts.md` | - |
+| ⏳ Not Started | [`FEAT-002-FE-products.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-002-FE-products.md) | Frontend | P0 | Product Detail & Catalog UI | `FEAT-002-BE-products.md` | - |
+| ⏳ Not Started | [`FEAT-002-VERIFY-products.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-002-VERIFY-products.md) | Verify | P0 | Catalog Verification | `FEAT-002-BE`, `FEAT-002-FE` | - |
+| ⏳ Not Started | [`FEAT-003-BE-search.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-003-BE-search.md) | Backend | P0 | Search & Filter Engine | `000-shared-contracts.md` | - |
+| ⏳ Not Started | [`FEAT-003-FE-search.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-003-FE-search.md) | Frontend | P0 | Search & Filter UI | `FEAT-003-BE-search.md` | - |
+| ⏳ Not Started | [`FEAT-003-VERIFY-search.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-003-VERIFY-search.md) | Verify | P0 | Search Verification | `FEAT-003-BE`, `FEAT-003-FE` | - |
+| ⏳ Not Started | [`FEAT-004-BE-cart.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-004-BE-cart.md) | Backend | P0 | Cart Service & Session | `000-shared-contracts.md` | - |
+| ⏳ Not Started | [`FEAT-004-FE-cart.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-004-FE-cart.md) | Frontend | P0 | Cart Drawer & State | `FEAT-004-BE-cart.md` | - |
+| ⏳ Not Started | [`FEAT-004-VERIFY-cart.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-004-VERIFY-cart.md) | Verify | P0 | Cart Verification | `FEAT-004-BE`, `FEAT-004-FE` | - |
+| ⏳ Not Started | [`FEAT-005-BE-checkout.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-005-BE-checkout.md) | Backend | P0 | Checkout Validation Service | `000-shared-contracts.md`, `FEAT-004-BE` | - |
+| ⏳ Not Started | [`FEAT-005-FE-checkout.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-005-FE-checkout.md) | Frontend | P0 | Multi-Step Checkout UI | `FEAT-005-BE-checkout.md` | - |
+| ⏳ Not Started | [`FEAT-005-VERIFY-checkout.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-005-VERIFY-checkout.md) | Verify | P0 | Checkout Verification | `FEAT-005-BE`, `FEAT-005-FE` | - |
+| ⏳ Not Started | [`FEAT-006-BE-payments.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-006-BE-payments.md) | Backend | P0 | Stripe Payment Intents API | `FEAT-005-BE-checkout.md` | - |
+| ⏳ Not Started | [`FEAT-006-INT-stripe-webhook.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-006-INT-stripe-webhook.md) | Integration | P0 | Stripe Webhook Processing | `FEAT-006-BE-payments.md` | - |
+| ⏳ Not Started | [`FEAT-006-FE-payments.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-006-FE-payments.md) | Frontend | P0 | Stripe Elements Checkout UI | `FEAT-006-BE-payments.md` | - |
+| ⏳ Not Started | [`FEAT-006-VERIFY-payments.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-006-VERIFY-payments.md) | Verify | P0 | Payments Verification | `FEAT-006-BE`, `FEAT-006-INT`, `FEAT-006-FE` | - |
+| ⏳ Not Started | [`FEAT-007-BE-orders.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-007-BE-orders.md) | Backend | P0 | Order Query & Receipt Service | `000-shared-contracts.md`, `FEAT-006-INT` | - |
+| ⏳ Not Started | [`FEAT-007-FE-orders.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-007-FE-orders.md) | Frontend | P0 | Order Confirmation & History UI | `FEAT-007-BE-orders.md` | - |
+| ⏳ Not Started | [`FEAT-007-VERIFY-orders.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-007-VERIFY-orders.md) | Verify | P0 | Orders Verification | `FEAT-007-BE`, `FEAT-007-FE` | - |
+| ⏳ Not Started | [`FEAT-008-BE-admin-products.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-008-BE-admin-products.md) | Backend | P0 | Admin Product CRUD & Revalidation | `000-shared-contracts.md` | - |
+| ⏳ Not Started | [`FEAT-008-FE-admin-products.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-008-FE-admin-products.md) | Frontend | P0 | Admin Product Management UI | `FEAT-008-BE-admin-products.md` | - |
+| ⏳ Not Started | [`FEAT-008-VERIFY-admin-products.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-008-VERIFY-admin-products.md) | Verify | P0 | Admin Products Verification | `FEAT-008-BE`, `FEAT-008-FE` | - |
+| ⏳ Not Started | [`FEAT-009-BE-admin-orders.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-009-BE-admin-orders.md) | Backend | P0 | Admin Order Processing API | `000-shared-contracts.md` | - |
+| ⏳ Not Started | [`FEAT-009-FE-admin-orders.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-009-FE-admin-orders.md) | Frontend | P0 | Admin Orders UI | `FEAT-009-BE-admin-orders.md` | - |
+| ⏳ Not Started | [`FEAT-009-VERIFY-admin-orders.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-009-VERIFY-admin-orders.md) | Verify | P0 | Admin Orders Verification | `FEAT-009-BE`, `FEAT-009-FE` | - |
+| ⏳ Not Started | [`FEAT-010-BE-reviews.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-010-BE-reviews.md) | Backend | P1 | Product Reviews Service | `000-shared-contracts.md` | - |
+| ⏳ Not Started | [`FEAT-010-FE-reviews.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-010-FE-reviews.md) | Frontend | P1 | Reviews & Rating UI | `FEAT-010-BE-reviews.md` | - |
+| ⏳ Not Started | [`FEAT-010-VERIFY-reviews.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-010-VERIFY-reviews.md) | Verify | P1 | Reviews Verification | `FEAT-010-BE`, `FEAT-010-FE` | - |
+| ⏳ Not Started | [`FEAT-011-BE-wishlist.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-011-BE-wishlist.md) | Backend | P1 | Wishlist Service | `000-shared-contracts.md` | - |
+| ⏳ Not Started | [`FEAT-011-FE-wishlist.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-011-FE-wishlist.md) | Frontend | P1 | Wishlist UI & Quick-Add | `FEAT-011-BE-wishlist.md` | - |
+| ⏳ Not Started | [`FEAT-011-VERIFY-wishlist.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-011-VERIFY-wishlist.md) | Verify | P1 | Wishlist Verification | `FEAT-011-BE`, `FEAT-011-FE` | - |
+| ⏳ Not Started | [`FEAT-012-BE-coupons.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-012-BE-coupons.md) | Backend | P1 | Coupon Engine & Validation | `000-shared-contracts.md` | - |
+| ⏳ Not Started | [`FEAT-012-FE-coupons.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-012-FE-coupons.md) | Frontend | P1 | Coupon Input & Discount Display | `FEAT-012-BE-coupons.md` | - |
+| ⏳ Not Started | [`FEAT-012-VERIFY-coupons.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-012-VERIFY-coupons.md) | Verify | P1 | Coupons Verification | `FEAT-012-BE`, `FEAT-012-FE` | - |
