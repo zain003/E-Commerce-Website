@@ -9,7 +9,7 @@ Running tracker for all feature spec files, build order, layers, dependencies, a
 | Status | File ID | Layer | Priority | Feature Name | Depends On | Test Report Link |
 |---|---|---|---|---|---|---|
 | ⏳ Not Started | [`000-shared-contracts.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/000-shared-contracts.md) | Core | P0 | Core Contracts & Data Models | None | N/A |
-| ⏳ Not Started | [`FEAT-001-BE-auth.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-001-BE-auth.md) | Backend | P0 | Auth & Account Service | `000-shared-contracts.md` | - |
+| ✅ Complete | [`FEAT-001-BE-auth.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-001-BE-auth.md) | Backend | P0 | Auth & Account Service | `000-shared-contracts.md` | [`FEAT-001-test-report.md`](file:///c:/Users/zaina/Desktop/ecommerce/feature-test-reports/FEAT-001-test-report.md) |
 | ⏳ Not Started | [`FEAT-001-FE-auth.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-001-FE-auth.md) | Frontend | P0 | Auth & Account UI | `FEAT-001-BE-auth.md` | - |
 | ⏳ Not Started | [`FEAT-001-VERIFY-auth.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-001-VERIFY-auth.md) | Verify | P0 | Auth Verification | `FEAT-001-BE`, `FEAT-001-FE` | - |
 | ⏳ Not Started | [`FEAT-002-BE-products.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-002-BE-products.md) | Backend | P0 | Products & Category API | `000-shared-contracts.md` | - |
