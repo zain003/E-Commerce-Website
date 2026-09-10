@@ -19,12 +19,15 @@ Update this file after every meaningful implementation change.
 - Multi-layer SQA test suite for Auth FE: 19 passing tests across 3 UI test suites (42 tests total passed across all layers).
 - `FEAT-001-VERIFY-auth.md`: Authentication Full-Stack Verification & End-to-End Sign-off. Verified all 8 acceptance criteria and SQA DoD items. All 42 automated tests pass with 0 failures, `tsc --noEmit` and `npm run build` succeed cleanly with zero errors.
 - Verified test report finalized: `feature-test-reports/FEAT-001-test-report.md`.
+- `FEAT-002-BE-products.md`: Product Catalog and Category Read API with Next.js 16 `"use cache"` and `cacheLife("hours")`, slug lookup with relation graph (`category`, `variants`), featured products query, categories query, and Route Handlers (`/api/categories`, `/api/products/featured`, `/api/products/[slug]`).
+- Multi-layer SQA test suite for Products BE: 18 passing tests across 5 test suites (60 tests total passed repository-wide).
+- Verified test report finalized: `feature-test-reports/FEAT-002-test-report.md`.
 
 ## In Progress
-- Transitioning to Module 2 Backend: `FEAT-002-BE-products.md`.
+- Transitioning to Module 2 Frontend: `FEAT-002-FE-products.md`.
 
 ## Next Up
-- `FEAT-002-BE-products.md` (Product Catalog and Category Read API with `"use cache"` and variant matrix queries).
+- `FEAT-002-FE-products.md` (Product Detail Page, Variant Matrix Selector, Sticky Mobile Add-to-Cart bar, and Catalog UI).
 
 ## Open Questions
 - None currently blocking.

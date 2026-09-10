@@ -97,3 +97,12 @@ export function requireAdmin(session: AuthSession | null | undefined): asserts s
     throw new Error("FORBIDDEN");
   }
 }
+
+import type { Category, Product, ProductVariant } from "@prisma/client";
+export type { Category, Product, ProductVariant };
+
+export interface ProductDetail extends Product {
+  category: Category;
+  variants: ProductVariant[];
+}
+
