@@ -13,4 +13,5 @@ This file is a running log of ambiguities encountered and assumptions made durin
 
 ## Log Entries
 
-*(No entries yet — all implementations currently adhere to base specifications.)*
+- `[FEAT-002-FE]` — Route collision between root `src/app/page.tsx` and `src/app/(shop)/page.tsx` — Migrated root `page.tsx` into `src/app/(shop)/page.tsx` with shared `(shop)/layout.tsx` per `architecture.md` to cleanly support customer storefront route grouping and mobile navigation bars.
+

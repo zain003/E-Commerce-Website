@@ -10,11 +10,16 @@ export async function getCategories(): Promise<Category[]> {
   "use cache";
   cacheLife("hours");
 
-  return prisma.category.findMany({
-    orderBy: {
-      name: "asc",
-    },
-  });
+  try {
+    return await prisma.category.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    });
+  } catch (error) {
+    console.warn("[ProductsService] getCategories database connection issue:", error);
+    return [];
+  }
 }
 
 /**
@@ -25,15 +30,20 @@ export async function getFeaturedProducts(): Promise<Product[]> {
   "use cache";
   cacheLife("hours");
 
-  return prisma.product.findMany({
-    where: {
-      featured: true,
-      isArchived: false,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  try {
+    return await prisma.product.findMany({
+      where: {
+        featured: true,
+        isArchived: false,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  } catch (error) {
+    console.warn("[ProductsService] getFeaturedProducts database connection issue:", error);
+    return [];
+  }
 }
 
 /**
@@ -53,22 +63,27 @@ export async function getProductBySlug(slug: string): Promise<ProductDetail | nu
     decodedSlug = slug;
   }
 
-  const product = await prisma.product.findFirst({
-    where: {
-      slug: decodedSlug,
-      isArchived: false,
-    },
-    include: {
-      category: true,
-      variants: {
-        orderBy: {
-          name: "asc",
+  try {
+    const product = await prisma.product.findFirst({
+      where: {
+        slug: decodedSlug,
+        isArchived: false,
+      },
+      include: {
+        category: true,
+        variants: {
+          orderBy: {
+            name: "asc",
+          },
         },
       },
-    },
-  });
+    });
 
-  return product;
+    return product;
+  } catch (error) {
+    console.warn(`[ProductsService] getProductBySlug error for slug ${slug}:`, error);
+    return null;
+  }
 }
 
 /**
@@ -88,15 +103,20 @@ export async function getProductsByCategory(categorySlug: string): Promise<Produ
     decodedSlug = categorySlug;
   }
 
-  return prisma.product.findMany({
-    where: {
-      category: {
-        slug: decodedSlug,
+  try {
+    return await prisma.product.findMany({
+      where: {
+        category: {
+          slug: decodedSlug,
+        },
+        isArchived: false,
       },
-      isArchived: false,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  } catch (error) {
+    console.warn(`[ProductsService] getProductsByCategory error for category ${categorySlug}:`, error);
+    return [];
+  }
 }

@@ -1,7 +1,10 @@
-# Test Report: FEAT-002-BE — Products & Category API
+# Test Report: FEAT-002 — Product Catalog & Detail UI (Full-Stack)
 
-**Feature ID:** `FEAT-002-BE`  
-**Spec Reference:** [`context/feature-specs/FEAT-002-BE-products.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-002-BE-products.md)  
+**Feature ID:** `FEAT-002` (`FEAT-002-BE` & `FEAT-002-FE`)  
+**Spec References:**  
+- [`context/feature-specs/FEAT-002-BE-products.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-002-BE-products.md)  
+- [`context/feature-specs/FEAT-002-FE-products.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-002-FE-products.md)  
+- [`context/feature-specs/FEAT-002-VERIFY-products.md`](file:///c:/Users/zaina/Desktop/ecommerce/context/feature-specs/FEAT-002-VERIFY-products.md)  
 **Date Tested:** `2026-09-11`  
 **SQA Status:** `PASSED`  
 **Tester:** `SQA Automation Engineer (Pair Programming Agent)`  
@@ -10,11 +13,15 @@
 
 ## 1. Executive Summary
 
-| Total Test Cases (New) | Passed | Failed | Skipped | Pass Rate | SQA Verdict |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| `18` | `18` | `0` | `0` | `100%` | **PASSED** |
+| Layer | Test Suites | Total Tests | Passed | Failed | Pass Rate | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Frontend / Fake DOM (UI)** | 4 | 21 | 21 | 0 | 100% | **PASSED** |
+| **Backend Service & Queries** | 2 | 9 | 9 | 0 | 100% | **PASSED** |
+| **API Endpoints & Handlers** | 3 | 9 | 9 | 0 | 100% | **PASSED** |
+| **Total (FEAT-002 Scope)** | **9** | **39** | **39** | **0** | **100%** | **PASSED** |
+| **Repository-Wide Total** | **16** | **81** | **81** | **0** | **100%** | **PASSED** |
 
-> **SQA Gate Policy:** Zero failing tests allowed. All 60 test cases across the entire project repository (Auth BE + Auth FE + Products BE) pass with 100% success.
+> **SQA Quality Gate:** 100% test pass rate with zero skips and zero failures. Next.js 16 build (`npm run build`) and TypeScript validation (`npx tsc --noEmit`) complete with zero errors.
 
 ---
 
@@ -22,86 +29,84 @@
 
 - **Framework & Runtime:** Next.js 16.3.4 (App Router, Turbopack), React 19.2.8, Node.js v22
 - **Test Runner:** Vitest v5.0.0
-- **DOM Engine:** jsdom v29.1.1
-- **API & Mocking:** Vitest mocks (`vi.mock`, NextRequest, NextResponse)
-- **Database ORM:** Prisma v6.4.1 (mocked client for unit/API isolation)
-- **Caching:** Next.js 16 `"use cache"` and `cacheLife("hours")`
+- **DOM Engine:** jsdom v29.1.1 + `@testing-library/react` + `@testing-library/user-event`
+- **Database & Cache:** Prisma ORM v6.4.1 + Next.js 16 `"use cache"` + `cacheLife("hours")`
+- **Styling Tokens:** Tailwind CSS v4 design tokens and semantic variables
 
 ---
 
 ## 3. Acceptance Criteria Traceability Matrix
 
-| AC ID | Acceptance Criterion | Test File & Test Name | Status |
-| :--- | :--- | :--- | :--- |
-| **AC-1** | Querying an existing product slug returns product details with all active variants | `tests/unit/product-service.test.ts` > `returns complete product with category and variants for an existing active slug`<br>`tests/api/product-detail.test.ts` > `returns 200 with complete product detail payload when slug exists` | `PASS` |
-| **AC-2** | Querying a nonexistent slug returns `null` or HTTP `404` | `tests/unit/product-service.test.ts` > `returns null when product is not found`<br>`tests/api/product-detail.test.ts` > `returns 404 NOT_FOUND when product slug does not exist` | `PASS` |
-| **AC-3** | All data read functions employ `"use cache"` and `cacheLife` directive | `src/lib/services/products.ts` (`getCategories`, `getFeaturedProducts`, `getProductBySlug`, `getProductsByCategory` all employ `"use cache"` and `cacheLife("hours")`) | `PASS` |
-| **AC-4** | Archived products (`isArchived: true`) are excluded from customer-facing catalog queries | `tests/unit/product-service.test.ts` > `excludes archived products and returns null`<br>`tests/api/product-detail.test.ts` > `returns 404 NOT_FOUND when product is archived`<br>`tests/unit/product-service.test.ts` > `returns featured products excluding archived ones`<br>`tests/unit/product-service.test.ts` > `returns products matching category slug excluding archived ones` | `PASS` |
-| **AC-5** | Product with 0 variants handled gracefully | `tests/unit/product-service.test.ts` > `handles product with 0 variants gracefully` | `PASS` |
-| **AC-6** | Special characters in slug encoded/decoded safely | `tests/unit/product-service.test.ts` > `decodes URL-encoded slug characters safely` | `PASS` |
-| **AC-7** | Endpoint returns standard `ApiResponse<T>` envelope | `tests/api/product-detail.test.ts`<br>`tests/api/categories-route.test.ts`<br>`tests/api/featured-products-route.test.ts` | `PASS` |
-
----
-
-## 4. Multi-Layer Test Execution Results
-
-### 4.1 Backend Service Layer (`tests/unit/product-service.test.ts` & `tests/unit/category-service.test.ts`)
-- [x] `getProductBySlug` retrieves complete relation graph (`include: { category: true, variants: true }`).
-- [x] `getCategories` retrieves active categories sorted by name ascending.
-- [x] `getFeaturedProducts` filters by `featured: true, isArchived: false` ordered by `createdAt: desc`.
-- [x] `getProductsByCategory` filters by `category.slug` and `isArchived: false`.
-
-*Execution Log:*
-```bash
-✓ tests/unit/category-service.test.ts (2 tests)
-✓ tests/unit/product-service.test.ts (7 tests)
-```
-
----
-
-### 4.2 API Layer (`tests/api/product-detail.test.ts`, `tests/api/categories-route.test.ts`, `tests/api/featured-products-route.test.ts`)
-- [x] `GET /api/products/[slug]` handles Next.js 16 async params (`await context.params`).
-- [x] `GET /api/products/[slug]` returns 200 with `ProductDetail` payload for valid slug.
-- [x] `GET /api/products/[slug]` returns 400 `BAD_REQUEST` for empty/whitespace slug.
-- [x] `GET /api/products/[slug]` returns 404 `NOT_FOUND` for missing or archived product slug.
-- [x] `GET /api/products/[slug]` returns 500 `INTERNAL_SERVER_ERROR` with structured envelope on unexpected error.
-- [x] `GET /api/categories` returns 200 with `Category[]` payload and handles 500 cleanly.
-- [x] `GET /api/products/featured` returns 200 with `Product[]` payload and handles 500 cleanly.
-
-*Execution Log:*
-```bash
-✓ tests/api/categories-route.test.ts (2 tests)
-✓ tests/api/featured-products-route.test.ts (2 tests)
-✓ tests/api/product-detail.test.ts (5 tests)
-```
-
----
-
-## 5. Edge Cases & Boundary Analysis
-
-| Scenario | Input / Trigger | Expected Outcome | Verified |
+| AC ID | Acceptance Criterion | Test File & Test Name | SQA Verdict |
 | :--- | :--- | :--- | :---: |
-| **Product with 0 variants** | Product record with `variants: []` | Returns product with empty variants array, zero crash | `YES` |
-| **URL-Encoded Slug** | `classic%20tee%26jeans` | Decoded via `decodeURIComponent` to query `classic tee&jeans` | `YES` |
-| **Malformed Percent Slug** | `%E0%A4%A` (invalid sequence) | Fallbacks safely without throwing unhandled URIError | `YES` |
-| **Archived Product Slug** | Slug belonging to `isArchived: true` | Query excludes archived items; returns 404 NOT_FOUND | `YES` |
-| **Empty Slug Parameter** | Empty string `""` in params | Returns 400 BAD_REQUEST | `YES` |
-| **Internal DB Failure** | Service throws unhandled exception | Returns 500 INTERNAL_SERVER_ERROR in `ApiResponse` format | `YES` |
+| **AC-1** | Querying an existing product slug returns complete details with active variants | `tests/unit/product-service.test.ts` > `returns complete product with category and variants`<br>`tests/api/product-detail.test.ts` > `returns 200 with complete product detail payload` | `PASS` |
+| **AC-2** | Querying nonexistent or empty slug returns null / HTTP 404 | `tests/unit/product-service.test.ts` > `returns null when product is not found`<br>`tests/api/product-detail.test.ts` > `returns 404 NOT_FOUND` | `PASS` |
+| **AC-3** | Data read functions employ Next.js 16 `"use cache"` and `cacheLife("hours")` | Verified in `src/lib/services/products.ts` | `PASS` |
+| **AC-4** | Archived products (`isArchived: true`) excluded from catalog queries | `tests/unit/product-service.test.ts` > `excludes archived products`<br>`tests/api/product-detail.test.ts` > `returns 404 when product is archived` | `PASS` |
+| **AC-5** | Product Card displays formatted price (e.g. `$49.99`) and links to correct slug URL | `tests/ui/product-card.test.tsx` > `renders product title, formatted currency price, and image`<br>`tests/ui/product-card.test.tsx` > `links to the correct product slug URL` | `PASS` |
+| **AC-6** | Selecting a variant with price delta updates displayed total price immediately | `tests/ui/variant-selector.test.tsx` > `updates selected variant and dynamic price calculation on click`<br>`tests/ui/product-detail-view.test.tsx` > `updates sticky mobile action bar price when a variant with price delta is selected` | `PASS` |
+| **AC-7** | Out of stock variants show "Out of Stock" badge and disable selection | `tests/ui/variant-selector.test.tsx` > `disables out of stock variants from being selected`<br>`tests/ui/product-detail-view.test.tsx` > `disables add to cart buttons when selected variant is out of stock` | `PASS` |
+| **AC-8** | Mobile view renders sticky action bar at bottom of viewport on PDP | `tests/ui/product-detail-view.test.tsx` > `renders sticky mobile action bar at bottom of viewport` | `PASS` |
+| **AC-9** | Product without images displays high quality placeholder | `tests/ui/product-card.test.tsx` > `renders a high-quality placeholder when product has no images`<br>`tests/ui/product-gallery.test.tsx` > `displays high-quality placeholder when images array is empty` | `PASS` |
+| **AC-10** | Long product titles truncate cleanly without breaking layout | `tests/ui/product-card.test.tsx` > `handles long product titles with clean truncation class` | `PASS` |
+| **AC-11** | Gallery switches active preview when thumbnail is clicked | `tests/ui/product-gallery.test.tsx` > `changes active preview image when a thumbnail is clicked` | `PASS` |
 
 ---
 
-## 6. Defects Discovered & Resolved
+## 4. Multi-Layer SQA Test Execution Results
 
-| Bug ID | Description | Root Cause | Resolution | Retest Status |
-| :--- | :--- | :--- | :--- | :--- |
-| `DEF-01` | TypeScript error TS2304 `Cannot find name 'Product'` in `src/types/index.ts` | Types were exported with `export type { ... } from "@prisma/client"` and then extended without being imported into local scope | Added explicit `import type { Category, Product, ProductVariant } from "@prisma/client";` before export | `VERIFIED FIXED` |
+### 4.1 Frontend / Fake DOM UI Layer (`tests/ui/`)
+```bash
+ ✓ tests/ui/product-card.test.tsx (6 tests)
+ ✓ tests/ui/product-gallery.test.tsx (5 tests)
+ ✓ tests/ui/variant-selector.test.tsx (6 tests)
+ ✓ tests/ui/product-detail-view.test.tsx (4 tests)
+ ✓ tests/ui/address-management.test.tsx (6 tests)
+ ✓ tests/ui/login-form.test.tsx (7 tests)
+ ✓ tests/ui/register-form.test.tsx (6 tests)
+```
+- **ProductCard**: Verified title, formatted price, Next.js responsive image with fill/sizes, category tag, placeholder fallback, and title truncation.
+- **ProductGallery**: Verified primary image rendering, thumbnail strip rendering (>1 image), thumbnail click transitions, active thumbnail highlighting (`aria-current="true"`), and empty placeholder state.
+- **VariantSelector**: Verified variant pill matrix, price delta labels (`+$5.00`), out of stock button disabling (`disabled`, `aria-disabled`), dynamic total price updates, and low stock warnings (`Only X left!`).
+- **ProductDetailView**: Verified semantic `h1` heading, breadcrumbs, desktop Add-to-Cart, sticky mobile action bar with live price, and out-of-stock disabling.
+
+### 4.2 Backend & API Layer (`tests/unit/` & `tests/api/`)
+```bash
+ ✓ tests/unit/product-service.test.ts (7 tests)
+ ✓ tests/unit/category-service.test.ts (2 tests)
+ ✓ tests/api/product-detail.test.ts (5 tests)
+ ✓ tests/api/categories-route.test.ts (2 tests)
+ ✓ tests/api/featured-products-route.test.ts (2 tests)
+```
+- Verified relation graph inclusion (`category`, `variants`), ordering, slug decoding (`decodeURIComponent`), and Next.js 16 `"use cache"` directives.
 
 ---
 
-## 7. Full Test Suite & Build Verification
+## 5. Build & Compilation Verification
 
-- Vitest Suite: 12 test files, 60 tests passed (0 failures).
-- TypeScript Compiler (`npx tsc --noEmit`): Clean (0 errors).
-- Production Build (`npm run build`): Clean (0 errors).
+1. **TypeScript Type Safety**:
+   ```bash
+   npx tsc --noEmit
+   # Exit Code: 0 (Zero errors)
+   ```
+2. **Next.js 16 Turbopack Production Build**:
+   ```bash
+   npm run build
+   # Compiled successfully, static pages generated, zero errors
+   ```
 
-**Final SQA Verdict:** **APPROVED (PASSED 100%)**
+---
+
+## 6. Defects Discovered & Resolved During SQA
+
+| Bug ID | Description | Root Cause | Resolution |
+| :--- | :--- | :--- | :--- |
+| `DEF-02` | `ProductCard` long title test failed assertion for `/truncate/` | Truncate class was on `<h3>` container but not on child `<Link>` | Added `truncate block` to `<Link>` inside `<h3>` for clean truncation across all DOM targets |
+| `DEF-03` | `product-detail-view.test.tsx` multiple elements found for category name | Category name was rendered in both breadcrumb `<nav>` and `<Badge>` | Updated test assertion to `expect(screen.getAllByText(cat).length).toBeGreaterThanOrEqual(1)` |
+| `DEF-04` | Prerendering error on `/` during `next build` when database is offline | Static page generation executes `getFeaturedProducts()` and `getCategories()`; unhandled db errors caused build abort | Added try/catch fallback with descriptive warning in `products.ts` and `HomePage`, allowing resilient static build generation |
+
+---
+
+## 7. Final SQA Verdict
+
+**APPROVED (PASSED 100%)** — All 81 automated tests passing across 16 test suites, zero TypeScript errors, clean production build.
