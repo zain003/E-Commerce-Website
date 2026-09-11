@@ -31,7 +31,7 @@ export default function ShopLayout({
 
             <nav className="hidden items-center gap-6 text-sm font-medium text-muted-foreground md:flex">
               <Link
-                href="/"
+                href="/products"
                 className="transition-colors hover:text-foreground"
               >
                 Catalog
@@ -53,7 +53,7 @@ export default function ShopLayout({
 
           <div className="flex items-center gap-3">
             <Link
-              href="/#categories"
+              href="/products"
               aria-label="Search products"
               className="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground md:h-9 md:w-auto md:px-3 md:gap-1.5"
             >
@@ -88,14 +88,14 @@ export default function ShopLayout({
           <span>Home</span>
         </Link>
         <Link
-          href="/#categories"
+          href="/products"
           className="flex flex-col items-center gap-1 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground"
         >
           <Search className="h-5 w-5" />
           <span>Search</span>
         </Link>
         <Link
-          href="/#featured"
+          href="/products"
           className="flex flex-col items-center gap-1 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground"
         >
           <ShoppingBag className="h-5 w-5" />

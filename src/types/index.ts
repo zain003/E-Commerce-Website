@@ -106,3 +106,16 @@ export interface ProductDetail extends Product {
   variants: ProductVariant[];
 }
 
+export type SortOption = "price_asc" | "price_desc" | "newest" | "featured";
+
+export interface SearchFilterParams {
+  query?: string;
+  categorySlug?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  inStockOnly?: boolean;
+  sortBy?: SortOption;
+  page?: number;
+  limit?: number;
+}
+

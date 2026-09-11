@@ -6,7 +6,7 @@ Update this file after every meaningful implementation change.
 - Phase 1 — MVP (In Progress)
 
 ## Current Goal
-- Complete Module 3: Search & Filtering Engine (`FEAT-003`)
+- Complete Module 4: Cart Service & Session (`FEAT-004`)
 
 ## Completed
 - Next.js 16 (App Router + Turbopack + Tailwind v4 + TypeScript) project initialization.
@@ -25,12 +25,18 @@ Update this file after every meaningful implementation change.
 - Multi-layer SQA test suite for Products FE: 21 passing tests across 4 UI test suites (`product-card.test.tsx`, `product-gallery.test.tsx`, `variant-selector.test.tsx`, `product-detail-view.test.tsx`). Repository-wide test suite: 81 passing tests across 16 test suites with 100% success.
 - `FEAT-002-VERIFY-products.md`: Product Catalog Full-Stack Verification Pass. Executed multi-layer SQA verification suites: Fake DOM UI (40 tests across 7 suites), API Endpoints (24 tests across 6 suites), Backend & Unit (17 tests across 3 suites) with 81 total repository tests passing (100% success rate, 0 failures, 0 skipped). All 8 acceptance criteria from `FEAT-002-VERIFY-products.md` verified. `npx tsc --noEmit` (0 errors) and Next.js 16 production build (`npm run build`) succeeded cleanly.
 - Verified test report finalized: `feature-test-reports/FEAT-002-test-report.md`.
+- `FEAT-003-BE-search.md`: Dynamic Search & Filter Engine backend. Implemented Zod query parameter validation (`searchQuerySchema`, `parseSearchParams`) with safe fallback for invalid/negative page parameters (`page=1, limit=12`) and inverted price validation; Prisma dynamic where clause with case-insensitive `contains` text search across name/description, decoded category slugs, price bounds, in-stock variant filtering, and unconditional exclusion of archived products (`isArchived: false`); multi-strategy sorting (`price_asc`, `price_desc`, `newest`, `featured`); atomic pagination with `prisma.$transaction([findMany, count])`; and Next.js Route Handler `GET /api/search` conforming to `ApiResponse<PaginatedResult<Product>>`.
+- Multi-layer SQA test suite for Search BE: 26 passing tests across 4 test suites (`search-validator.test.ts`, `search-filter.test.ts`, `search-sorting.test.ts`, `search-route.test.ts`). Repository-wide test suite: 107 passing tests across 20 test suites with 100% success rate. `npx tsc --noEmit` and `npm run build` pass with zero errors.
+- `FEAT-003-FE-search.md`: Interactive Search & Filter Catalog UI. Implemented debounced `SearchBar` (300ms debounce with instant clear button, search icon, accessible label, and Enter key submission), `SortDropdown` (accessible sort selector supporting `newest`, `price_asc`, `price_desc`, `featured`), `FilterSidebar` (desktop filter panel with category selection, price range min/max inputs with "$" prefix, in-stock checkbox, and clear CTA), `FilterDrawer` (mobile bottom sheet modal with accessible trigger button, active filter badge count, and sticky bottom action bar), `ActiveFilters` (removable filter pills with single-click removal and "Clear all" button), `CatalogView` (interactive client coordinator with loading skeleton pulse cards during transitions, accessible empty state with friendly copy and reset CTA, and accessible pagination bar), and Next.js 16 Server Component `ProductsPage` (`src/app/(shop)/products/page.tsx`) with async `searchParams` and cached category/search pre-fetching. Updated storefront layout navigation links (`src/app/(shop)/layout.tsx`) to direct catalog and search icons to `/products`.
+- Multi-layer SQA test suite for Search FE: 26 passing tests across 6 UI test suites (`search-bar.test.tsx`, `filter-sidebar.test.tsx`, `active-filters.test.tsx`, `sort-dropdown.test.tsx`, `filter-drawer.test.tsx`, `catalog-view.test.tsx`). Repository-wide test suite: 133 passing tests across 26 test suites with 100% success rate. `npx tsc --noEmit` and `npm run build` pass with zero errors.
+- `FEAT-003-VERIFY-search.md`: Search & Filter Full-Stack Verification Pass. Verified all 8 acceptance criteria from `FEAT-003-VERIFY-search.md` across Frontend Fake DOM (26 tests across 6 suites), API Endpoints (6 tests across 1 suite), and Backend/Unit logic (20 tests across 3 suites) with 133 total repository tests passing (100% success rate, 0 failures, 0 skipped). `npx tsc --noEmit` and Next.js 16 production build (`npm run build`) succeeded cleanly with zero errors.
+- Verified test report finalized: `feature-test-reports/FEAT-003-test-report.md`.
 
 ## In Progress
-- Transitioning to Module 3 Backend: `FEAT-003-BE-search.md`.
+- Transitioning to Module 4: Cart Service & Session (`FEAT-004-BE-cart.md`).
 
 ## Next Up
-- `FEAT-003-BE-search.md` (Debounced text search, multi-criteria filtering by category/price, URL query state synchronization, and Route Handlers).
+- `FEAT-004-BE-cart.md` (Cart service, guest token cookie sessions, stock limit validation, and cart CRUD API).
 
 ## Open Questions
 - None currently blocking.
