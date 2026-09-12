@@ -1,9 +1,10 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ProductDetailView } from "@/components/product/product-detail-view";
 import { Decimal } from "@prisma/client/runtime/library";
 import { ProductDetail } from "@/types";
+import { useCartStore } from "@/store/cart-store";
 
 // Mock Next.js Image for jsdom compatibility
 vi.mock("next/image", () => ({
@@ -153,5 +154,24 @@ describe("ProductDetailView UI Component", () => {
     for (const btn of addButtons) {
       expect(btn.hasAttribute("disabled")).toBe(true);
     }
+  });
+
+  it("calls addItem with selected variant and quantity 1 when Add to Cart is clicked", async () => {
+    const mockAddItem = vi.fn();
+    const originalAddItem = useCartStore.getState().addItem;
+    useCartStore.setState({ addItem: mockAddItem });
+
+    const user = userEvent.setup();
+    const { unmount } = render(<ProductDetailView product={mockProductDetail} />);
+
+    const addButtons = screen.getAllByRole("button", { name: /add to cart/i });
+    await user.click(addButtons[0]);
+
+    await waitFor(() => {
+      expect(mockAddItem).toHaveBeenCalledWith("var-1", 1);
+    });
+
+    unmount();
+    useCartStore.setState({ addItem: originalAddItem });
   });
 });

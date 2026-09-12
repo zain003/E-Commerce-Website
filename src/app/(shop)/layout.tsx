@@ -7,6 +7,11 @@ import {
   Home as HomeIcon,
   ShieldCheck,
 } from "lucide-react";
+import {
+  HeaderCartButton,
+  MobileCartNavButton,
+} from "@/components/layout/header-cart-button";
+import { CartDrawer } from "@/components/cart/cart-drawer";
 
 export default function ShopLayout({
   children,
@@ -68,12 +73,17 @@ export default function ShopLayout({
               <User className="h-4 w-4" />
               <span className="hidden sm:inline">Account</span>
             </Link>
+
+            <HeaderCartButton />
           </div>
         </div>
       </header>
 
       {/* Main Page Content */}
       <main className="flex-1">{children}</main>
+
+      {/* Global Slide-Out Cart Drawer */}
+      <CartDrawer />
 
       {/* Mobile Bottom Navigation Bar (WCAG AA & UI Context) */}
       <nav
@@ -94,13 +104,7 @@ export default function ShopLayout({
           <Search className="h-5 w-5" />
           <span>Search</span>
         </Link>
-        <Link
-          href="/products"
-          className="flex flex-col items-center gap-1 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground"
-        >
-          <ShoppingBag className="h-5 w-5" />
-          <span>Products</span>
-        </Link>
+        <MobileCartNavButton />
         <Link
           href="/account/profile"
           className="flex flex-col items-center gap-1 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground"

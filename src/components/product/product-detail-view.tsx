@@ -16,11 +16,16 @@ import {
   ChevronRight,
 } from "lucide-react";
 
+import { useCartStore } from "@/store/cart-store";
+
 export interface ProductDetailViewProps {
   product: ProductDetail;
 }
 
 export function ProductDetailView({ product }: ProductDetailViewProps) {
+  const addItem = useCartStore((state) => state.addItem);
+  const isMutating = useCartStore((state) => state.isMutating);
+
   // Initial selected variant (first in-stock or first available)
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
     () => {
@@ -39,8 +44,8 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
     : false;
 
   const handleAddToCart = () => {
-    if (isOutOfStock) return;
-    // Dispatched to cart store or notification (FEAT-004)
+    if (isOutOfStock || !selectedVariant || isMutating) return;
+    addItem(selectedVariant.id, 1);
   };
 
   return (
