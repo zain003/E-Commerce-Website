@@ -14,4 +14,6 @@ This file is a running log of ambiguities encountered and assumptions made durin
 ## Log Entries
 
 - `[FEAT-002-FE]` — Route collision between root `src/app/page.tsx` and `src/app/(shop)/page.tsx` — Migrated root `page.tsx` into `src/app/(shop)/page.tsx` with shared `(shop)/layout.tsx` per `architecture.md` to cleanly support customer storefront route grouping and mobile navigation bars.
+- `[FEAT-004-BE]` — Empty cart resolution — Handled `getCart()` for sessions without an active cart by returning an in-memory empty `HydratedCart` (`items: []`, `subtotal: 0`, `itemCount: 0`) without creating superfluous empty rows in PostgreSQL until items are added.
+- `[FEAT-004-BE]` — Token resolution in `POST /api/cart/merge` — Allowed `guestToken` to be resolved from either HTTP-only `guest_cart_token` cookie or optional request body `{ guestToken }` before fallback.
 

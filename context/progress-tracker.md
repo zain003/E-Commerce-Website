@@ -31,12 +31,15 @@ Update this file after every meaningful implementation change.
 - Multi-layer SQA test suite for Search FE: 26 passing tests across 6 UI test suites (`search-bar.test.tsx`, `filter-sidebar.test.tsx`, `active-filters.test.tsx`, `sort-dropdown.test.tsx`, `filter-drawer.test.tsx`, `catalog-view.test.tsx`). Repository-wide test suite: 133 passing tests across 26 test suites with 100% success rate. `npx tsc --noEmit` and `npm run build` pass with zero errors.
 - `FEAT-003-VERIFY-search.md`: Search & Filter Full-Stack Verification Pass. Verified all 8 acceptance criteria from `FEAT-003-VERIFY-search.md` across Frontend Fake DOM (26 tests across 6 suites), API Endpoints (6 tests across 1 suite), and Backend/Unit logic (20 tests across 3 suites) with 133 total repository tests passing (100% success rate, 0 failures, 0 skipped). `npx tsc --noEmit` and Next.js 16 production build (`npm run build`) succeeded cleanly with zero errors.
 - Verified test report finalized: `feature-test-reports/FEAT-003-test-report.md`.
+- `FEAT-004-BE-cart.md`: Cart Service & Cookie Session Backend. Implemented `src/lib/validators/cart.ts` (Zod v4 schema validation for `addToCartSchema`, `updateCartItemSchema`, `mergeCartSchema`); `src/lib/cookies/cart-cookie.ts` (HTTP-only cookie utilities for `guest_cart_token` generation, retrieval, and response attachment/clearing); `src/lib/services/cart-calculator.ts` (pure monetary unit price, item total, and cart subtotal/itemCount calculation with Decimal precision and rounding); `src/lib/services/cart.ts` (`getCart`, `addToCart`, `updateCartItem`, `removeCartItem`, `mergeGuestCart` with dynamic cart creation, cumulative inventory stock limit validation returning HTTP 400 `INSUFFICIENT_STOCK`, automatic pruning of stale items referencing deleted/archived products, and strict tenant ownership verification); and Next.js 16 App Router route handlers `GET /api/cart`, `POST /api/cart/items`, `PATCH /api/cart/items/[id]`, `DELETE /api/cart/items/[id]`, and `POST /api/cart/merge` returning standard `ApiResponse<HydratedCart>` envelopes.
+- Multi-layer SQA test suite for Cart BE: 36 passing tests across 5 test suites (`cart-calculator.test.ts`, `cart-guest.test.ts`, `cart-stock-limit.test.ts`, `cart-service.test.ts`, `cart-routes.test.ts`). Repository-wide test suite: 169 passing tests across 31 test suites with 100% success rate. `npx tsc --noEmit` and Next.js 16 production build (`npm run build`) succeeded cleanly with zero errors.
+- Verified test report finalized: `feature-test-reports/FEAT-004-test-report.md`.
 
 ## In Progress
-- Transitioning to Module 4: Cart Service & Session (`FEAT-004-BE-cart.md`).
+- Transitioning to Module 4 Frontend: Cart Drawer & State (`FEAT-004-FE-cart.md`).
 
 ## Next Up
-- `FEAT-004-BE-cart.md` (Cart service, guest token cookie sessions, stock limit validation, and cart CRUD API).
+- `FEAT-004-FE-cart.md` (Slide-out Cart Drawer, Zustand cart store, quantity controls, and optimistic updates).
 
 ## Open Questions
 - None currently blocking.
