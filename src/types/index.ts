@@ -138,3 +138,25 @@ export interface SearchFilterParams {
   limit?: number;
 }
 
+export interface ShippingMethod {
+  id: "STANDARD" | "EXPRESS";
+  name: string;
+  price: number;
+  estimatedDays: string;
+}
+
+export interface CheckoutPreview {
+  items: HydratedCart["items"];
+  subtotal: number;
+  shippingFee: number;
+  discountTotal: number;
+  total: number;
+  availableShippingMethods: ShippingMethod[];
+}
+
+export interface CheckoutSessionDto {
+  shippingAddress: AddressDto;
+  shippingMethodId: "STANDARD" | "EXPRESS";
+  guestEmail?: string;
+}
+

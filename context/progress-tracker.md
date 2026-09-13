@@ -37,12 +37,15 @@ Update this file after every meaningful implementation change.
 - Multi-layer SQA test suite for Cart FE: 16 passing tests across 3 UI test suites (`cart-drawer.test.tsx`, `cart-item-actions.test.tsx`, `cart-empty-state.test.tsx`) plus `product-detail-view.test.tsx` integration test.
 - `FEAT-004-VERIFY-cart.md`: Cart Full-Stack Verification Pass. Executed multi-layer SQA verification suites across Fake DOM UI (20 tests across 4 suites), API Endpoints (26 tests across 4 suites), and Backend & Unit logic (18 tests across 2 suites), with 186 total repository tests passing (100% success rate, 0 failures, 0 skipped). All 8 acceptance criteria from `FEAT-004-VERIFY-cart.md` verified against automated tests. `npx tsc --noEmit` and Next.js 16 production build (`npm run build`) succeeded cleanly with zero errors.
 - Verified test report finalized: `feature-test-reports/FEAT-004-test-report.md`.
+- `FEAT-005-BE-checkout.md`: Checkout Validation Service & Shipping Rate API. Implemented `src/lib/validators/checkout.ts` (`checkoutAddressSchema` validating address, postal code, and phone formats with 7-15 digits; `checkoutSessionSchema`; `validateCheckoutSessionInput` enforcing `guestEmail` for unauthenticated sessions); `src/lib/services/checkout.ts` (`calculateShippingFee` with Standard $5.00 / Free $\ge$ $100.00 and Express $15.00; `getAvailableShippingMethods`; `getCheckoutPreview` with real-time stock and archived check returning HTTP 400 `STOCK_CHANGED` and empty cart check returning HTTP 400 `CART_EMPTY`; `validateCheckoutSession`); and Next.js 16 App Router route handlers `GET /api/checkout/preview` and `POST /api/checkout/validate` conforming to standard `ApiResponse` envelopes.
+- Multi-layer SQA test suite for Checkout BE: 29 passing tests across 5 test suites (`shipping-calculator.test.ts`, `checkout-validator.test.ts`, `checkout-empty-cart.test.ts`, `checkout-validation.test.ts`, `checkout-preview-route.test.ts`). Repository-wide test suite: 215 passing tests across 39 test suites with 100% success rate. `npx tsc --noEmit` and `npm run build` pass with zero errors.
+- Verified test report finalized: `feature-test-reports/FEAT-005-test-report.md`.
 
 ## In Progress
-- Transitioning to Module 5: Checkout Validation Service (`FEAT-005-BE-checkout.md`).
+- Transitioning to Module 5 Frontend: Multi-Step Checkout UI (`FEAT-005-FE-checkout.md`).
 
 ## Next Up
-- `FEAT-005-BE-checkout.md` (Checkout validation service, address validation, and shipping rate calculations).
+- `FEAT-005-FE-checkout.md` (Multi-Step Checkout UI: Address & Contact -> Delivery Method -> Order Review).
 
 ## Open Questions
 - None currently blocking.
