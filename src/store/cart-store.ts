@@ -27,6 +27,7 @@ export interface CartStoreState {
   setOpen: (open: boolean) => void;
   clearError: () => void;
   setError: (error: string | null) => void;
+  clearCart: () => void;
   fetchCart: () => Promise<void>;
   addItem: (variantId: string, quantity?: number) => Promise<void>;
   updateQuantity: (itemId: string, quantity: number) => Promise<void>;
@@ -46,6 +47,7 @@ export const useCartStore = create<CartStoreState>((set, get) => ({
   setOpen: (open: boolean) => set({ isOpen: open }),
   clearError: () => set({ error: null }),
   setError: (error: string | null) => set({ error }),
+  clearCart: () => set({ cart: null }),
 
   fetchCart: async () => {
     set({ isLoading: true, error: null });

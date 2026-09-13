@@ -27,7 +27,9 @@ export async function getOrderByNumber(
 
   try {
     const order = await prisma.order.findUnique({
-      where: { orderNumber: trimmedOrderNumber },
+      where: trimmedOrderNumber.startsWith("pi_")
+        ? { stripePaymentId: trimmedOrderNumber }
+        : { orderNumber: trimmedOrderNumber },
       include: {
         items: {
           include: {
