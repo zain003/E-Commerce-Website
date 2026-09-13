@@ -53,13 +53,15 @@ Update this file after every meaningful implementation change.
 - Multi-layer SQA test suite for Payments INT: 11 passing tests across 3 integration test suites (`stripe-webhook-signature.test.ts`, `stripe-webhook-idempotency.test.ts`, `atomic-stock-decrement.test.ts`). Repository-wide test suite: 273 passing tests across 51 test suites with 100% success rate. `npx tsc --noEmit` and Next.js 16 production build (`npm run build`) pass with zero errors.
 - Verified test report finalized: `feature-test-reports/FEAT-006-INT-test-report.md`.
 - `FEAT-006-VERIFY-payments.md`: Payments Full-Stack Verification Pass & End-to-End Sign-off. Verified all 9 acceptance criteria and SQA DoD items across Frontend Fake DOM (12 tests across 3 suites), Integration & Webhooks (11 tests across 3 suites), API Endpoints (9 tests across 2 suites), and Backend & Unit logic (7 tests across 1 suite), totaling 39 payment tests. All 273 repository-wide automated tests pass with 0 failures (100% pass rate). Strict TypeScript check (`npx tsc --noEmit`) and Next.js 16 production build (`npm run build`) succeeded cleanly with zero errors.
-- Verified full-stack test report finalized: `feature-test-reports/FEAT-006-test-report.md`.
+- `FEAT-007-BE-orders.md`: Order Query & Receipt Service Backend. Implemented `src/types/index.ts` (`HydratedOrderItem`, `HydratedOrder`, re-exporting `Order`, `OrderItem`); `src/lib/validators/orders.ts` (`orderLookupQuerySchema` validating optional guest email, `orderHistoryQuerySchema` validating pagination bounds); `src/lib/services/orders.ts` (`getOrderByNumber` enforcing strict tenant access control for authenticated user ID or case-insensitive guest email matching with sensitive field omission, and `getUserOrders` executing atomic paginated count/findMany queries sorted descending by `createdAt`); and Next.js 16 App Router route handlers `GET /api/orders/[orderNumber]` with async `context.params` and `GET /api/account/orders` protected by NextAuth session returning standard `ApiResponse` JSON envelopes.
+- Multi-layer SQA test suite for Orders BE: 25 passing tests across 3 test suites (`order-access-control.test.ts`, `order-detail.test.ts`, `account-order-history.test.ts`). Repository-wide test suite: 298 passing tests across 54 test suites with 100% success rate. `npx tsc --noEmit` and Next.js 16 production build (`npm run build`) pass with zero errors.
+- Verified test report finalized: `feature-test-reports/FEAT-007-BE-test-report.md`.
 
 ## In Progress
-- Transitioning to `FEAT-007-BE-orders.md` (Order Query & Receipt Service).
+- Transitioning to `FEAT-007-FE-orders.md` (Order Confirmation & History UI).
 
 ## Next Up
-- `FEAT-007-BE-orders.md` (Order Query & Receipt Service).
+- `FEAT-007-FE-orders.md` (Order Confirmation & History UI).
 
 ## Open Questions
 - None currently blocking.

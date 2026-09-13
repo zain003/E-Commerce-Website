@@ -98,8 +98,32 @@ export function requireAdmin(session: AuthSession | null | undefined): asserts s
   }
 }
 
-import type { Category, Product, ProductVariant, Cart, CartItem } from "@prisma/client";
-export type { Category, Product, ProductVariant, Cart, CartItem };
+import type {
+  Category,
+  Product,
+  ProductVariant,
+  Cart,
+  CartItem,
+  Order,
+  OrderItem,
+} from "@prisma/client";
+export type {
+  Category,
+  Product,
+  ProductVariant,
+  Cart,
+  CartItem,
+  Order,
+  OrderItem,
+};
+
+export interface HydratedOrderItem extends OrderItem {
+  variant: ProductVariant & { product: Product };
+}
+
+export interface HydratedOrder extends Order {
+  items: HydratedOrderItem[];
+}
 
 export interface AddToCartDto {
   variantId: string;
