@@ -61,12 +61,15 @@ Update this file after every meaningful implementation change.
 - Verified test report finalized: `feature-test-reports/FEAT-007-FE-test-report.md`.
 - `FEAT-007-VERIFY-orders.md`: Orders Full-Stack Verification Pass & End-to-End Sign-off. Verified all 7 acceptance criteria and SQA DoD items across Frontend Fake DOM (19 tests across 3 suites), API Endpoints (12 tests across 2 suites), and Backend & Unit logic (13 tests across 1 suite), totaling 44 orders feature tests. All 317 repository-wide automated tests pass with 0 failures (100% pass rate). Strict TypeScript check (`npx tsc --noEmit`) and Next.js 16 production build (`npm run build`) succeeded cleanly with zero errors.
 - Verified test report finalized: `feature-test-reports/FEAT-007-test-report.md`.
+- `FEAT-008-BE-admin-products.md`: Admin Product CRUD & Revalidation Backend. Implemented `src/types/index.ts` (`CreateProductVariantDto`, `CreateProductDto`, `UpdateProductDto`, `UpdateVariantStockDto`, `AdminProduct`); `src/lib/validators/admin-product.ts` (`createVariantSchema`, `createProductSchema`, `updateProductSchema`, `updateVariantStockSchema`, `adminProductQuerySchema` with Zod boundary validations); `src/lib/services/admin-products.ts` (`getAdminProducts` paginated listing including active and archived items, `createAdminProduct` creating product and nested variants atomically with slug/SKU uniqueness and category verification, `updateAdminProduct` updating details with conflict detection, and `updateVariantStock` adjusting stock with immediate `revalidateTag("products", "hours")` cache invalidation); and Next.js 16 App Router route handlers with async `params` and strict `ADMIN` session enforcement (`GET /api/admin/products`, `POST /api/admin/products`, `PATCH /api/admin/products/[id]`, `DELETE /api/admin/products/[id]`, `PATCH /api/admin/variants/[id]/stock`).
+- Multi-layer SQA test suite for Admin Products BE: 53 passing tests across 5 test suites (`admin-product-validator.test.ts`, `admin-product-service.test.ts`, `admin-auth-guard.test.ts`, `admin-product-crud.test.ts`, `admin-stock-route.test.ts`). Repository-wide test suite: 370 passing tests across 62 test suites with 100% success rate. `npx tsc --noEmit` (0 errors) and Next.js 16 production build (`npm run build`) pass with zero errors.
+- Verified test report finalized: `feature-test-reports/FEAT-008-BE-test-report.md`.
 
 ## In Progress
-- Transitioning to `FEAT-008-BE-admin-products.md` (Admin Product CRUD & Revalidation).
+- Transitioning to `FEAT-008-FE-admin-products.md` (Admin Product Management UI).
 
 ## Next Up
-- `FEAT-008-BE-admin-products.md` (Admin Product CRUD & Revalidation).
+- `FEAT-008-FE-admin-products.md` (Admin Product Management UI).
 
 ## Open Questions
 - None currently blocking.

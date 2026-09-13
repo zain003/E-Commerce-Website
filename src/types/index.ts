@@ -196,3 +196,32 @@ export interface PaymentIntentResponse {
   currency: string;
 }
 
+export interface CreateProductVariantDto {
+  sku: string;
+  name: string;
+  priceDelta: number;
+  stock: number;
+}
+
+export interface CreateProductDto {
+  name: string;
+  slug: string;
+  description: string;
+  basePrice: number;
+  categoryId: string;
+  images: string[];
+  featured?: boolean;
+  variants: CreateProductVariantDto[];
+}
+
+export type UpdateProductDto = Partial<CreateProductDto> & { isArchived?: boolean };
+
+export interface UpdateVariantStockDto {
+  stock: number;
+}
+
+export type AdminProduct = Product & {
+  category: Category;
+  variants: ProductVariant[];
+};
+
