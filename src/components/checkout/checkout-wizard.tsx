@@ -11,6 +11,8 @@ import {
 import { AddressStep } from "@/components/checkout/address-step";
 import { ShippingStep } from "@/components/checkout/shipping-step";
 import { CheckoutOrderSummary } from "@/components/checkout/order-summary";
+import { StripeWrapper } from "@/components/checkout/stripe-wrapper";
+import { StripePaymentForm } from "@/components/checkout/stripe-payment-form";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/components/product/price-tag";
@@ -66,6 +68,8 @@ export function CheckoutWizard({
   const [isValidating, setIsValidating] = React.useState(false);
   const [validationError, setValidationError] = React.useState<string | null>(null);
   const [isPaymentReady, setIsPaymentReady] = React.useState(false);
+  const [clientSecret, setClientSecret] = React.useState<string | null>(null);
+  const [paymentIntentId, setPaymentIntentId] = React.useState<string | null>(null);
 
   // Restore draft state from sessionStorage
   React.useEffect(() => {
@@ -193,6 +197,25 @@ export function CheckoutWizard({
         return;
       }
 
+      // Initialize Stripe PaymentIntent
+      const intentRes = await fetch("/api/payments/create-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ checkoutSession: payload }),
+      });
+
+      const intentJson = await intentRes.json();
+
+      if (!intentRes.ok || !intentJson.success || !intentJson.data?.clientSecret) {
+        setValidationError(
+          intentJson.error?.message || "Failed to initialize payment gateway. Please try again."
+        );
+        setIsValidating(false);
+        return;
+      }
+
+      setClientSecret(intentJson.data.clientSecret);
+      setPaymentIntentId(intentJson.data.paymentIntentId);
       setIsPaymentReady(true);
       setIsValidating(false);
     } catch {
@@ -330,7 +353,11 @@ export function CheckoutWizard({
                     type="button"
                     variant="ghost"
                     size="sm"
-                    onClick={() => setStep(1)}
+                    onClick={() => {
+                      setIsPaymentReady(false);
+                      setClientSecret(null);
+                      setStep(1);
+                    }}
                     className="gap-1.5 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
                   >
                     <Edit2 className="h-3 w-3" />
@@ -366,7 +393,11 @@ export function CheckoutWizard({
                     type="button"
                     variant="ghost"
                     size="sm"
-                    onClick={() => setStep(2)}
+                    onClick={() => {
+                      setIsPaymentReady(false);
+                      setClientSecret(null);
+                      setStep(2);
+                    }}
                     className="gap-1.5 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
                   >
                     <Edit2 className="h-3 w-3" />
@@ -396,52 +427,69 @@ export function CheckoutWizard({
                 </div>
               </div>
 
-              {/* Payment Readiness State */}
-              {isPaymentReady ? (
-                <div
-                  role="status"
-                  className="rounded-2xl border border-emerald-500/30 bg-emerald-50/50 dark:bg-emerald-950/20 p-5 space-y-3"
-                >
-                  <div className="flex items-center gap-2 text-emerald-600 font-semibold text-sm">
-                    <Check className="h-5 w-5" />
-                    <span>Checkout Verified & Ready for Payment</span>
+              {/* Stripe Credit Card Payment Form */}
+              {clientSecret && (
+                <div className="space-y-4 pt-2">
+                  <div className="space-y-1">
+                    <h4 className="text-sm font-semibold text-foreground">
+                      Payment Details
+                    </h4>
+                    <p className="text-xs text-muted-foreground">
+                      Enter your payment card information. All transactions are 256-bit encrypted and secure.
+                    </p>
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    Your shipping information and stock availability have been successfully confirmed.
-                    Stripe credit card processing will be handled in the next step.
-                  </p>
+                  <StripeWrapper clientSecret={clientSecret}>
+                    <StripePaymentForm
+                      amount={preview.total}
+                      paymentIntentId={paymentIntentId || undefined}
+                    />
+                  </StripeWrapper>
+                  <div className="pt-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setIsPaymentReady(false);
+                        setClientSecret(null);
+                        setStep(2);
+                      }}
+                      className="gap-2 text-xs font-semibold cursor-pointer"
+                    >
+                      <ArrowLeft className="h-3 w-3" />
+                      <span>Back to Delivery</span>
+                    </Button>
+                  </div>
                 </div>
-              ) : null}
+              )}
 
-              {/* Action Buttons */}
-              <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-3 pt-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="lg"
-                  onClick={() => setStep(2)}
-                  className="w-full sm:w-auto gap-2 font-semibold shadow-xs cursor-pointer"
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                  <span>Back to Delivery</span>
-                </Button>
+              {/* Action Buttons before Stripe Form is initialized */}
+              {!clientSecret && (
+                <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-3 pt-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="lg"
+                    onClick={() => setStep(2)}
+                    className="w-full sm:w-auto gap-2 font-semibold shadow-xs cursor-pointer"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    <span>Back to Delivery</span>
+                  </Button>
 
-                <Button
-                  type="button"
-                  size="lg"
-                  onClick={handleProceedToPayment}
-                  disabled={isValidating || isPaymentReady}
-                  isLoading={isValidating}
-                  className="w-full sm:w-auto gap-2 font-semibold shadow-xs cursor-pointer"
-                >
-                  <Lock className="h-4 w-4" />
-                  <span>
-                    {isPaymentReady
-                      ? "Ready for Stripe Payment"
-                      : "Proceed to Payment"}
-                  </span>
-                </Button>
-              </div>
+                  <Button
+                    type="button"
+                    size="lg"
+                    onClick={handleProceedToPayment}
+                    disabled={isValidating}
+                    isLoading={isValidating}
+                    className="w-full sm:w-auto gap-2 font-semibold shadow-xs cursor-pointer"
+                  >
+                    <Lock className="h-4 w-4" />
+                    <span>Proceed to Payment</span>
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </div>
