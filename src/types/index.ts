@@ -160,3 +160,15 @@ export interface CheckoutSessionDto {
   guestEmail?: string;
 }
 
+export interface CreatePaymentIntentDto {
+  checkoutSession: CheckoutSessionDto;
+  idempotencyKey?: string;
+}
+
+export interface PaymentIntentResponse {
+  clientSecret: string;
+  paymentIntentId: string;
+  amount: number;
+  currency: string;
+}
+

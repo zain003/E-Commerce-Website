@@ -43,12 +43,15 @@ Update this file after every meaningful implementation change.
 - Multi-layer SQA test suite for Checkout FE: 19 passing tests across 3 UI test suites (`checkout-address-step.test.tsx`, `shipping-method-selector.test.tsx`, `checkout-navigation.test.tsx`). Repository-wide test suite: 234 passing tests across 42 test suites with 100% success rate. `npx tsc --noEmit` and `npm run build` pass with zero errors.
 - `FEAT-005-VERIFY-checkout.md`: Checkout Verification Pass & End-to-End Sign-off. Fully verified all 8 acceptance criteria and SQA DoD items across 8 test suites (48 tests total for FEAT-005). All 234 repository automated tests pass with 0 failures (100% pass rate). `npx tsc --noEmit` (0 errors) and Next.js 16 production build (`npm run build`) succeeded cleanly with zero errors.
 - Verified test report finalized: `feature-test-reports/FEAT-005-test-report.md`.
+- `FEAT-006-BE-payments.md`: Stripe Payment Intents API. Implemented `src/lib/payments/stripe.ts` (Stripe Node SDK client singleton and pure `calculateStripeAmount` utility guaranteeing exact integer cents without IEEE 754 floating-point drift); `src/lib/validators/payments.ts` (`createPaymentIntentSchema` and `validateCreatePaymentIntentInput` validating checkout payload, guest email, address, and phone); `src/lib/services/payments.ts` (`createPaymentIntent` enforcing server-side price invariant, live inventory verification, metadata binding for cartId, userId/guestEmail, and shippingAddress, idempotency key generation, and resilient 503 SERVICE_UNAVAILABLE Stripe outage handling); and App Router route handler `POST /api/payments/create-intent` in `src/app/api/payments/create-intent/route.ts` returning standard `ApiResponse<PaymentIntentResponse>` JSON envelopes.
+- Multi-layer SQA test suite for Payments BE: 16 passing tests across 3 test suites (`stripe-amount-calculation.test.ts`, `payment-intent-creation.test.ts`, `payment-intent-empty-cart.test.ts`). Repository-wide test suite: 250 passing tests across 45 test suites with 100% success rate. `npx tsc --noEmit` and Next.js 16 production build (`npm run build`) pass with zero errors.
+- Verified test report finalized: `feature-test-reports/FEAT-006-test-report.md`.
 
 ## In Progress
-- Transitioning to Module 6: Stripe Payments (`FEAT-006-BE-payments.md`).
+- Transitioning to `FEAT-006-INT-stripe-webhook.md` (Stripe Webhook Processing).
 
 ## Next Up
-- `FEAT-006-BE-payments.md` (Stripe Payment Intents API).
+- `FEAT-006-INT-stripe-webhook.md` (Stripe Webhooks & Atomic Order Creation).
 
 ## Open Questions
 - None currently blocking.
