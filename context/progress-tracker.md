@@ -6,7 +6,7 @@ Update this file after every meaningful implementation change.
 - Phase 1 — MVP (In Progress)
 
 ## Current Goal
-- Complete Module 6: Stripe Payments Integration (`FEAT-006`)
+- Complete Module 7: Order Query, Confirmation & Receipt Service (`FEAT-007`)
 
 ## Completed
 - Next.js 16 (App Router + Turbopack + Tailwind v4 + TypeScript) project initialization.
@@ -49,12 +49,17 @@ Update this file after every meaningful implementation change.
 - `FEAT-006-FE-payments.md`: Stripe Elements Checkout UI. Implemented `src/components/checkout/stripe-wrapper.tsx` (memoized `loadStripe` singleton, `StripeWrapper` provider matching Tailwind v4 design tokens via Stripe appearance variables and strict `StripeElementsOptionsClientSecret` typing); `src/components/checkout/stripe-payment-form.tsx` (`StripePaymentForm` embedding `<PaymentElement id="payment-element" />` with horizontal overflow prevention, dynamic formatted total button, disabled state while Stripe SDK is resolving, `Loader2` spinning progress indicator during submission, double-submission lock, accessible error alerts with `role="alert"` for card declines and validation failures, retry prompt for network interruptions, 256-bit SSL encrypted trust badge, and redirection to `/order-confirmation?orderNumber=...` upon successful payment completion); and integrated payment intent initialization and Stripe Elements form rendering into Step 3 of `CheckoutWizard` (`src/components/checkout/checkout-wizard.tsx`) with state preservation across all steps on card decline.
 - Multi-layer SQA test suite for Payments FE: 12 passing tests across 3 UI test suites (`stripe-payment-form.test.tsx`, `payment-processing-state.test.tsx`, `payment-error-display.test.tsx`). Repository-wide test suite: 262 passing tests across 48 test suites with 100% success rate. `npx tsc --noEmit` and Next.js 16 production build (`npm run build`) pass with zero errors.
 - Verified test report finalized: `feature-test-reports/FEAT-006-FE-test-report.md`.
+- `FEAT-006-INT-stripe-webhook.md`: Stripe Webhook Processing & Atomic Order Creation. Implemented `src/lib/services/order-creation.ts` (`handleStripeWebhook` with cryptographic signature verification via `stripe.webhooks.constructEvent`, idempotency check against `stripePaymentId`, unique `orderNumber` generation, atomic `prisma.$transaction` creating `Order` with `status: PROCESSING` and `paymentStatus: PAID`, creating `OrderItem` line items, atomic inventory stock decrementing `decrement: item.quantity`, stock deficit admin alert logging, cart and cart items cleanup/deletion, concurrent delivery race condition handling for `P2002`, and `payment_intent.payment_failed` logging/order updating); Next.js 16 App Router route handler `POST /api/webhooks/stripe` in `src/app/api/webhooks/stripe/route.ts` with raw body reading and HTTP 400 `WEBHOOK_SIGNATURE_VERIFICATION_FAILED` error envelopes; and added `"test:integration"` script to `package.json`.
+- Multi-layer SQA test suite for Payments INT: 11 passing tests across 3 integration test suites (`stripe-webhook-signature.test.ts`, `stripe-webhook-idempotency.test.ts`, `atomic-stock-decrement.test.ts`). Repository-wide test suite: 273 passing tests across 51 test suites with 100% success rate. `npx tsc --noEmit` and Next.js 16 production build (`npm run build`) pass with zero errors.
+- Verified test report finalized: `feature-test-reports/FEAT-006-INT-test-report.md`.
+- `FEAT-006-VERIFY-payments.md`: Payments Full-Stack Verification Pass & End-to-End Sign-off. Verified all 9 acceptance criteria and SQA DoD items across Frontend Fake DOM (12 tests across 3 suites), Integration & Webhooks (11 tests across 3 suites), API Endpoints (9 tests across 2 suites), and Backend & Unit logic (7 tests across 1 suite), totaling 39 payment tests. All 273 repository-wide automated tests pass with 0 failures (100% pass rate). Strict TypeScript check (`npx tsc --noEmit`) and Next.js 16 production build (`npm run build`) succeeded cleanly with zero errors.
+- Verified full-stack test report finalized: `feature-test-reports/FEAT-006-test-report.md`.
 
 ## In Progress
-- Transitioning to `FEAT-006-INT-stripe-webhook.md` (Stripe Webhook Processing).
+- Transitioning to `FEAT-007-BE-orders.md` (Order Query & Receipt Service).
 
 ## Next Up
-- `FEAT-006-INT-stripe-webhook.md` (Stripe Webhooks & Atomic Order Creation).
+- `FEAT-007-BE-orders.md` (Order Query & Receipt Service).
 
 ## Open Questions
 - None currently blocking.
