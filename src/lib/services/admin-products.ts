@@ -18,7 +18,7 @@ import type {
 export async function getAdminProducts(
   page = 1,
   limit = 10
-): Promise<ApiResponse<PaginatedResult<Product>>> {
+): Promise<ApiResponse<PaginatedResult<AdminProduct>>> {
   try {
     const safePage = Math.max(1, page);
     const safeLimit = Math.max(1, Math.min(100, limit));
