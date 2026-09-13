@@ -6,7 +6,7 @@ Update this file after every meaningful implementation change.
 - Phase 1 — MVP (In Progress)
 
 ## Current Goal
-- Complete Module 5: Checkout & Shipping (`FEAT-005`)
+- Complete Module 6: Stripe Payments Integration (`FEAT-006`)
 
 ## Completed
 - Next.js 16 (App Router + Turbopack + Tailwind v4 + TypeScript) project initialization.
@@ -39,13 +39,16 @@ Update this file after every meaningful implementation change.
 - Verified test report finalized: `feature-test-reports/FEAT-004-test-report.md`.
 - `FEAT-005-BE-checkout.md`: Checkout Validation Service & Shipping Rate API. Implemented `src/lib/validators/checkout.ts` (`checkoutAddressSchema` validating address, postal code, and phone formats with 7-15 digits; `checkoutSessionSchema`; `validateCheckoutSessionInput` enforcing `guestEmail` for unauthenticated sessions); `src/lib/services/checkout.ts` (`calculateShippingFee` with Standard $5.00 / Free $\ge$ $100.00 and Express $15.00; `getAvailableShippingMethods`; `getCheckoutPreview` with real-time stock and archived check returning HTTP 400 `STOCK_CHANGED` and empty cart check returning HTTP 400 `CART_EMPTY`; `validateCheckoutSession`); and Next.js 16 App Router route handlers `GET /api/checkout/preview` and `POST /api/checkout/validate` conforming to standard `ApiResponse` envelopes.
 - Multi-layer SQA test suite for Checkout BE: 29 passing tests across 5 test suites (`shipping-calculator.test.ts`, `checkout-validator.test.ts`, `checkout-empty-cart.test.ts`, `checkout-validation.test.ts`, `checkout-preview-route.test.ts`). Repository-wide test suite: 215 passing tests across 39 test suites with 100% success rate. `npx tsc --noEmit` and `npm run build` pass with zero errors.
+- `FEAT-005-FE-checkout.md`: Multi-Step Checkout UI. Implemented `src/components/checkout/checkout-wizard.tsx` (coordinator managing step 1-3 progression, `sessionStorage` draft persistence, and live session validation); `src/components/checkout/address-step.tsx` (Step 1 with React Hook Form + Zod, guest email prompt for unauthenticated users, saved address selector for logged-in users, accessible error labels, and phone format validation); `src/components/checkout/shipping-step.tsx` (Step 2 radio selector with dynamic Standard $5.00/Free $\ge$ $100 and Express $15.00 delivery options); `src/components/checkout/order-summary.tsx` (responsive sticky sidebar / mobile drawer with itemized thumbnails, real-time total updates, and 256-bit encrypted checkout trust signals); `src/lib/services/shipping-calculator.ts` (pure calculation service preventing server module bundle leaks); and Next.js 16 Server Component `src/app/(shop)/checkout/page.tsx` with async session verification and saved address pre-fetching.
+- Multi-layer SQA test suite for Checkout FE: 19 passing tests across 3 UI test suites (`checkout-address-step.test.tsx`, `shipping-method-selector.test.tsx`, `checkout-navigation.test.tsx`). Repository-wide test suite: 234 passing tests across 42 test suites with 100% success rate. `npx tsc --noEmit` and `npm run build` pass with zero errors.
+- `FEAT-005-VERIFY-checkout.md`: Checkout Verification Pass & End-to-End Sign-off. Fully verified all 8 acceptance criteria and SQA DoD items across 8 test suites (48 tests total for FEAT-005). All 234 repository automated tests pass with 0 failures (100% pass rate). `npx tsc --noEmit` (0 errors) and Next.js 16 production build (`npm run build`) succeeded cleanly with zero errors.
 - Verified test report finalized: `feature-test-reports/FEAT-005-test-report.md`.
 
 ## In Progress
-- Transitioning to Module 5 Frontend: Multi-Step Checkout UI (`FEAT-005-FE-checkout.md`).
+- Transitioning to Module 6: Stripe Payments (`FEAT-006-BE-payments.md`).
 
 ## Next Up
-- `FEAT-005-FE-checkout.md` (Multi-Step Checkout UI: Address & Contact -> Delivery Method -> Order Review).
+- `FEAT-006-BE-payments.md` (Stripe Payment Intents API).
 
 ## Open Questions
 - None currently blocking.

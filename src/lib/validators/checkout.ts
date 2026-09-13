@@ -2,7 +2,7 @@ import { z } from "zod";
 import { CheckoutSessionDto } from "@/types";
 
 // Phone regex allowing optional '+' at start, followed by digits, spaces, hyphens, dots, or parentheses
-const phoneRegex = /^\+?[0-9\s\-().]{7,25}$/;
+const phoneRegex = /^\+?[0-9\s\-().]+$/;
 
 export const checkoutAddressSchema = z.object({
   fullName: z.string().trim().min(1, "Full name is required"),
@@ -19,6 +19,7 @@ export const checkoutAddressSchema = z.object({
   phone: z
     .string()
     .trim()
+    .max(25, "Phone number is too long")
     .regex(phoneRegex, "Invalid phone number format")
     .refine(
       (val) => {
