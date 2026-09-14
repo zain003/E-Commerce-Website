@@ -13,10 +13,12 @@ import {
   Heart,
   LogOut,
   ShieldCheck,
+  Edit,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ProfileEditModal } from "@/components/account/profile-edit-modal";
 
 export interface ProfileViewProps {
   user: {
@@ -29,6 +31,9 @@ export interface ProfileViewProps {
 }
 
 export function ProfileView({ user }: ProfileViewProps) {
+  const [userName, setUserName] = React.useState(user.name);
+  const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
+
   const registeredDate = React.useMemo(() => {
     try {
       return new Date(user.createdAt).toLocaleDateString("en-US", {
@@ -59,7 +64,19 @@ export function ProfileView({ user }: ProfileViewProps) {
             <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-muted text-muted-foreground mb-3">
               <UserIcon className="h-10 w-10 text-foreground" />
             </div>
-            <CardTitle className="text-xl">{user.name || "Customer"}</CardTitle>
+            <div className="flex items-center justify-center gap-1.5">
+              <CardTitle className="text-xl">{userName || "Customer"}</CardTitle>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                aria-label="Edit Profile"
+                className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
+                onClick={() => setIsEditModalOpen(true)}
+              >
+                <Edit className="h-3.5 w-3.5" />
+              </Button>
+            </div>
             <div className="pt-1">
               <Badge variant={user.role === "ADMIN" ? "default" : "secondary"}>
                 {user.role === "ADMIN" ? (
@@ -86,7 +103,17 @@ export function ProfileView({ user }: ProfileViewProps) {
               <span>Joined {registeredDate}</span>
             </div>
 
-            <div className="pt-4">
+            <div className="pt-4 space-y-2">
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full gap-2 text-foreground"
+                onClick={() => setIsEditModalOpen(true)}
+              >
+                <Edit className="h-4 w-4" />
+                <span>Edit Profile</span>
+              </Button>
+
               <Button
                 variant="outline"
                 className="w-full text-destructive hover:bg-destructive/10 hover:text-destructive gap-2"
@@ -185,6 +212,13 @@ export function ProfileView({ user }: ProfileViewProps) {
           </div>
         </div>
       </div>
+
+      <ProfileEditModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        currentName={userName}
+        onSuccess={(newName) => setUserName(newName)}
+      />
     </div>
   );
 }

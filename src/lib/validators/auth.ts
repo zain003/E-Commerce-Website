@@ -37,3 +37,9 @@ export const addressSchema = z.object({
 });
 
 export type AddressInput = z.infer<typeof addressSchema>;
+
+export const updateProfileSchema = z.object({
+  name: z.string().trim().min(1, "Name cannot be empty").max(100, "Name cannot exceed 100 characters"),
+});
+
+export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;

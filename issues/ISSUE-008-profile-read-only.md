@@ -27,10 +27,10 @@ Medium
 - **Out of Scope:** Implementing complex OAuth multi-factor or email-verification flows.
 
 ## Acceptance Criteria
-- [ ] `PATCH /api/account/profile` accepts and validates profile updates (e.g., `name`).
-- [ ] `ProfileView` renders an "Edit Profile" button opening an accessible modal or inline edit form.
-- [ ] Submitting the form updates the user name in the database and updates the UI immediately.
-- [ ] Unauthenticated requests to mutate profile return HTTP 401.
+- [x] `PATCH /api/account/profile` accepts and validates profile updates (e.g., `name`).
+- [x] `ProfileView` renders an "Edit Profile" button opening an accessible modal or inline edit form.
+- [x] Submitting the form updates the user name in the database and updates the UI immediately.
+- [x] Unauthenticated requests to mutate profile return HTTP 401.
 
 ## Related Feature ID
 FEAT-001 — Authentication & Profiles

@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
-import { registerSchema, addressSchema } from "@/lib/validators/auth";
+import { registerSchema, addressSchema, updateProfileSchema, UpdateProfileInput } from "@/lib/validators/auth";
 import {
   ApiResponse,
   RegisterDto,
@@ -279,6 +279,63 @@ export async function deleteAddress(
   return {
     success: true,
     data: { deletedId: addressId },
+    timestamp: new Date().toISOString(),
+  };
+}
+
+export async function updateProfile(
+  userId: string,
+  dto: UpdateProfileInput
+): Promise<ApiResponse<{ id: string; name: string | null; email: string; role: Role }>> {
+  const validated = updateProfileSchema.safeParse(dto);
+  if (!validated.success) {
+    return {
+      success: false,
+      error: {
+        code: "VALIDATION_ERROR",
+        message: "Invalid profile payload",
+        details: validated.error.flatten().fieldErrors,
+      },
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    return {
+      success: false,
+      error: {
+        code: "USER_NOT_FOUND",
+        message: "User not found",
+      },
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  const updated = await prisma.user.update({
+    where: { id: userId },
+    data: {
+      name: validated.data.name.trim(),
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+    },
+  });
+
+  return {
+    success: true,
+    data: {
+      id: updated.id,
+      name: updated.name,
+      email: updated.email,
+      role: updated.role as Role,
+    },
     timestamp: new Date().toISOString(),
   };
 }
