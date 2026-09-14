@@ -26,9 +26,9 @@ High
 - **Out of Scope:** Altering order querying logic or modifying `/account/orders` page implementation.
 
 ## Acceptance Criteria
-- [ ] Customers can access `/account/orders` directly from the global navigation (e.g., header, user menu, or footer).
-- [ ] The link includes appropriate accessible labels and icons (e.g., `Package` icon).
-- [ ] If clicked while unauthenticated, the user is redirected to `/login?callbackUrl=/account/orders`.
+- [x] Customers can access `/account/orders` directly from the global navigation (e.g., header, user menu, or footer).
+- [x] The link includes appropriate accessible labels and icons (e.g., `Package` icon).
+- [x] If clicked while unauthenticated, the user is redirected to `/login?callbackUrl=/account/orders`.
 
 ## Related Feature ID
 FEAT-007 — Orders & Receipts

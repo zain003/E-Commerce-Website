@@ -7,6 +7,7 @@ import {
   Home as HomeIcon,
   ShieldCheck,
   Heart,
+  Package,
 } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -52,6 +53,12 @@ export default async function ShopLayout({
                 className="transition-colors hover:text-foreground"
               >
                 Categories
+              </Link>
+              <Link
+                href="/account/orders"
+                className="transition-colors hover:text-foreground"
+              >
+                Orders
               </Link>
               <Link
                 href="/account/wishlist"
@@ -120,6 +127,13 @@ export default async function ShopLayout({
         </Link>
         <MobileCartNavButton />
         <Link
+          href="/account/orders"
+          className="flex flex-col items-center gap-1 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <Package className="h-5 w-5" />
+          <span>Orders</span>
+        </Link>
+        <Link
           href="/account/profile"
           className="flex flex-col items-center gap-1 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground"
         >
@@ -139,6 +153,21 @@ export default async function ShopLayout({
             <span className="text-xs text-muted-foreground">
               — Sub-second catalog & seamless checkout
             </span>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-6 text-xs">
+            <Link href="/products" className="transition-colors hover:text-foreground">
+              Catalog
+            </Link>
+            <Link href="/account/orders" className="transition-colors hover:text-foreground">
+              Orders
+            </Link>
+            <Link href="/account/wishlist" className="transition-colors hover:text-foreground">
+              Wishlist
+            </Link>
+            <Link href="/account/profile" className="transition-colors hover:text-foreground">
+              Account
+            </Link>
           </div>
 
           <div className="flex items-center gap-4 text-xs">
