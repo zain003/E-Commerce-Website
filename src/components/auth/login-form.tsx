@@ -10,6 +10,7 @@ import { AlertCircle } from "lucide-react";
 import { loginSchema, LoginInput } from "@/lib/validators/auth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useCartStore } from "@/store/cart-store";
 
 export function LoginForm() {
   const router = useRouter();
@@ -47,6 +48,13 @@ export function LoginForm() {
         setServerError("Invalid email or password. Please try again.");
         setIsLoading(false);
         return;
+      }
+
+      // Merge guest cart items into authenticated user account (ISSUE-007)
+      try {
+        await useCartStore.getState().mergeCart();
+      } catch (mergeErr) {
+        console.warn("[LoginForm] Cart merge error:", mergeErr);
       }
 
       router.push(callbackUrl);

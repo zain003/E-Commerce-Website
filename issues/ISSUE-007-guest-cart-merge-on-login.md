@@ -30,10 +30,10 @@ High
 - **Out of Scope:** Modifying `mergeGuestCart` backend database logic, which is already functional.
 
 ## Acceptance Criteria
-- [ ] When a guest with items in their cart signs in, `POST /api/cart/merge` is called.
-- [ ] All items from the guest cart are merged into the customer's account cart.
-- [ ] The `useCartStore` is refreshed immediately with the merged items.
-- [ ] Cart drawer displays the updated merged items and subtotal.
+- [x] When a guest with items in their cart signs in, `POST /api/cart/merge` is called.
+- [x] All items from the guest cart are merged into the customer's account cart.
+- [x] The `useCartStore` is refreshed immediately with the merged items.
+- [x] Cart drawer displays the updated merged items and subtotal.
 
 ## Related Feature ID
 FEAT-001 — Authentication & Profiles, FEAT-004 — Cart & Persistence

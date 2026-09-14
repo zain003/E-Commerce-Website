@@ -70,6 +70,7 @@ export interface CartStoreState {
   setError: (error: string | null) => void;
   clearCart: () => void;
   fetchCart: () => Promise<void>;
+  mergeCart: (guestToken?: string) => Promise<void>;
   addItem: (variantId: string, quantity?: number) => Promise<void>;
   updateQuantity: (itemId: string, quantity: number) => Promise<void>;
   removeItem: (itemId: string) => Promise<void>;
@@ -135,6 +136,36 @@ export const useCartStore = create<CartStoreState>((set, get) => ({
         isLoading: false,
         error: "Failed to connect to cart service",
       });
+    }
+  },
+
+  mergeCart: async (guestToken?: string) => {
+    set({ isLoading: true, error: null });
+    try {
+      const res = await fetch("/api/cart/merge", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(guestToken ? { guestToken } : {}),
+      });
+      if (!res.ok) {
+        throw new Error("Failed to merge cart");
+      }
+      const json: ApiResponse<HydratedCart> = await res.json();
+      if (json.success && json.data) {
+        const couponRecalc = recalculateCoupon(get().appliedCoupon, json.data.subtotal);
+        set({
+          cart: json.data,
+          isLoading: false,
+          error: null,
+          appliedCoupon: couponRecalc.appliedCoupon,
+          discountTotal: couponRecalc.discountTotal,
+          ...(couponRecalc.couponError ? { couponError: couponRecalc.couponError } : {}),
+        });
+      } else {
+        await get().fetchCart();
+      }
+    } catch {
+      await get().fetchCart();
     }
   },
 
