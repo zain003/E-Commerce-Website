@@ -106,6 +106,7 @@ import type {
   CartItem,
   Order,
   OrderItem,
+  Review,
 } from "@prisma/client";
 export type {
   Category,
@@ -115,6 +116,7 @@ export type {
   CartItem,
   Order,
   OrderItem,
+  Review,
 };
 
 export interface HydratedOrderItem extends OrderItem {
@@ -244,3 +246,17 @@ export interface AdminOrder extends Order {
   } | null;
   items: HydratedOrderItem[];
 }
+
+export interface CreateReviewDto {
+  productId: string;
+  rating: number; // 1 to 5
+  title?: string;
+  comment: string;
+}
+
+export interface ProductReviewSummary {
+  averageRating: number;
+  totalReviews: number;
+  ratingDistribution: Record<1 | 2 | 3 | 4 | 5, number>;
+}
+

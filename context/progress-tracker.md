@@ -76,12 +76,15 @@ Update this file after every meaningful implementation change.
 - Verified test report finalized: `feature-test-reports/FEAT-009-FE-test-report.md`.
 - `FEAT-009-VERIFY-admin-orders.md`: Admin Orders Full-Stack Verification Pass & End-to-End Sign-off. Verified all 8 acceptance criteria and SQA DoD items across Frontend Fake DOM (26 tests across 6 suites), API Endpoints (20 tests across 3 suites), and Backend & Unit logic (9 tests across 2 suites), totaling 55 admin orders feature tests. All 459 repository-wide automated tests pass with 0 failures (100% pass rate). Strict TypeScript check (`npx tsc --noEmit`) and Next.js 16 production build (`npm run build`) succeeded cleanly with zero errors.
 - Verified unified test report finalized: `feature-test-reports/FEAT-009-test-report.md`.
+- `FEAT-010-BE-reviews.md`: Product Reviews Service & API Backend. Implemented `src/types/index.ts` (`CreateReviewDto`, `ProductReviewSummary`, re-exporting `Review`); `src/lib/validators/review.ts` (`createReviewSchema` validating 1-5 rating and 10-1000 character comment length, `reviewQuerySchema` validating pagination); `src/lib/services/reviews.ts` (`calculateReviewSummary` aggregating 1-5 star distributions and rounding average rating to 1 decimal place, `hasUserPurchasedProduct` checking completed orders in `PROCESSING`, `SHIPPED`, or `DELIVERED` status with paid verification, `getProductReviews` paginating reviews with reviewer names, `getProductReviewSummary` returning distribution metrics, and `createProductReview` enforcing verified buyer check HTTP 403 `ONLY_VERIFIED_BUYERS` and duplicate check HTTP 409 `ALREADY_REVIEWED`); and Next.js 16 App Router route handlers `GET /api/products/[slug]/reviews`, `POST /api/products/[slug]/reviews`, and `GET /api/products/[slug]/reviews/summary` with dual `slug`/`id` parameter resolution preventing route collisions.
+- Multi-layer SQA test suite for Reviews BE: 21 passing tests across 4 test suites (`review-rating-calc.test.ts`, `review-rating-bounds.test.ts`, `review-verified-buyer.test.ts`, `review-list-and-summary.test.ts`). Repository-wide test suite: 480 passing tests across 82 test suites with 100% success rate. `npx tsc --noEmit` (0 errors) and Next.js 16 production build (`npm run build`) pass cleanly with zero errors.
+- Verified test report finalized: `feature-test-reports/FEAT-010-BE-test-report.md`.
 
 ## In Progress
-- Transitioning to `FEAT-010-BE-reviews.md` (Product Reviews Service & API).
+- `FEAT-010-FE-reviews.md` (Product Reviews UI & Rating Components).
 
 ## Next Up
-- `FEAT-010-BE-reviews.md` (Product Reviews Service & API).
+- `FEAT-010-FE-reviews.md` (Product Reviews UI & Rating Components).
 
 ## Open Questions
 - None currently blocking.
