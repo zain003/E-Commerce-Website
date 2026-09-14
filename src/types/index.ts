@@ -108,6 +108,7 @@ import type {
   OrderItem,
   Review,
   WishlistItem,
+  Coupon,
 } from "@prisma/client";
 export type {
   Category,
@@ -119,6 +120,7 @@ export type {
   OrderItem,
   Review,
   WishlistItem,
+  Coupon,
 };
 
 export interface HydratedOrderItem extends OrderItem {
@@ -269,5 +271,20 @@ export interface HydratedWishlistItem extends WishlistItem {
 export interface ToggleWishlistResponse {
   isWishlisted: boolean;
   productId: string;
+}
+
+export interface ValidateCouponDto {
+  code: string;
+  cartSubtotal: number;
+}
+
+export interface CouponValidationResult {
+  valid: boolean;
+  code: string;
+  discountType: DiscountType;
+  discountValue: number;
+  discountAmount: number;
+  newTotal: number;
+  minSpend?: number | null;
 }
 

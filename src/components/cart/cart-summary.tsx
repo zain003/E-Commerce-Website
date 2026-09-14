@@ -6,6 +6,8 @@ import { ArrowRight, ShieldCheck, Truck } from "lucide-react";
 import { formatCurrency } from "@/components/product/price-tag";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useCartStore } from "@/store/cart-store";
+import { CouponInput } from "@/components/cart/coupon-input";
 
 export interface CartSummaryProps {
   subtotal: number;
@@ -24,9 +26,14 @@ export function CartSummary({
   className,
   isCompact = false,
 }: CartSummaryProps) {
+  const appliedCoupon = useCartStore((s) => s.appliedCoupon);
+  const discountTotal = useCartStore((s) => s.discountTotal);
+
   const isFreeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
   const amountNeeded = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
   const progressPercent = Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100);
+
+  const estimatedTotal = Math.max(0, subtotal - discountTotal);
 
   return (
     <div
@@ -61,6 +68,11 @@ export function CartSummary({
         </div>
       </div>
 
+      {/* Promo Code Input Form */}
+      <div className="border-t border-border/60 pt-3">
+        <CouponInput />
+      </div>
+
       {/* Calculations */}
       <div className="space-y-2.5 text-sm">
         <div className="flex items-center justify-between text-muted-foreground">
@@ -72,6 +84,17 @@ export function CartSummary({
             {formatCurrency(subtotal)}
           </span>
         </div>
+
+        {discountTotal > 0 && (
+          <div className="flex items-center justify-between text-emerald-600 font-medium">
+            <span>
+              Discount{appliedCoupon ? ` (${appliedCoupon.code})` : ""}
+            </span>
+            <span data-testid="discount-amount">
+              -{formatCurrency(discountTotal)}
+            </span>
+          </div>
+        )}
 
         <div className="flex items-center justify-between text-muted-foreground">
           <span>Estimated Shipping</span>
@@ -86,8 +109,11 @@ export function CartSummary({
 
         <div className="border-t border-border pt-2.5 flex items-center justify-between">
           <span className="text-base font-bold text-foreground">Estimated Total</span>
-          <span className="text-lg font-extrabold text-foreground">
-            {formatCurrency(subtotal)}
+          <span
+            data-testid="cart-estimated-total"
+            className="text-lg font-extrabold text-foreground"
+          >
+            {formatCurrency(estimatedTotal)}
           </span>
         </div>
       </div>

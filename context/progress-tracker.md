@@ -3,10 +3,10 @@
 Update this file after every meaningful implementation change.
 
 ## Current Phase
-- Phase 1 — MVP (In Progress)
+- Phase 1 MVP & Phase 2 Growth (Complete — All 12 Modules Verified)
 
 ## Current Goal
-- Complete Module 12: Coupon Engine & Discounts (`FEAT-012`)
+- Maintain 100% automated test coverage and zero-regression production stability across all modules.
 
 ## Completed
 - Next.js 16 (App Router + Turbopack + Tailwind v4 + TypeScript) project initialization.
@@ -94,11 +94,21 @@ Update this file after every meaningful implementation change.
 - `FEAT-011-VERIFY-wishlist.md`: Wishlist Full-Stack Verification Pass & End-to-End Sign-off. Verified all 8 acceptance criteria and SQA DoD items across Frontend Fake DOM (11 tests across 3 suites), API Endpoints (9 tests across 2 suites), and Backend & Unit logic (8 tests across 1 suite), totaling 28 wishlist feature tests. All 528 repository-wide automated tests pass with 0 failures (100% pass rate). Strict TypeScript check (`npx tsc --noEmit`) and Next.js 16 production build (`npm run build`) succeeded cleanly with zero errors across all 37 routes.
 - Verified unified test report finalized: `feature-test-reports/FEAT-011-test-report.md`.
 
+- `FEAT-012-BE-coupons.md`: Coupon Engine & Validation Service Backend. Implemented `src/types/index.ts` (`ValidateCouponDto`, `CouponValidationResult`, re-exporting `Coupon`); `src/lib/validators/coupon.ts` (`validateCouponSchema` validating coupon code and non-negative cartSubtotal); `src/lib/services/coupons.ts` (`calculateDiscount` supporting percentage and fixed amount discounts with subtotal clamping and precision rounding, `validateCoupon` performing case-insensitive lookup, active status check, expiration check, max usage limit check, and minimum spend validation, and `incrementCouponUsage` updating used counter); and Next.js 16 App Router route handler `POST /api/coupons/validate` returning standard `ApiResponse` JSON envelopes.
+- Multi-layer SQA test suite for Coupon BE: 17 passing tests across 3 test suites (`coupon-discount-calc.test.ts`, `coupon-expiry.test.ts`, `coupon-min-spend.test.ts`). Strict TypeScript check (`npx tsc --noEmit`) passes with zero errors.
+- Verified test report finalized: `feature-test-reports/FEAT-012-BE-test-report.md`.
+- `FEAT-012-FE-coupons.md`: Coupon Input & Discount Display UI. Implemented `src/lib/services/coupon-calculator.ts` (pure calculation service preventing server code leakage into client bundles); `src/store/cart-store.ts` (`useCartStore` updated with `appliedCoupon`, `discountTotal`, `couponError`, `isApplyingCoupon`, `applyCoupon`, `removeCoupon`, and automatic recalculation / invalidation when cart items change); `src/components/cart/coupon-input.tsx` (accessible promo code form, spinner loading state, inline error alert, applied discount badge with remove action); `src/components/cart/cart-summary.tsx` (embedded `CouponInput`, green discount deduction line item, dynamic total deduction); and `src/components/checkout/order-summary.tsx` (discount line item and coupon input integration).
+- Multi-layer SQA test suite for Coupon FE: 9 passing tests across 3 UI test suites (`coupon-input.test.tsx`, `coupon-applied-badge.test.tsx`, `coupon-error-message.test.tsx`). Repository-wide test suite: 554 passing tests across 99 test suites with 100% success rate. `npx tsc --noEmit` (0 errors) and Next.js 16 production build (`npm run build`) pass cleanly with zero errors.
+- Verified test report finalized: `feature-test-reports/FEAT-012-FE-test-report.md`.
+
+- `FEAT-012-VERIFY-coupons.md`: Coupons Full-Stack Verification Pass & End-to-End Sign-off. Verified all 7 acceptance criteria and SQA DoD items across Frontend Fake DOM (9 tests across 3 suites), API Endpoints (9 tests across 2 suites), and Backend & Unit logic (8 tests across 1 suite), totaling 26 coupon feature tests. All 554 repository-wide automated tests pass with 0 failures (100% pass rate). Strict TypeScript check (`npx tsc --noEmit`) and Next.js 16 production build (`npm run build`) succeeded cleanly with zero errors across all 38 routes.
+- Verified unified test report finalized: `feature-test-reports/FEAT-012-test-report.md`.
+
 ## In Progress
-- `FEAT-012-BE-coupons.md` (Coupon Engine & Validation Backend).
+- None.
 
 ## Next Up
-- `FEAT-012-FE-coupons.md` (Coupon Input & Discount Display).
+- Full specifications suite (Modules 1 through 12) 100% completed and verified!
 
 ## Open Questions
 - None currently blocking.

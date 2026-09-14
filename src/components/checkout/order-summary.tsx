@@ -6,6 +6,8 @@ import { CheckoutPreview } from "@/types";
 import { formatCurrency } from "@/components/product/price-tag";
 import { ShieldCheck, Lock, RotateCcw, ChevronDown, ChevronUp, Package } from "lucide-react";
 import { calculateShippingFee } from "@/lib/services/shipping-calculator";
+import { useCartStore } from "@/store/cart-store";
+import { CouponInput } from "@/components/cart/coupon-input";
 
 export interface CheckoutOrderSummaryProps {
   preview: CheckoutPreview;
@@ -19,14 +21,18 @@ export function CheckoutOrderSummary({
   className = "",
 }: CheckoutOrderSummaryProps) {
   const [isOpenMobile, setIsOpenMobile] = React.useState(false);
+  const storeDiscount = useCartStore((s) => s.discountTotal);
+  const appliedCoupon = useCartStore((s) => s.appliedCoupon);
 
   const items = preview.items || [];
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   const subtotal = preview.subtotal;
   const shippingFee = calculateShippingFee(subtotal, selectedShippingMethodId);
-  const discountTotal = preview.discountTotal || 0.0;
-  const total = Math.round((subtotal + shippingFee - discountTotal) * 100) / 100;
+  const discountTotal = preview.discountTotal !== undefined && preview.discountTotal > 0
+    ? preview.discountTotal
+    : storeDiscount || 0.0;
+  const total = Math.max(0, Math.round((subtotal + shippingFee - discountTotal) * 100) / 100);
 
   return (
     <div
@@ -132,6 +138,11 @@ export function CheckoutOrderSummary({
         })}
       </div>
 
+      {/* Promo Code Input */}
+      <div className="border-t border-border/60 pt-3">
+        <CouponInput />
+      </div>
+
       {/* Calculations Breakdown */}
       <div className="space-y-2.5 border-t border-border pt-4 text-xs sm:text-sm">
         <div className="flex items-center justify-between text-muted-foreground">
@@ -157,8 +168,10 @@ export function CheckoutOrderSummary({
 
         {discountTotal > 0 && (
           <div className="flex items-center justify-between text-emerald-600">
-            <span>Discount</span>
-            <span className="font-semibold">
+            <span>
+              Discount{appliedCoupon ? ` (${appliedCoupon.code})` : ""}
+            </span>
+            <span data-testid="discount-amount" className="font-semibold">
               -{formatCurrency(discountTotal)}
             </span>
           </div>
