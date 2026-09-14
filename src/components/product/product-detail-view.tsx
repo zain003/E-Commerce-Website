@@ -51,7 +51,7 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
   };
 
   return (
-    <div className="relative pb-24 md:pb-12">
+    <div className="relative pb-36 md:pb-12">
       {/* Breadcrumb Navigation */}
       <nav
         aria-label="Breadcrumb"
@@ -149,7 +149,7 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
       {/* Sticky Mobile Action Bar (acceptance criterion 4) */}
       <aside
         data-testid="sticky-mobile-bar"
-        className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/95 p-3.5 backdrop-blur-md shadow-lg md:hidden"
+        className="fixed bottom-16 left-0 right-0 z-40 border-t border-border bg-background/95 p-3.5 backdrop-blur-md shadow-lg md:hidden"
         aria-label="Quick order action bar"
       >
         <div className="mx-auto flex max-w-md items-center justify-between gap-4">

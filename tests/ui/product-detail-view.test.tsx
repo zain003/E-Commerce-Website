@@ -84,11 +84,13 @@ describe("ProductDetailView UI Component", () => {
     ).toBeTruthy();
   });
 
-  it("renders sticky mobile action bar at bottom of viewport", () => {
+  it("renders sticky mobile action bar positioned above bottom navigation at bottom-16", () => {
     render(<ProductDetailView product={mockProductDetail} />);
 
     const stickyBar = screen.getByTestId("sticky-mobile-bar");
     expect(stickyBar).toBeTruthy();
+    expect(stickyBar.className).toContain("bottom-16");
+    expect(stickyBar.className).not.toContain("bottom-0");
     // Verify it contains an Add to Cart button and price display
     expect(stickyBar.textContent).toContain("$79.99");
     expect(stickyBar.textContent).toContain("Add to Cart");

@@ -30,9 +30,9 @@ High
 - **Out of Scope:** Altering desktop product detail view layout.
 
 ## Acceptance Criteria
-- [ ] On mobile viewports (< 768px), the sticky action bar and the mobile bottom navigation bar do not overlap or obscure each other.
-- [ ] Both the "Add to Cart" CTA and all 4 bottom navigation tabs (`Home`, `Search`, `Cart`, `Profile`) are visible and interactive.
-- [ ] No horizontal or vertical overflow defects are introduced.
+- [x] On mobile viewports (< 768px), the sticky action bar and the mobile bottom navigation bar do not overlap or obscure each other.
+- [x] Both the "Add to Cart" CTA and all 4 bottom navigation tabs (`Home`, `Search`, `Cart`, `Profile`) are visible and interactive.
+- [x] No horizontal or vertical overflow defects are introduced.
 
 ## Related Feature ID
 FEAT-002 — Catalog & Product Details
