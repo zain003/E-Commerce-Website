@@ -154,38 +154,57 @@ export default async function ShopLayout({
 
       {/* Storefront Footer */}
       <footer className="border-t border-border bg-card py-10 pb-24 text-sm text-muted-foreground md:pb-10">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-4 text-center sm:flex-row sm:px-6 sm:text-left">
-          <div className="flex items-center gap-2">
-            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground text-xs font-bold">
-              S
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="flex flex-col items-center justify-between gap-8 sm:flex-row sm:items-start">
+            <div className="flex flex-col items-center sm:items-start gap-2">
+              <div className="flex items-center gap-2">
+                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground text-xs font-bold">
+                  S
+                </div>
+                <span className="font-semibold text-foreground">Modern Store</span>
+              </div>
+              <p className="text-xs text-muted-foreground text-center sm:text-left max-w-xs">
+                Sub-second catalog & seamless checkout built with Next.js 16 and Tailwind v4.
+              </p>
             </div>
-            <span className="font-semibold text-foreground">Modern Store</span>
-            <span className="text-xs text-muted-foreground">
-              — Sub-second catalog & seamless checkout
-            </span>
+
+            <div className="grid grid-cols-2 gap-8 text-xs sm:gap-12">
+              <div className="flex flex-col gap-2.5 text-center sm:text-left">
+                <span className="font-semibold text-foreground">Shop</span>
+                <Link href="/products" className="transition-colors hover:text-foreground">
+                  All Products
+                </Link>
+                <Link href="/#categories" className="transition-colors hover:text-foreground">
+                  Categories
+                </Link>
+                <Link href="/products?featured=true" className="transition-colors hover:text-foreground">
+                  Featured
+                </Link>
+              </div>
+
+              <div className="flex flex-col gap-2.5 text-center sm:text-left">
+                <span className="font-semibold text-foreground">Account</span>
+                <Link href="/account/orders" className="transition-colors hover:text-foreground">
+                  My Orders
+                </Link>
+                <Link href="/account/wishlist" className="transition-colors hover:text-foreground">
+                  Saved Wishlist
+                </Link>
+                <Link href="/account/addresses" className="transition-colors hover:text-foreground">
+                  Saved Addresses
+                </Link>
+                <Link href="/account/profile" className="transition-colors hover:text-foreground">
+                  Profile Settings
+                </Link>
+              </div>
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-6 text-xs">
-            <Link href="/products" className="transition-colors hover:text-foreground">
-              Catalog
-            </Link>
-            <Link href="/account/orders" className="transition-colors hover:text-foreground">
-              Orders
-            </Link>
-            <Link href="/account/wishlist" className="transition-colors hover:text-foreground">
-              Wishlist
-            </Link>
-            <Link href="/account/profile" className="transition-colors hover:text-foreground">
-              Account
-            </Link>
-          </div>
-
-          <div className="flex items-center gap-4 text-xs">
-            <span className="inline-flex items-center gap-1 text-emerald-600">
+          <div className="mt-8 pt-6 border-t border-border/60 flex flex-col items-center justify-between gap-4 text-xs sm:flex-row">
+            <div className="flex items-center gap-1.5 text-emerald-600">
               <ShieldCheck className="h-3.5 w-3.5" />
-              Verified SQA Quality Gate
-            </span>
-            <span>•</span>
+              <span>Verified SQA Quality Gate</span>
+            </div>
             <p>© {new Date().getFullYear()} Modern Store. All rights reserved.</p>
           </div>
         </div>

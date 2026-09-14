@@ -27,9 +27,9 @@ Low
 - **Out of Scope:** Creating standalone terms/privacy policy pages if not in spec.
 
 ## Acceptance Criteria
-- [ ] The storefront footer provides organized, accessible links to core destinations: `/products`, `/#categories`, `/account/orders`, and `/account/wishlist`.
-- [ ] Links conform to Tailwind v4 design tokens and WCAG AA contrast standards.
-- [ ] Links are thumb-reachable and responsively stacked on mobile screens.
+- [x] The storefront footer provides organized, accessible links to core destinations: `/products`, `/#categories`, `/account/orders`, and `/account/wishlist`.
+- [x] Links conform to Tailwind v4 design tokens and WCAG AA contrast standards.
+- [x] Links are thumb-reachable and responsively stacked on mobile screens.
 
 ## Related Feature ID
 FEAT-002 — Catalog & Product Details, FEAT-007 — Orders & Receipts
