@@ -46,7 +46,11 @@ const defaultSummary: ProductReviewSummary = {
 function useSafeSession() {
   try {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    return useSession();
+    const session = useSession();
+    if (!session) {
+      return { data: null, status: "unauthenticated" as const };
+    }
+    return session;
   } catch {
     return { data: null, status: "unauthenticated" as const };
   }

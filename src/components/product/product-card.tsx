@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ShoppingBag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { PriceTag } from "@/components/product/price-tag";
+import { WishlistButton } from "@/components/wishlist/wishlist-button";
 import { Product, Category } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -66,6 +67,11 @@ export function ProductCard({
             </Badge>
           </div>
         )}
+
+        {/* Wishlist Button Over Image */}
+        <div className="absolute top-3 right-3 z-10">
+          <WishlistButton productId={product.id} size="sm" />
+        </div>
       </div>
 
       {/* Card Content & Details */}

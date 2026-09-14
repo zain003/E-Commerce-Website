@@ -6,6 +6,7 @@ import {
   Search,
   Home as HomeIcon,
   ShieldCheck,
+  Heart,
 } from "lucide-react";
 import {
   HeaderCartButton,
@@ -48,6 +49,12 @@ export default function ShopLayout({
                 Categories
               </Link>
               <Link
+                href="/account/wishlist"
+                className="transition-colors hover:text-foreground"
+              >
+                Wishlist
+              </Link>
+              <Link
                 href="/account/addresses"
                 className="transition-colors hover:text-foreground"
               >
@@ -64,6 +71,14 @@ export default function ShopLayout({
             >
               <Search className="h-4 w-4" />
               <span className="hidden text-sm md:inline">Search</span>
+            </Link>
+
+            <Link
+              href="/account/wishlist"
+              aria-label="View wishlist"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              <Heart className="h-4 w-4" />
             </Link>
 
             <Link

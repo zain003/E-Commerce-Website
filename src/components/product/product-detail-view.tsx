@@ -18,6 +18,7 @@ import {
 
 import { useCartStore } from "@/store/cart-store";
 import { ReviewSection } from "@/components/reviews/review-section";
+import { WishlistButton } from "@/components/wishlist/wishlist-button";
 
 export interface ProductDetailViewProps {
   product: ProductDetail;
@@ -105,18 +106,23 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
             onSelectVariant={(variant) => setSelectedVariant(variant)}
           />
 
-          {/* Desktop Primary Action Button */}
-          <div className="hidden md:block pt-2">
+          {/* Desktop Primary Action Buttons */}
+          <div className="hidden md:flex items-center gap-3 pt-2">
             <Button
               type="button"
               size="lg"
               disabled={isOutOfStock}
               onClick={handleAddToCart}
-              className="w-full gap-2 text-base font-semibold shadow-sm cursor-pointer"
+              className="flex-1 gap-2 text-base font-semibold shadow-sm cursor-pointer"
             >
               <ShoppingBag className="h-5 w-5" />
               <span>{isOutOfStock ? "Out of Stock" : "Add to Cart"}</span>
             </Button>
+            <WishlistButton
+              productId={product.id}
+              size="lg"
+              className="border border-border shrink-0"
+            />
           </div>
 
           {/* Trust Highlights */}
@@ -166,6 +172,12 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
             <ShoppingBag className="h-4 w-4" />
             <span>{isOutOfStock ? "Out of Stock" : "Add to Cart"}</span>
           </Button>
+
+          <WishlistButton
+            productId={product.id}
+            size="md"
+            className="border border-border shrink-0"
+          />
         </div>
       </aside>
     </div>

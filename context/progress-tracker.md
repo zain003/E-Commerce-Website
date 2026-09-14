@@ -6,7 +6,7 @@ Update this file after every meaningful implementation change.
 - Phase 1 — MVP (In Progress)
 
 ## Current Goal
-- Complete Module 11: Customer Wishlist (`FEAT-011`)
+- Complete Module 12: Coupon Engine & Discounts (`FEAT-012`)
 
 ## Completed
 - Next.js 16 (App Router + Turbopack + Tailwind v4 + TypeScript) project initialization.
@@ -85,11 +85,20 @@ Update this file after every meaningful implementation change.
 - `FEAT-010-VERIFY-reviews.md`: Product Reviews Full-Stack Verification Pass & End-to-End Sign-off. Verified all 8 acceptance criteria and SQA DoD items across Frontend Fake DOM (20 tests across 5 suites), API Endpoints (16 tests across 3 suites), and Backend & Unit logic (5 tests across 1 suite), totaling 41 reviews feature tests. All 500 repository-wide automated tests pass with 0 failures (100% pass rate). Strict TypeScript check (`npx tsc --noEmit`) and Next.js 16 production build (`npm run build`) succeeded cleanly with zero errors across all 34 routes.
 - Verified unified test report finalized: `feature-test-reports/FEAT-010-test-report.md`.
 
+- `FEAT-011-BE-wishlist.md`: Wishlist Service & API Backend. Implemented `src/types/index.ts` (`HydratedWishlistItem`, `ToggleWishlistResponse`, re-exporting `WishlistItem`); `src/lib/validators/wishlist.ts` (`toggleWishlistSchema` validating `productId`); `src/lib/services/wishlist.ts` (`getWishlist` querying customer's wishlisted items with product and variants, dynamically computing `inStock` status based on non-archived variants having `stock > 0`, and `toggleWishlistItem` verifying product existence with HTTP 404 `NOT_FOUND` fallback and performing idempotent create/delete toggle); and Next.js 16 App Router route handlers with session authentication enforcement (`GET /api/account/wishlist` and `POST /api/account/wishlist/toggle` returning standard `ApiResponse` JSON envelopes).
+- Multi-layer SQA test suite for Wishlist BE: 17 passing tests across 3 test suites (`wishlist-auth.test.ts`, `wishlist-toggle.test.ts`, `wishlist-query.test.ts`). Strict TypeScript check (`npx tsc --noEmit`) passes with zero errors.
+- Verified test report finalized: `feature-test-reports/FEAT-011-BE-test-report.md`.
+- `FEAT-011-FE-wishlist.md`: Wishlist UI & Quick-Add. Implemented `src/components/wishlist/wishlist-button.tsx` (accessible Lucide `Heart` button with micro-bounce animation, optimistic toggle, unauthenticated redirect to `/login?callbackUrl=...`, and rollback on failure); `src/components/wishlist/wishlist-card.tsx` (wishlist card with product thumbnail, category badge, stock status, removal button, and "Move to Cart" action integrating default/in-stock variant addition and disabled "Out of Stock" button); `src/app/account/wishlist/page.tsx` (dedicated wishlist page with session protection, items grid, and accessible empty state with "Browse Products" CTA); embedded `WishlistButton` in `ProductCard` (`src/components/product/product-card.tsx`) and `ProductDetailView` (`src/components/product/product-detail-view.tsx`); and added Wishlist navigation links in `ShopLayout` header and nav (`src/app/(shop)/layout.tsx`).
+- Multi-layer SQA test suite for Wishlist FE: 11 passing tests across 3 UI test suites (`wishlist-button.test.tsx`, `wishlist-move-to-cart.test.tsx`, `wishlist-page.test.tsx`). Repository-wide test suite: 528 passing tests across 93 test suites with 100% success rate. `npx tsc --noEmit` (0 errors) and Next.js 16 production build (`npm run build`) pass cleanly with zero errors.
+- Verified test report finalized: `feature-test-reports/FEAT-011-FE-test-report.md`.
+- `FEAT-011-VERIFY-wishlist.md`: Wishlist Full-Stack Verification Pass & End-to-End Sign-off. Verified all 8 acceptance criteria and SQA DoD items across Frontend Fake DOM (11 tests across 3 suites), API Endpoints (9 tests across 2 suites), and Backend & Unit logic (8 tests across 1 suite), totaling 28 wishlist feature tests. All 528 repository-wide automated tests pass with 0 failures (100% pass rate). Strict TypeScript check (`npx tsc --noEmit`) and Next.js 16 production build (`npm run build`) succeeded cleanly with zero errors across all 37 routes.
+- Verified unified test report finalized: `feature-test-reports/FEAT-011-test-report.md`.
+
 ## In Progress
-- `FEAT-011-BE-wishlist.md` (Wishlist Service & API Backend).
+- `FEAT-012-BE-coupons.md` (Coupon Engine & Validation Backend).
 
 ## Next Up
-- `FEAT-011-BE-wishlist.md` (Wishlist Service & API Backend).
+- `FEAT-012-FE-coupons.md` (Coupon Input & Discount Display).
 
 ## Open Questions
 - None currently blocking.
