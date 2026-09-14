@@ -32,8 +32,8 @@ Low
 - **Out of Scope:** Redesigning the 403 page layout.
 
 ## Acceptance Criteria
-- [ ] Clicking "Sign in as Admin" on `/unauthorized` directs to `/login?callbackUrl=/admin/dashboard` (or preserves the user's attempted route).
-- [ ] Successfully logging in as an admin redirects to the dashboard rather than products by default.
+- [x] Clicking "Sign in as Admin" on `/unauthorized` directs to `/login?callbackUrl=/admin/dashboard` (or preserves the user's attempted route).
+- [x] Successfully logging in as an admin redirects to the dashboard rather than products by default.
 
 ## Related Feature ID
 FEAT-001 — Authentication & Profiles, FEAT-008 — Admin Catalog Management

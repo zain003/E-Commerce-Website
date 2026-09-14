@@ -7,7 +7,15 @@ export const metadata = {
   description: "You do not have permission to access this administration area.",
 };
 
-export default function UnauthorizedPage() {
+interface UnauthorizedPageProps {
+  searchParams?: Promise<{ callbackUrl?: string }>;
+}
+
+export default async function UnauthorizedPage(props: UnauthorizedPageProps) {
+  const searchParams = props.searchParams ? await props.searchParams : undefined;
+  const targetCallback = searchParams?.callbackUrl || "/admin/dashboard";
+  const loginHref = `/login?callbackUrl=${encodeURIComponent(targetCallback)}`;
+
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center">
       <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10 text-destructive mb-4">
@@ -32,7 +40,7 @@ export default function UnauthorizedPage() {
           </Button>
         </Link>
 
-        <Link href="/login?callbackUrl=/admin/products">
+        <Link href={loginHref}>
           <Button className="inline-flex items-center gap-2 cursor-pointer">
             <LogIn className="h-4 w-4" />
             Sign in as Admin
