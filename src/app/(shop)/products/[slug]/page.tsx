@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getProductBySlug } from "@/lib/services/products";
 import { ProductDetailView } from "@/components/product/product-detail-view";
+import { serializeData } from "@/lib/utils";
 
 interface ProductPageProps {
   params: Promise<{
@@ -43,7 +44,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <ProductDetailView product={product} />
+      <ProductDetailView product={serializeData(product)} />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getOrderByNumber } from "@/lib/services/orders";
 import { OrderReceipt } from "@/components/orders/order-receipt";
+import { serializeData } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { AlertCircle, ShoppingBag, Package } from "lucide-react";
 
@@ -107,7 +108,7 @@ export default async function OrderConfirmationPage({
 
   return (
     <div className="container max-w-5xl mx-auto px-4 py-8 sm:py-12 sm:px-6 lg:px-8">
-      <OrderReceipt order={result.data} />
+      <OrderReceipt order={serializeData(result.data)} />
     </div>
   );
 }

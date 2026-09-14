@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getUserOrders } from "@/lib/services/orders";
 import { OrderHistoryList } from "@/components/orders/order-history-list";
+import { serializeData } from "@/lib/utils";
 import { ChevronLeft } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -35,7 +36,7 @@ export default async function AccountOrdersPage({
   const result = await getUserOrders(session.user.id, page, limit);
 
   const ordersData = result.success && result.data
-    ? result.data
+    ? serializeData(result.data)
     : { items: [], total: 0, page: 1, limit, totalPages: 1 };
 
   return (

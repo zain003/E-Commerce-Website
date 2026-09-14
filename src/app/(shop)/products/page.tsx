@@ -4,6 +4,7 @@ import { getCategories } from "@/lib/services/products";
 import { searchProducts } from "@/lib/services/search";
 import { parseSearchParams } from "@/lib/validators/search";
 import { CatalogView } from "@/components/search/catalog-view";
+import { serializeData } from "@/lib/utils";
 
 interface ProductsPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -58,8 +59,8 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
       getCategories(),
       searchProducts(searchFilterParams),
     ]);
-    categories = fetchedCategories;
-    searchResult = fetchedResults;
+    categories = serializeData(fetchedCategories);
+    searchResult = serializeData(fetchedResults);
   } catch (error) {
     console.warn("[ProductsPage] Catalog fetch fallback:", error);
   }

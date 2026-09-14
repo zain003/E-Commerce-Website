@@ -11,16 +11,19 @@ import {
 import { getFeaturedProducts, getCategories } from "@/lib/services/products";
 import { ProductCard } from "@/components/product/product-card";
 import { Badge } from "@/components/ui/badge";
+import { serializeData } from "@/lib/utils";
 
 export default async function HomePage() {
   let featuredProducts: Awaited<ReturnType<typeof getFeaturedProducts>> = [];
   let categories: Awaited<ReturnType<typeof getCategories>> = [];
 
   try {
-    [featuredProducts, categories] = await Promise.all([
+    const [rawFeatured, rawCategories] = await Promise.all([
       getFeaturedProducts(),
       getCategories(),
     ]);
+    featuredProducts = serializeData(rawFeatured);
+    categories = serializeData(rawCategories);
   } catch (error) {
     console.warn("Notice: Database unavailable during page render. Rendering with empty catalog state.", error);
   }

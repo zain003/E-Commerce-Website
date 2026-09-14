@@ -6,7 +6,7 @@ Update this file after every meaningful implementation change.
 - Phase 1 — MVP (In Progress)
 
 ## Current Goal
-- Complete Module 9: Admin Order Processing (`FEAT-009`)
+- Complete Module 10: Product Reviews (`FEAT-010`)
 
 ## Completed
 - Next.js 16 (App Router + Turbopack + Tailwind v4 + TypeScript) project initialization.
@@ -69,12 +69,19 @@ Update this file after every meaningful implementation change.
 - Verified test report finalized: `feature-test-reports/FEAT-008-FE-test-report.md`.
 - `FEAT-008-VERIFY-admin-products.md`: Admin Products Full-Stack Verification Pass & End-to-End Sign-off. Verified all 8 acceptance criteria and SQA DoD items across Frontend Fake DOM (28 tests across 4 suites), API Endpoints (25 tests across 3 suites), and Backend & Unit logic (28 tests across 2 suites), totaling 81 admin products feature tests. All 398 repository-wide automated tests pass with 0 failures (100% pass rate). Strict TypeScript check (`npx tsc --noEmit`) and Next.js 16 production build (`npm run build`) succeeded cleanly with zero errors.
 - Verified test report finalized: `feature-test-reports/FEAT-008-test-report.md`.
+- `FEAT-009-BE-admin-orders.md`: Admin Order Processing API. Implemented `src/types/index.ts` (`AdminOrderMetrics`, `UpdateOrderStatusDto`, `AdminOrder`); `src/lib/validators/admin-orders.ts` (`adminOrderQuerySchema` validating optional order status filter, page, and limit; `updateOrderStatusSchema` validating order status transitions); `src/lib/services/admin-orders.ts` (`getAdminOrders` paginated querying with status filtering, user profile selection, and hydrated line item variants; `updateOrderStatus` with state machine transition invariants `PENDING_PAYMENT` -> `PROCESSING`/`CANCELLED` -> `SHIPPED` -> `DELIVERED`, handling paid cancellation with automatic `paymentStatus: "REFUNDED"`; `getAdminMetrics` aggregating paid orders revenue via Prisma `aggregate` subtotal and calculating total, processing, and delivered order counts); and Next.js 16 App Router route handlers with async `params` and strict `ADMIN` session enforcement (`GET /api/admin/orders`, `PATCH /api/admin/orders/[id]/status`, `GET /api/admin/metrics`).
+- Multi-layer SQA test suite for Admin Orders BE: 29 passing tests across 5 test suites (`admin-orders-auth.test.ts`, `admin-order-status-transition.test.ts`, `admin-metrics-calc.test.ts`, `admin-orders-query.test.ts`, `admin-orders-service.test.ts`). Repository-wide test suite: 433 passing tests across 72 test suites with 100% success rate. `npx tsc --noEmit` (0 errors) and Next.js 16 production build (`npm run build`) pass cleanly with zero errors.
+- `FEAT-009-FE-admin-orders.md`: Admin Orders UI & Dashboard. Implemented `src/components/admin/admin-nav.tsx` (top navigation bar linking Dashboard, Products, Orders, and Storefront with active state indicators); `src/components/admin/metrics-cards.tsx` (4 KPI metric overview cards for Total Revenue, Total Orders, Pending Processing, and Delivered Orders formatted with monetary precision and Lucide icons); `src/components/admin/order-status-dropdown.tsx` (inline quick status change selector enforcing state machine invariants from `ALLOWED_STATUS_TRANSITIONS`, disabled terminal statuses for `DELIVERED`/`CANCELLED`, and rollback with accessible error alerts on mutation failures); `src/components/admin/order-details-drawer.tsx` (slide-out inspection drawer displaying customer details, full shipping destination, itemized line items with variant SKU/thumbnails, financial summary, and embedded status transition control); `src/components/admin/order-table.tsx` (responsive orders data table with status filter tabs: All, Processing, Shipped, Delivered, Cancelled, Pending Payment; order inspection drawer trigger; and accessible pagination controls); `src/components/admin/admin-orders-manager.tsx` (client coordinator orchestrating table, drawer, KPI cards, and URL search params synchronization); `src/app/admin/orders/page.tsx` (Next.js 16 Server Component with async `searchParams`, strict `ADMIN` role check, and pre-fetched orders and metrics); `src/app/admin/dashboard/page.tsx` (Next.js 16 Server Component with strict admin session check, live KPI metric cards, quick action links, and recent orders preview table); and updated `src/app/admin/products/page.tsx` to include `AdminNav`.
+- Multi-layer SQA test suite for Admin Orders FE: 26 passing tests across 6 UI test suites (`admin-metrics-cards.test.tsx`, `admin-status-dropdown.test.tsx`, `admin-order-table.test.tsx`, `admin-order-details-drawer.test.tsx`, `admin-orders-page.test.tsx`, `admin-dashboard-page.test.tsx`). Repository-wide test suite: 459 passing tests across 78 test suites with 100% success rate. `npx tsc --noEmit` (0 errors) and Next.js 16 production build (`npm run build`) pass cleanly with zero errors.
+- Verified test report finalized: `feature-test-reports/FEAT-009-FE-test-report.md`.
+- `FEAT-009-VERIFY-admin-orders.md`: Admin Orders Full-Stack Verification Pass & End-to-End Sign-off. Verified all 8 acceptance criteria and SQA DoD items across Frontend Fake DOM (26 tests across 6 suites), API Endpoints (20 tests across 3 suites), and Backend & Unit logic (9 tests across 2 suites), totaling 55 admin orders feature tests. All 459 repository-wide automated tests pass with 0 failures (100% pass rate). Strict TypeScript check (`npx tsc --noEmit`) and Next.js 16 production build (`npm run build`) succeeded cleanly with zero errors.
+- Verified unified test report finalized: `feature-test-reports/FEAT-009-test-report.md`.
 
 ## In Progress
-- Transitioning to `FEAT-009-BE-admin-orders.md` (Admin Order Processing API).
+- Transitioning to `FEAT-010-BE-reviews.md` (Product Reviews Service & API).
 
 ## Next Up
-- `FEAT-009-BE-admin-orders.md` (Admin Order Processing API).
+- `FEAT-010-BE-reviews.md` (Product Reviews Service & API).
 
 ## Open Questions
 - None currently blocking.

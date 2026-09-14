@@ -8,7 +8,9 @@ import { Product, Category } from "@/types";
 import { cn } from "@/lib/utils";
 
 export interface ProductCardProps {
-  product: Product & {
+  product: (Omit<Product, "basePrice"> & {
+    basePrice: number | string | { toNumber?: () => number; toString: () => string };
+  }) & {
     category?: Category | null;
   };
   className?: string;

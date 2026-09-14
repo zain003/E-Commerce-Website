@@ -225,3 +225,22 @@ export type AdminProduct = Product & {
   variants: ProductVariant[];
 };
 
+export interface AdminOrderMetrics {
+  totalRevenue: number;
+  totalOrders: number;
+  processingOrders: number;
+  deliveredOrders: number;
+}
+
+export interface UpdateOrderStatusDto {
+  status: OrderStatus;
+}
+
+export interface AdminOrder extends Order {
+  user: {
+    id: string;
+    name: string | null;
+    email: string;
+  } | null;
+  items: HydratedOrderItem[];
+}
