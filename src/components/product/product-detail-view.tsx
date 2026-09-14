@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 
 import { useCartStore } from "@/store/cart-store";
+import { ReviewSection } from "@/components/reviews/review-section";
 
 export interface ProductDetailViewProps {
   product: ProductDetail;
@@ -135,6 +136,9 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
           </div>
         </div>
       </div>
+
+      {/* Customer Reviews & Rating Breakdown */}
+      <ReviewSection productId={product.id} productName={product.name} />
 
       {/* Sticky Mobile Action Bar (acceptance criterion 4) */}
       <aside
