@@ -151,4 +151,25 @@ describe("OrderReceipt (UI)", () => {
     render(<OrderReceipt order={mockOrder} />);
     expect(mockClearCart).toHaveBeenCalled();
   });
+
+  it("renders fallback placeholder icon when product has no image", () => {
+    const orderWithoutImage: HydratedOrder = {
+      ...mockOrder,
+      items: [
+        {
+          ...mockOrder.items[0],
+          variant: {
+            ...mockOrder.items[0].variant,
+            product: {
+              ...mockOrder.items[0].variant.product,
+              images: [],
+            },
+          },
+        },
+      ],
+    };
+
+    render(<OrderReceipt order={orderWithoutImage} />);
+    expect(screen.getByTestId("order-item-placeholder")).toBeTruthy();
+  });
 });

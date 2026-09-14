@@ -28,9 +28,9 @@ Medium
 - **Out of Scope:** Modifying product image upload logic.
 
 ## Acceptance Criteria
-- [ ] No 404 network errors occur when viewing order receipts or history for items without images.
-- [ ] Products with missing images display a clean, accessible fallback icon (e.g., `Package` or `ShoppingBag`).
-- [ ] Layout remains visually consistent with Tailwind v4 design tokens.
+- [x] No 404 network errors occur when viewing order receipts or history for items without images.
+- [x] Products with missing images display a clean, accessible fallback icon (e.g., `Package` or `ShoppingBag`).
+- [x] Layout remains visually consistent with Tailwind v4 design tokens.
 
 ## Related Feature ID
 FEAT-007 — Orders & Receipts

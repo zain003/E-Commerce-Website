@@ -7,7 +7,7 @@ import { HydratedOrder } from "@/types";
 import { OrderStatusBadge } from "./order-status-badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, MapPin, Receipt, ExternalLink } from "lucide-react";
+import { ChevronDown, ChevronUp, MapPin, Receipt, ExternalLink, Package } from "lucide-react";
 
 export interface OrderHistoryCardProps {
   order: HydratedOrder;
@@ -99,7 +99,7 @@ export function OrderHistoryCard({ order, className }: OrderHistoryCardProps) {
           <div className="flex items-center gap-2 overflow-x-auto py-1 max-w-full">
             {order.items.slice(0, 4).map((item) => {
               const product = item.variant?.product;
-              const imageSrc = product?.images?.[0] || "/placeholder.png";
+              const primaryImage = product?.images?.[0];
 
               return (
                 <div
@@ -107,13 +107,22 @@ export function OrderHistoryCard({ order, className }: OrderHistoryCardProps) {
                   className="relative h-12 w-12 rounded-md border border-border bg-muted overflow-hidden shrink-0"
                   title={`${product?.name || "Product"} (${item.quantity}x)`}
                 >
-                  <Image
-                    src={imageSrc}
-                    alt={product?.name || "Product preview"}
-                    fill
-                    sizes="48px"
-                    className="object-cover"
-                  />
+                  {primaryImage ? (
+                    <Image
+                      src={primaryImage}
+                      alt={product?.name || "Product preview"}
+                      fill
+                      sizes="48px"
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div
+                      data-testid="order-item-placeholder-compact"
+                      className="flex h-full w-full items-center justify-center bg-muted/40 text-muted-foreground"
+                    >
+                      <Package className="h-5 w-5" />
+                    </div>
+                  )}
                   {item.quantity > 1 && (
                     <span className="absolute bottom-0 right-0 bg-foreground/80 text-background text-[10px] font-bold px-1 rounded-tl">
                       ×{item.quantity}
@@ -147,7 +156,7 @@ export function OrderHistoryCard({ order, className }: OrderHistoryCardProps) {
                   const product = item.variant?.product;
                   const unitPrice = Number(item.unitPrice) || 0;
                   const lineTotal = unitPrice * item.quantity;
-                  const imageSrc = product?.images?.[0] || "/placeholder.png";
+                  const primaryImage = product?.images?.[0];
 
                   return (
                     <div
@@ -156,13 +165,22 @@ export function OrderHistoryCard({ order, className }: OrderHistoryCardProps) {
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <div className="relative h-10 w-10 rounded-md border border-border bg-muted overflow-hidden shrink-0">
-                          <Image
-                            src={imageSrc}
-                            alt={product?.name || "Item"}
-                            fill
-                            sizes="40px"
-                            className="object-cover"
-                          />
+                          {primaryImage ? (
+                            <Image
+                              src={primaryImage}
+                              alt={product?.name || "Item"}
+                              fill
+                              sizes="40px"
+                              className="object-cover"
+                            />
+                          ) : (
+                            <div
+                              data-testid="order-item-placeholder-breakdown"
+                              className="flex h-full w-full items-center justify-center bg-muted/40 text-muted-foreground"
+                            >
+                              <Package className="h-4 w-4" />
+                            </div>
+                          )}
                         </div>
                         <div className="min-w-0">
                           <p className="font-medium text-foreground truncate text-xs sm:text-sm">
