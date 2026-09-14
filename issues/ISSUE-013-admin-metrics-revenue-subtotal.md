@@ -41,9 +41,9 @@ Medium
 - **Out of Scope:** Changing the visual presentation of `MetricsCards`.
 
 ## Acceptance Criteria
-- [ ] `getAdminMetrics()` aggregates the `total` column for orders with `paymentStatus: "PAID"`.
-- [ ] The Total Revenue card on `/admin/dashboard` accurately reflects net order revenue including shipping and discounts.
-- [ ] Associated unit tests for KPI metric calculations pass with updated expectation.
+- [x] `getAdminMetrics()` aggregates the `total` column for orders with `paymentStatus: "PAID"`.
+- [x] The Total Revenue card on `/admin/dashboard` accurately reflects net order revenue including shipping and discounts.
+- [x] Associated unit tests for KPI metric calculations pass with updated expectation.
 
 ## Related Feature ID
 FEAT-009 — Admin Orders Dashboard

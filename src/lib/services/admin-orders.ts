@@ -219,7 +219,7 @@ export async function getAdminMetrics(): Promise<ApiResponse<AdminOrderMetrics>>
             paymentStatus: "PAID",
           },
           _sum: {
-            subtotal: true,
+            total: true,
           },
         }),
         prisma.order.count(),
@@ -235,8 +235,8 @@ export async function getAdminMetrics(): Promise<ApiResponse<AdminOrderMetrics>>
         }),
       ]);
 
-    const totalRevenue = revenueAggregation._sum.subtotal
-      ? Number(revenueAggregation._sum.subtotal)
+    const totalRevenue = revenueAggregation._sum.total
+      ? Number(revenueAggregation._sum.total)
       : 0;
 
     return {

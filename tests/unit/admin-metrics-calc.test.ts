@@ -21,7 +21,7 @@ describe("Admin Metrics Calculation (Unit)", () => {
     // Mock aggregate for total revenue of paid orders
     vi.mocked(prisma.order.aggregate).mockResolvedValue({
       _sum: {
-        subtotal: new Decimal("1250.75"),
+        total: new Decimal("1250.75"),
       },
     } as any);
 
@@ -45,7 +45,7 @@ describe("Admin Metrics Calculation (Unit)", () => {
         paymentStatus: "PAID",
       },
       _sum: {
-        subtotal: true,
+        total: true,
       },
     });
 
@@ -62,7 +62,7 @@ describe("Admin Metrics Calculation (Unit)", () => {
   it("handles empty database state with zero revenue and zero counts gracefully", async () => {
     vi.mocked(prisma.order.aggregate).mockResolvedValue({
       _sum: {
-        subtotal: null,
+        total: null,
       },
     } as any);
 
