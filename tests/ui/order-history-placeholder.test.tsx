@@ -78,4 +78,45 @@ describe("OrderHistoryCard Placeholder Fallback (UI)", () => {
 
     expect(screen.getByTestId("order-item-placeholder-breakdown")).toBeTruthy();
   });
+
+  it("links compact thumbnail to PDP when slug exists", () => {
+    render(<OrderHistoryCard order={mockOrder} />);
+    const link = screen.getByTitle(/classic crewneck/i);
+    expect(link.tagName.toLowerCase()).toBe("a");
+    expect(link.getAttribute("href")).toBe("/products/classic-crewneck");
+  });
+
+  it("links item title and thumbnail in expanded breakdown to PDP", async () => {
+    const user = userEvent.setup();
+    render(<OrderHistoryCard order={mockOrder} />);
+
+    const expandButton = screen.getByRole("button", { name: /view details/i });
+    await user.click(expandButton);
+
+    const titleLinks = screen.getAllByRole("link", { name: /classic crewneck/i });
+    expect(titleLinks.length).toBeGreaterThanOrEqual(1);
+    expect(titleLinks.every((l) => l.getAttribute("href") === "/products/classic-crewneck")).toBe(true);
+  });
+
+  it("gracefully falls back to non-clickable element when product slug is missing", () => {
+    const orderWithoutSlug: HydratedOrder = {
+      ...mockOrder,
+      items: [
+        {
+          ...mockOrder.items[0],
+          variant: {
+            ...mockOrder.items[0].variant,
+            product: {
+              ...mockOrder.items[0].variant.product,
+              slug: "",
+            },
+          },
+        },
+      ],
+    };
+
+    render(<OrderHistoryCard order={orderWithoutSlug} />);
+    const thumb = screen.getByTitle(/classic crewneck/i);
+    expect(thumb.tagName.toLowerCase()).toBe("div");
+  });
 });

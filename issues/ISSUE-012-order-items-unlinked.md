@@ -26,10 +26,10 @@ Low
 - **Out of Scope:** Creating a dedicated 1-click re-order button.
 
 ## Acceptance Criteria
-- [ ] Product names and thumbnails in `OrderReceipt` link to `/products/${slug}`.
-- [ ] Product names and thumbnails in `OrderHistoryCard` link to `/products/${slug}`.
-- [ ] If a product slug is missing (e.g. deleted product), gracefully falls back to non-clickable text.
-- [ ] Links include accessible hover and focus styling matching Tailwind v4 tokens.
+- [x] Product names and thumbnails in `OrderReceipt` link to `/products/${slug}`.
+- [x] Product names and thumbnails in `OrderHistoryCard` link to `/products/${slug}`.
+- [x] If a product slug is missing (e.g. deleted product), gracefully falls back to non-clickable text.
+- [x] Links include accessible hover and focus styling matching Tailwind v4 tokens.
 
 ## Related Feature ID
 FEAT-007 — Orders & Receipts, FEAT-010 — Customer Reviews & Ratings

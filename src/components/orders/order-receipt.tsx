@@ -161,6 +161,7 @@ export function OrderReceipt({ order, className }: OrderReceiptProps) {
                 const unitPrice = Number(item.unitPrice) || 0;
                 const lineTotal = unitPrice * item.quantity;
                 const primaryImage = product?.images?.[0];
+                const productUrl = product?.slug ? `/products/${product.slug}` : null;
 
                 return (
                   <div
@@ -168,28 +169,62 @@ export function OrderReceipt({ order, className }: OrderReceiptProps) {
                     className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-card"
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="relative h-14 w-14 rounded-lg border border-border bg-muted overflow-hidden shrink-0">
-                        {primaryImage ? (
-                          <Image
-                            src={primaryImage}
-                            alt={product?.name || "Product item"}
-                            fill
-                            sizes="56px"
-                            className="object-cover"
-                          />
-                        ) : (
-                          <div
-                            data-testid="order-item-placeholder"
-                            className="flex h-full w-full items-center justify-center bg-muted/40 text-muted-foreground"
-                          >
-                            <Package className="h-6 w-6" />
-                          </div>
-                        )}
-                      </div>
+                      {productUrl ? (
+                        <Link
+                          href={productUrl}
+                          className="relative h-14 w-14 rounded-lg border border-border bg-muted overflow-hidden shrink-0 group focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
+                        >
+                          {primaryImage ? (
+                            <Image
+                              src={primaryImage}
+                              alt={product?.name || "Product item"}
+                              fill
+                              sizes="56px"
+                              className="object-cover transition-transform duration-200 group-hover:scale-105"
+                            />
+                          ) : (
+                            <div
+                              data-testid="order-item-placeholder"
+                              className="flex h-full w-full items-center justify-center bg-muted/40 text-muted-foreground"
+                            >
+                              <Package className="h-6 w-6" />
+                            </div>
+                          )}
+                        </Link>
+                      ) : (
+                        <div className="relative h-14 w-14 rounded-lg border border-border bg-muted overflow-hidden shrink-0">
+                          {primaryImage ? (
+                            <Image
+                              src={primaryImage}
+                              alt={product?.name || "Product item"}
+                              fill
+                              sizes="56px"
+                              className="object-cover"
+                            />
+                          ) : (
+                            <div
+                              data-testid="order-item-placeholder"
+                              className="flex h-full w-full items-center justify-center bg-muted/40 text-muted-foreground"
+                            >
+                              <Package className="h-6 w-6" />
+                            </div>
+                          )}
+                        </div>
+                      )}
+
                       <div className="min-w-0">
-                        <p className="font-medium text-sm text-foreground truncate">
-                          {product?.name || "Product"}
-                        </p>
+                        {productUrl ? (
+                          <Link
+                            href={productUrl}
+                            className="font-medium text-sm text-foreground truncate block hover:text-primary hover:underline transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary rounded-xs"
+                          >
+                            {product?.name || "Product"}
+                          </Link>
+                        ) : (
+                          <p className="font-medium text-sm text-foreground truncate">
+                            {product?.name || "Product"}
+                          </p>
+                        )}
                         {variant?.name && (
                           <p className="text-xs text-muted-foreground">
                             {variant.name}

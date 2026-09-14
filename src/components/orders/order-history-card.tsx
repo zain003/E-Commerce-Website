@@ -100,20 +100,17 @@ export function OrderHistoryCard({ order, className }: OrderHistoryCardProps) {
             {order.items.slice(0, 4).map((item) => {
               const product = item.variant?.product;
               const primaryImage = product?.images?.[0];
+              const productUrl = product?.slug ? `/products/${product.slug}` : null;
 
-              return (
-                <div
-                  key={item.id}
-                  className="relative h-12 w-12 rounded-md border border-border bg-muted overflow-hidden shrink-0"
-                  title={`${product?.name || "Product"} (${item.quantity}x)`}
-                >
+              const thumbnailContent = (
+                <>
                   {primaryImage ? (
                     <Image
                       src={primaryImage}
                       alt={product?.name || "Product preview"}
                       fill
                       sizes="48px"
-                      className="object-cover"
+                      className="object-cover transition-transform duration-200 group-hover:scale-105"
                     />
                   ) : (
                     <div
@@ -128,6 +125,25 @@ export function OrderHistoryCard({ order, className }: OrderHistoryCardProps) {
                       ×{item.quantity}
                     </span>
                   )}
+                </>
+              );
+
+              return productUrl ? (
+                <Link
+                  key={item.id}
+                  href={productUrl}
+                  className="relative h-12 w-12 rounded-md border border-border bg-muted overflow-hidden shrink-0 group focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
+                  title={`${product?.name || "Product"} (${item.quantity}x)`}
+                >
+                  {thumbnailContent}
+                </Link>
+              ) : (
+                <div
+                  key={item.id}
+                  className="relative h-12 w-12 rounded-md border border-border bg-muted overflow-hidden shrink-0"
+                  title={`${product?.name || "Product"} (${item.quantity}x)`}
+                >
+                  {thumbnailContent}
                 </div>
               );
             })}
@@ -157,6 +173,7 @@ export function OrderHistoryCard({ order, className }: OrderHistoryCardProps) {
                   const unitPrice = Number(item.unitPrice) || 0;
                   const lineTotal = unitPrice * item.quantity;
                   const primaryImage = product?.images?.[0];
+                  const productUrl = product?.slug ? `/products/${product.slug}` : null;
 
                   return (
                     <div
@@ -164,28 +181,62 @@ export function OrderHistoryCard({ order, className }: OrderHistoryCardProps) {
                       className="p-3 flex items-center justify-between gap-3 text-sm bg-card"
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="relative h-10 w-10 rounded-md border border-border bg-muted overflow-hidden shrink-0">
-                          {primaryImage ? (
-                            <Image
-                              src={primaryImage}
-                              alt={product?.name || "Item"}
-                              fill
-                              sizes="40px"
-                              className="object-cover"
-                            />
-                          ) : (
-                            <div
-                              data-testid="order-item-placeholder-breakdown"
-                              className="flex h-full w-full items-center justify-center bg-muted/40 text-muted-foreground"
-                            >
-                              <Package className="h-4 w-4" />
-                            </div>
-                          )}
-                        </div>
+                        {productUrl ? (
+                          <Link
+                            href={productUrl}
+                            className="relative h-10 w-10 rounded-md border border-border bg-muted overflow-hidden shrink-0 group focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
+                          >
+                            {primaryImage ? (
+                              <Image
+                                src={primaryImage}
+                                alt={product?.name || "Item"}
+                                fill
+                                sizes="40px"
+                                className="object-cover transition-transform duration-200 group-hover:scale-105"
+                              />
+                            ) : (
+                              <div
+                                data-testid="order-item-placeholder-breakdown"
+                                className="flex h-full w-full items-center justify-center bg-muted/40 text-muted-foreground"
+                              >
+                                <Package className="h-4 w-4" />
+                              </div>
+                            )}
+                          </Link>
+                        ) : (
+                          <div className="relative h-10 w-10 rounded-md border border-border bg-muted overflow-hidden shrink-0">
+                            {primaryImage ? (
+                              <Image
+                                src={primaryImage}
+                                alt={product?.name || "Item"}
+                                fill
+                                sizes="40px"
+                                className="object-cover"
+                              />
+                            ) : (
+                              <div
+                                data-testid="order-item-placeholder-breakdown"
+                                className="flex h-full w-full items-center justify-center bg-muted/40 text-muted-foreground"
+                              >
+                                <Package className="h-4 w-4" />
+                              </div>
+                            )}
+                          </div>
+                        )}
+
                         <div className="min-w-0">
-                          <p className="font-medium text-foreground truncate text-xs sm:text-sm">
-                            {product?.name || "Product"}
-                          </p>
+                          {productUrl ? (
+                            <Link
+                              href={productUrl}
+                              className="font-medium text-foreground truncate text-xs sm:text-sm block hover:text-primary hover:underline transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary rounded-xs"
+                            >
+                              {product?.name || "Product"}
+                            </Link>
+                          ) : (
+                            <p className="font-medium text-foreground truncate text-xs sm:text-sm">
+                              {product?.name || "Product"}
+                            </p>
+                          )}
                           <p className="text-xs text-muted-foreground">
                             {item.variant?.name ? `${item.variant.name} • ` : ""}
                             Qty: {item.quantity} × {formatMoney(unitPrice)}

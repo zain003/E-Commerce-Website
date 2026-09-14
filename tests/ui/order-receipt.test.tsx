@@ -172,4 +172,33 @@ describe("OrderReceipt (UI)", () => {
     render(<OrderReceipt order={orderWithoutImage} />);
     expect(screen.getByTestId("order-item-placeholder")).toBeTruthy();
   });
+
+  it("renders product name and thumbnail as links to PDP when slug exists", () => {
+    render(<OrderReceipt order={mockOrder} />);
+    const productLinks = screen.getAllByRole("link", { name: /classic crewneck/i });
+    expect(productLinks.length).toBeGreaterThanOrEqual(1);
+    expect(productLinks[0].getAttribute("href")).toBe("/products/classic-crewneck");
+  });
+
+  it("gracefully falls back to plain text when product slug is missing", () => {
+    const orderWithoutSlug: HydratedOrder = {
+      ...mockOrder,
+      items: [
+        {
+          ...mockOrder.items[0],
+          variant: {
+            ...mockOrder.items[0].variant,
+            product: {
+              ...mockOrder.items[0].variant.product,
+              slug: "",
+            },
+          },
+        },
+      ],
+    };
+
+    render(<OrderReceipt order={orderWithoutSlug} />);
+    expect(screen.queryByRole("link", { name: /classic crewneck/i })).toBeNull();
+    expect(screen.getByText("Classic Crewneck")).toBeTruthy();
+  });
 });
