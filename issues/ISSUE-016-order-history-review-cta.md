@@ -28,9 +28,9 @@ Medium
 - **Out of Scope:** Changing the verified buyer logic in `src/lib/services/reviews.ts`.
 
 ## Acceptance Criteria
-- [ ] Delivered items in `/account/orders` display an accessible "Write Review" CTA.
-- [ ] Clicking the CTA directs the verified customer to the product review section or opens the review modal.
-- [ ] Items on cancelled or pending orders do not display the review CTA.
+- [x] Delivered items in `/account/orders` display an accessible "Write Review" CTA.
+- [x] Clicking the CTA directs the verified customer to the product review section or opens the review modal.
+- [x] Items on cancelled or pending orders do not display the review CTA.
 
 ## Related Feature ID
 FEAT-007 — Orders & Receipts, FEAT-010 — Customer Reviews & Ratings

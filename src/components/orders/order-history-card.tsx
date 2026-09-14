@@ -7,7 +7,7 @@ import { HydratedOrder } from "@/types";
 import { OrderStatusBadge } from "./order-status-badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, MapPin, Receipt, ExternalLink, Package } from "lucide-react";
+import { ChevronDown, ChevronUp, MapPin, Receipt, ExternalLink, Package, Star } from "lucide-react";
 
 export interface OrderHistoryCardProps {
   order: HydratedOrder;
@@ -244,8 +244,19 @@ export function OrderHistoryCard({ order, className }: OrderHistoryCardProps) {
                         </div>
                       </div>
 
-                      <div className="text-right font-medium text-xs sm:text-sm text-foreground shrink-0">
-                        {formatMoney(lineTotal)}
+                      <div className="flex flex-col items-end gap-1.5 shrink-0">
+                        <span className="font-medium text-xs sm:text-sm text-foreground">
+                          {formatMoney(lineTotal)}
+                        </span>
+                        {order.status === "DELIVERED" && productUrl && (
+                          <Link
+                            href={`${productUrl}#reviews`}
+                            className="inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:underline hover:text-primary/80 transition-colors py-0.5 px-2 rounded-md bg-primary/10 hover:bg-primary/15 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
+                          >
+                            <Star className="h-3 w-3 fill-primary text-primary" />
+                            <span>Write Review</span>
+                          </Link>
+                        )}
                       </div>
                     </div>
                   );
