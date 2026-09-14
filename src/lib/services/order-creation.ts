@@ -2,6 +2,7 @@ import { stripe } from "@/lib/payments/stripe";
 import { prisma } from "@/lib/prisma";
 import { calculateCartTotals, getVariantUnitPrice } from "@/lib/services/cart-calculator";
 import { calculateShippingFee } from "@/lib/services/shipping-calculator";
+import { incrementCouponUsage } from "@/lib/services/coupons";
 import Stripe from "stripe";
 
 export interface StripeWebhookResult {
@@ -123,7 +124,9 @@ export async function handleStripeWebhook(
           cartTotals.subtotal,
           shippingMethodId
         );
-        const total = Math.round((cartTotals.subtotal + shippingFee) * 100) / 100;
+        const rawDiscount = metadata.discountTotal ? parseFloat(metadata.discountTotal) : 0.0;
+        const discountTotal = isNaN(rawDiscount) ? 0.0 : Math.max(0, rawDiscount);
+        const total = Math.round(Math.max(0, cartTotals.subtotal + shippingFee - discountTotal) * 100) / 100;
 
         // Parse shipping address safely
         let parsedShippingAddress: any = {};
@@ -152,7 +155,7 @@ export async function handleStripeWebhook(
             paymentStatus: "PAID",
             stripePaymentId: paymentIntent.id,
             subtotal: cartTotals.subtotal,
-            discountTotal: 0.0,
+            discountTotal,
             shippingFee,
             total,
             shippingAddress: parsedShippingAddress,
@@ -187,6 +190,9 @@ export async function handleStripeWebhook(
       });
 
       if (order) {
+        if (metadata.couponCode && metadata.couponCode.trim()) {
+          await incrementCouponUsage(metadata.couponCode.trim());
+        }
         return { received: true, orderId: order.id };
       }
       return { received: true };

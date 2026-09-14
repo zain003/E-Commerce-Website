@@ -45,11 +45,11 @@ Critical
 - **Out of Scope:** Implementing multi-coupon stacking or complex bundle logic.
 
 ## Acceptance Criteria
-- [ ] `CheckoutSessionDto` accepts an optional `couponCode`.
-- [ ] Server validates the coupon against database rules (min spend, expiry, usage limits).
-- [ ] Stripe PaymentIntent amount in cents reflects the discounted order total.
-- [ ] The generated `Order` in database contains the accurate `discountTotal`.
-- [ ] Coupon usage count is atomically incremented upon confirmed payment.
+- [x] `CheckoutSessionDto` accepts an optional `couponCode`.
+- [x] Server validates the coupon against database rules (min spend, expiry, usage limits).
+- [x] Stripe PaymentIntent amount in cents reflects the discounted order total.
+- [x] The generated `Order` in database contains the accurate `discountTotal`.
+- [x] Coupon usage count is atomically incremented upon confirmed payment.
 
 ## Related Feature ID
 FEAT-005 — Checkout & Shipping, FEAT-006 — Stripe Payments, FEAT-012 — Coupons & Discounts

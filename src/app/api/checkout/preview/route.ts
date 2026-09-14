@@ -9,13 +9,14 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const method = searchParams.get("method") || undefined;
+    const coupon = searchParams.get("coupon") || undefined;
 
     const session = await getServerSession(authOptions);
     const userId = session?.user?.id;
     const guestToken =
       req.cookies.get(CART_COOKIE_NAME)?.value || (await getGuestCartToken());
 
-    const result = await getCheckoutPreview(method, guestToken, userId);
+    const result = await getCheckoutPreview(method, guestToken, userId, coupon);
 
     if (!result.success || !result.data) {
       const status =

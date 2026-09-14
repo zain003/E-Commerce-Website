@@ -45,6 +45,7 @@ export const checkoutSessionSchema = z.object({
     .email("Invalid email address")
     .optional()
     .or(z.literal("")),
+  couponCode: z.string().trim().optional(),
 });
 
 export type CheckoutSessionInput = z.infer<typeof checkoutSessionSchema>;
@@ -94,7 +95,7 @@ export function validateCheckoutSessionInput(
     };
   }
 
-  const { shippingAddress, shippingMethodId, guestEmail } = result.data;
+  const { shippingAddress, shippingMethodId, guestEmail, couponCode } = result.data;
 
   if (isGuest && (!guestEmail || guestEmail.trim() === "")) {
     return {
@@ -115,6 +116,7 @@ export function validateCheckoutSessionInput(
       shippingAddress,
       shippingMethodId,
       guestEmail: guestEmail && guestEmail.trim() !== "" ? guestEmail : undefined,
+      couponCode: couponCode && couponCode.trim() !== "" ? couponCode.trim() : undefined,
     },
   };
 }

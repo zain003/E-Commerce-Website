@@ -16,6 +16,7 @@ import { StripePaymentForm } from "@/components/checkout/stripe-payment-form";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/components/product/price-tag";
+import { useCartStore } from "@/store/cart-store";
 import {
   Check,
   MapPin,
@@ -52,6 +53,7 @@ export function CheckoutWizard({
 }: CheckoutWizardProps) {
   const router = useRouter();
 
+  const appliedCoupon = useCartStore((state) => state.appliedCoupon);
   const [preview, setPreview] = React.useState<CheckoutPreview | null>(
     initialPreview || null
   );
@@ -113,7 +115,12 @@ export function CheckoutWizard({
     let isMounted = true;
     async function loadPreview() {
       try {
-        const res = await fetch("/api/checkout/preview");
+        const queryParams = new URLSearchParams();
+        if (appliedCoupon?.code) {
+          queryParams.set("coupon", appliedCoupon.code);
+        }
+        const queryString = queryParams.toString() ? `?${queryParams.toString()}` : "";
+        const res = await fetch(`/api/checkout/preview${queryString}`);
         const json = await res.json();
         if (!isMounted) return;
 
@@ -143,7 +150,7 @@ export function CheckoutWizard({
     return () => {
       isMounted = false;
     };
-  }, [initialPreview, router]);
+  }, [initialPreview, router, appliedCoupon]);
 
   // Handle step 1 completion
   const handleAddressSubmit = (data: {
@@ -179,6 +186,7 @@ export function CheckoutWizard({
         shippingAddress: address,
         shippingMethodId,
         guestEmail: isGuest ? guestEmail : undefined,
+        couponCode: appliedCoupon?.code,
       };
 
       const res = await fetch("/api/checkout/validate", {

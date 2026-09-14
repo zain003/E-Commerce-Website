@@ -13,6 +13,7 @@ import {
   calculateShippingFee,
   getAvailableShippingMethods,
 } from "./shipping-calculator";
+import { validateCoupon } from "./coupons";
 
 /**
  * Generates an immutable order checkout preview with real-time stock verification.
@@ -20,7 +21,8 @@ import {
 export async function getCheckoutPreview(
   shippingMethodId?: string,
   guestToken?: string,
-  userId?: string
+  userId?: string,
+  couponCode?: string
 ): Promise<ApiResponse<CheckoutPreview>> {
   try {
     const validMethod: "STANDARD" | "EXPRESS" =
@@ -52,7 +54,6 @@ export async function getCheckoutPreview(
 
     for (const item of cart.items) {
       const live = liveVariantMap.get(item.variantId);
-
       if (!live || live.product.isArchived) {
         return {
           success: false,
@@ -79,8 +80,19 @@ export async function getCheckoutPreview(
     // 3. Compute totals adhering strictly to Server-Side Price Invariant
     const subtotal = cart.subtotal;
     const shippingFee = calculateShippingFee(subtotal, validMethod);
-    const discountTotal = 0.0;
-    const total = Math.round((subtotal + shippingFee - discountTotal) * 100) / 100;
+    let discountTotal = 0.0;
+
+    if (couponCode && couponCode.trim()) {
+      const couponRes = await validateCoupon({
+        code: couponCode.trim(),
+        cartSubtotal: subtotal,
+      });
+      if (couponRes.success && couponRes.data) {
+        discountTotal = couponRes.data.discountAmount;
+      }
+    }
+
+    const total = Math.max(0, Math.round((subtotal + shippingFee - discountTotal) * 100) / 100);
     const availableShippingMethods = getAvailableShippingMethods(subtotal);
 
     return {
@@ -109,7 +121,7 @@ export async function getCheckoutPreview(
 }
 
 /**
- * Validates a checkout session payload including address format, guest email, and cart readiness.
+ * Validates a checkout session payload including address format, guest email, coupon, and cart readiness.
  */
 export async function validateCheckoutSession(
   dto: CheckoutSessionDto,
@@ -126,11 +138,30 @@ export async function validateCheckoutSession(
     };
   }
 
-  // 2. Validate live cart state & inventory
+  // If couponCode was passed, validate it strictly against the current cart subtotal
+  if (validation.data.couponCode) {
+    const cartRes = await getCart(guestToken, userId);
+    if (cartRes.success && cartRes.data) {
+      const couponRes = await validateCoupon({
+        code: validation.data.couponCode,
+        cartSubtotal: cartRes.data.subtotal,
+      });
+      if (!couponRes.success) {
+        return {
+          success: false,
+          error: couponRes.error,
+          timestamp: new Date().toISOString(),
+        };
+      }
+    }
+  }
+
+  // 2. Validate live cart state & inventory with coupon discount
   const previewRes = await getCheckoutPreview(
     validation.data.shippingMethodId,
     guestToken,
-    userId
+    userId,
+    validation.data.couponCode
   );
 
   if (!previewRes.success || !previewRes.data) {

@@ -188,6 +188,7 @@ export interface CheckoutSessionDto {
   shippingAddress: AddressDto;
   shippingMethodId: "STANDARD" | "EXPRESS";
   guestEmail?: string;
+  couponCode?: string;
 }
 
 export interface CreatePaymentIntentDto {

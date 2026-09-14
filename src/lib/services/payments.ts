@@ -74,6 +74,8 @@ export async function createPaymentIntent(
       guestEmail: dto.checkoutSession.guestEmail || "",
       shippingMethodId: dto.checkoutSession.shippingMethodId,
       shippingAddress: JSON.stringify(dto.checkoutSession.shippingAddress),
+      couponCode: dto.checkoutSession.couponCode || "",
+      discountTotal: String(preview.discountTotal || 0),
     };
 
     // 5. Determine idempotency key
