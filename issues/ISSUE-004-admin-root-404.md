@@ -25,10 +25,10 @@ Medium
 - **Out of Scope:** Modifying `/admin/dashboard` or other existing subroutes.
 
 ## Acceptance Criteria
-- [ ] Navigating to `/admin` automatically redirects to `/admin/dashboard`.
-- [ ] If unauthenticated, redirect targets `/login?callbackUrl=/admin/dashboard`.
-- [ ] If authenticated as a non-admin, redirect targets `/unauthorized`.
-- [ ] No 404 error occurs when accessing `/admin`.
+- [x] Navigating to `/admin` automatically redirects to `/admin/dashboard`.
+- [x] If unauthenticated, redirect targets `/login?callbackUrl=/admin/dashboard`.
+- [x] If authenticated as a non-admin, redirect targets `/unauthorized`.
+- [x] No 404 error occurs when accessing `/admin`.
 
 ## Related Feature ID
 FEAT-008 — Admin Catalog Management, FEAT-009 — Admin Orders Dashboard
