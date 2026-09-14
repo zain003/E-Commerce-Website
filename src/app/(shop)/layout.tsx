@@ -93,6 +93,16 @@ export default async function ShopLayout({
               <Heart className="h-4 w-4" />
             </Link>
 
+            {session?.user?.role === "ADMIN" && (
+              <Link
+                href="/admin/dashboard"
+                className="hidden sm:inline-flex h-8 items-center gap-1.5 rounded-md border border-primary/20 bg-primary/10 px-2.5 text-xs font-medium text-primary transition-colors hover:bg-primary/20"
+              >
+                <ShieldCheck className="h-3.5 w-3.5" />
+                <span>Admin</span>
+              </Link>
+            )}
+
             <HeaderAccountButton user={session?.user} />
 
             <HeaderCartButton />

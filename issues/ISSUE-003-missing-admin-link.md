@@ -27,9 +27,9 @@ High
 - **Out of Scope:** Altering admin route protection (`requireAdmin`) or dashboard logic.
 
 ## Acceptance Criteria
-- [ ] Users with `role === "ADMIN"` see a prominent "Admin Portal" link/card in `/account/profile` linking to `/admin/dashboard`.
-- [ ] Non-admin customers (`role === "CUSTOMER"`) do not see the Admin Portal entry point.
-- [ ] Clicking the link routes directly to `/admin/dashboard`.
+- [x] Users with `role === "ADMIN"` see a prominent "Admin Portal" link/card in `/account/profile` linking to `/admin/dashboard`.
+- [x] Non-admin customers (`role === "CUSTOMER"`) do not see the Admin Portal entry point.
+- [x] Clicking the link routes directly to `/admin/dashboard`.
 
 ## Related Feature ID
 FEAT-008 — Admin Catalog Management, FEAT-009 — Admin Orders Dashboard

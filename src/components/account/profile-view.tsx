@@ -157,6 +157,31 @@ export function ProfileView({ user }: ProfileViewProps) {
                 </CardContent>
               </Card>
             </Link>
+
+            {user.role === "ADMIN" && (
+              <Link href="/admin/dashboard" className="block group">
+                <Card className="h-full border-primary/30 bg-primary/5 transition-all group-hover:border-primary group-hover:shadow-md">
+                  <CardContent className="p-5 flex items-start gap-4">
+                    <div className="rounded-lg bg-primary p-2.5 text-primary-foreground transition-colors">
+                      <ShieldCheck className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                          Admin Portal
+                        </h3>
+                        <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4">
+                          Staff
+                        </Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Manage catalog, orders, inventory and view KPIs
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            )}
           </div>
         </div>
       </div>
