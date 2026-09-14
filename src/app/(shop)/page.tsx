@@ -79,8 +79,8 @@ export default async function HomePage() {
                 {categories.map((category) => (
                   <Link
                     key={category.id}
-                    href={`/#featured`}
-                    className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full"
+                    href={`/products?category=${encodeURIComponent(category.slug)}`}
+                    className="focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary rounded-full"
                   >
                     <Badge
                       variant="secondary"

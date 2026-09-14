@@ -35,9 +35,9 @@ High
 - **Out of Scope:** Modifying `/products` catalog filtering logic (which already supports `category=${slug}`).
 
 ## Acceptance Criteria
-- [ ] Category badges on the homepage link to `/products?category=${category.slug}`.
-- [ ] Clicking a badge navigates to `/products` with the corresponding category active and filtered in `CatalogView`.
-- [ ] The category pill remains accessible with keyboard focus and screen readers.
+- [x] Category badges on the homepage link to `/products?category=${category.slug}`.
+- [x] Clicking a badge navigates to `/products` with the corresponding category active and filtered in `CatalogView`.
+- [x] The category pill remains accessible with keyboard focus and screen readers.
 
 ## Related Feature ID
 FEAT-002 — Catalog & Product Details, FEAT-003 — Search & Filtering
