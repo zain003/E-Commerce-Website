@@ -36,9 +36,9 @@ Low
 - **Out of Scope:** Changing cache tags or data-fetching cache profiles.
 
 ## Acceptance Criteria
-- [ ] `revalidateTag` is called with exactly one argument: `revalidateTag("products")`.
-- [ ] TypeScript types strictly validate with zero type warnings.
-- [ ] Catalog updates immediately invalidate the storefront products cache without errors.
+- [x] `revalidateTag` is called with exactly one argument: `revalidateTag("products")`.
+- [x] TypeScript types strictly validate with zero type warnings.
+- [x] Catalog updates immediately invalidate the storefront products cache without errors.
 
 ## Related Feature ID
 FEAT-008 — Admin Catalog Management

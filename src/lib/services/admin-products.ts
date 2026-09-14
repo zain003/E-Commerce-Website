@@ -155,7 +155,7 @@ export async function createAdminProduct(
 
     // 5. Trigger Next.js 16 cache revalidation for storefront catalog reads
     try {
-      revalidateTag("products", "hours");
+      revalidateTag("products");
     } catch (tagError) {
       console.warn("[AdminProductsService] revalidateTag('products') warning:", tagError);
     }
@@ -303,7 +303,7 @@ export async function updateAdminProduct(
 
     // 6. Trigger Next.js 16 cache revalidation for storefront catalog reads
     try {
-      revalidateTag("products", "hours");
+      revalidateTag("products");
     } catch (tagError) {
       console.warn("[AdminProductsService] revalidateTag('products') warning:", tagError);
     }
@@ -357,7 +357,7 @@ export async function updateVariantStock(
 
     // Trigger Next.js 16 cache revalidation
     try {
-      revalidateTag("products", "hours");
+      revalidateTag("products");
     } catch (tagError) {
       console.warn("[AdminProductsService] revalidateTag('products') warning:", tagError);
     }

@@ -128,7 +128,7 @@ describe("Admin Products Service (Unit)", () => {
 
       expect(res.success).toBe(true);
       expect(res.data?.slug).toBe("classic-denim-jacket");
-      expect(revalidateTag).toHaveBeenCalledWith("products", "hours");
+      expect(revalidateTag).toHaveBeenCalledWith("products");
     });
 
     it("fails with CONFLICT when slug already exists", async () => {
@@ -163,7 +163,7 @@ describe("Admin Products Service (Unit)", () => {
 
       expect(res.success).toBe(true);
       expect(res.data?.name).toBe("Updated Jacket");
-      expect(revalidateTag).toHaveBeenCalledWith("products", "hours");
+      expect(revalidateTag).toHaveBeenCalledWith("products");
     });
 
     it("returns NOT_FOUND if product does not exist", async () => {
@@ -210,7 +210,7 @@ describe("Admin Products Service (Unit)", () => {
 
       expect(res.success).toBe(true);
       expect(res.data?.stock).toBe(35);
-      expect(revalidateTag).toHaveBeenCalledWith("products", "hours");
+      expect(revalidateTag).toHaveBeenCalledWith("products");
     });
 
     it("returns NOT_FOUND if variant does not exist", async () => {

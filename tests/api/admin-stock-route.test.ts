@@ -73,7 +73,7 @@ describe("Admin Variant Stock Adjustment (API)", () => {
       where: { id: "var_100" },
       data: { stock: 42 },
     });
-    expect(revalidateTag).toHaveBeenCalledWith("products", "hours");
+    expect(revalidateTag).toHaveBeenCalledWith("products");
   });
 
   it("returns 404 NOT_FOUND if variant does not exist", async () => {

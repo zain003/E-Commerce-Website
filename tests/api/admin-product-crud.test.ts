@@ -167,7 +167,7 @@ describe("Admin Product CRUD & Revalidation (API)", () => {
       expect(body.success).toBe(true);
       expect(body.data.name).toBe("Classic Denim Jacket");
       expect(prisma.product.create).toHaveBeenCalledTimes(1);
-      expect(revalidateTag).toHaveBeenCalledWith("products", "hours");
+      expect(revalidateTag).toHaveBeenCalledWith("products");
     });
 
     it("returns 409 CONFLICT if product with slug already exists", async () => {
@@ -271,7 +271,7 @@ describe("Admin Product CRUD & Revalidation (API)", () => {
       const body = await res.json();
       expect(body.success).toBe(true);
       expect(body.data.name).toBe("Vintage Denim Jacket");
-      expect(revalidateTag).toHaveBeenCalledWith("products", "hours");
+      expect(revalidateTag).toHaveBeenCalledWith("products");
     });
 
     it("returns 404 NOT_FOUND if product does not exist", async () => {
@@ -337,7 +337,7 @@ describe("Admin Product CRUD & Revalidation (API)", () => {
           data: expect.objectContaining({ isArchived: true }),
         })
       );
-      expect(revalidateTag).toHaveBeenCalledWith("products", "hours");
+      expect(revalidateTag).toHaveBeenCalledWith("products");
     });
   });
 });
