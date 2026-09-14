@@ -8,17 +8,22 @@ import {
   ShieldCheck,
   Heart,
 } from "lucide-react";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import {
   HeaderCartButton,
   MobileCartNavButton,
 } from "@/components/layout/header-cart-button";
+import { HeaderAccountButton } from "@/components/layout/header-account-button";
 import { CartDrawer } from "@/components/cart/cart-drawer";
 
-export default function ShopLayout({
+export default async function ShopLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession(authOptions);
+
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       {/* Universal Store Header */}
@@ -81,13 +86,7 @@ export default function ShopLayout({
               <Heart className="h-4 w-4" />
             </Link>
 
-            <Link
-              href="/login"
-              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-md px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-            >
-              <User className="h-4 w-4" />
-              <span className="hidden sm:inline">Account</span>
-            </Link>
+            <HeaderAccountButton user={session?.user} />
 
             <HeaderCartButton />
           </div>
