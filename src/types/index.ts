@@ -107,6 +107,7 @@ import type {
   Order,
   OrderItem,
   Review,
+  WishlistItem,
 } from "@prisma/client";
 export type {
   Category,
@@ -117,6 +118,7 @@ export type {
   Order,
   OrderItem,
   Review,
+  WishlistItem,
 };
 
 export interface HydratedOrderItem extends OrderItem {
@@ -258,5 +260,14 @@ export interface ProductReviewSummary {
   averageRating: number;
   totalReviews: number;
   ratingDistribution: Record<1 | 2 | 3 | 4 | 5, number>;
+}
+
+export interface HydratedWishlistItem extends WishlistItem {
+  product: Product & { inStock: boolean; variants?: ProductVariant[]; category?: Category | null };
+}
+
+export interface ToggleWishlistResponse {
+  isWishlisted: boolean;
+  productId: string;
 }
 
