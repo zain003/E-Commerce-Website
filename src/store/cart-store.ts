@@ -227,7 +227,6 @@ export const useCartStore = create<CartStoreState>((set, get) => ({
         variantId,
         quantity,
         createdAt: new Date(),
-        updatedAt: new Date(),
         variant: {
           id: variantId,
           productId: details?.product?.id || "",
@@ -235,8 +234,6 @@ export const useCartStore = create<CartStoreState>((set, get) => ({
           sku: details?.variant?.sku || "",
           priceDelta: numericPriceDelta,
           stock: Number(details?.variant?.stock ?? 999),
-          createdAt: new Date(),
-          updatedAt: new Date(),
           product: {
             id: details?.product?.id || "",
             name: details?.product?.name || "Product",

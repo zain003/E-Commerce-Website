@@ -1,17 +1,20 @@
 import { prisma } from "@/lib/prisma";
 import { ApiResponse, HydratedOrder, PaginatedResult } from "@/types";
+import { createOrderFromPaymentIntent } from "./order-creation";
 
 /**
- * Retrieves a full hydrated order by its unique orderNumber.
+ * Retrieves a full hydrated order by its unique orderNumber or stripePaymentId.
  * Enforces access control:
  * - Allowed if authenticated userId matches order.userId.
  * - Allowed if guestEmail matches order.guestEmail or order.user.email (case-insensitive).
+ * - Allowed if valid paymentIntentId matches order.stripePaymentId (proof of checkout).
  * - Otherwise returns 403 FORBIDDEN.
  */
 export async function getOrderByNumber(
   orderNumber: string,
   guestEmail?: string,
-  userId?: string
+  userId?: string,
+  paymentIntentId?: string
 ): Promise<ApiResponse<HydratedOrder>> {
   const trimmedOrderNumber = orderNumber?.trim();
   if (!trimmedOrderNumber) {
@@ -26,7 +29,7 @@ export async function getOrderByNumber(
   }
 
   try {
-    const order = await prisma.order.findUnique({
+    let order = await prisma.order.findUnique({
       where: trimmedOrderNumber.startsWith("pi_")
         ? { stripePaymentId: trimmedOrderNumber }
         : { orderNumber: trimmedOrderNumber },
@@ -43,6 +46,24 @@ export async function getOrderByNumber(
         user: true,
       },
     });
+
+    // If order was not found in DB yet, but a Stripe PaymentIntent ID was provided, attempt lazy sync/creation
+    if (!order) {
+      const targetPi = trimmedOrderNumber.startsWith("pi_")
+        ? trimmedOrderNumber
+        : paymentIntentId;
+
+      if (targetPi && targetPi.startsWith("pi_")) {
+        try {
+          const syncedOrder = await createOrderFromPaymentIntent(targetPi);
+          if (syncedOrder) {
+            order = syncedOrder as any;
+          }
+        } catch (syncErr) {
+          console.warn("[OrdersService] On-demand order creation fallback error:", syncErr);
+        }
+      }
+    }
 
     if (!order) {
       return {
@@ -73,6 +94,16 @@ export async function getOrderByNumber(
         (orderGuestEmail && orderGuestEmail === normalizedQueryEmail) ||
         (orderUserEmail && orderUserEmail === normalizedQueryEmail)
       ) {
+        hasAccess = true;
+      }
+    }
+
+    // 3. PaymentIntent proof: user presenting matching Stripe PaymentIntent ID has proven checkout payment
+    if (!hasAccess && (paymentIntentId || trimmedOrderNumber.startsWith("pi_"))) {
+      const targetPi =
+        paymentIntentId ||
+        (trimmedOrderNumber.startsWith("pi_") ? trimmedOrderNumber : undefined);
+      if (targetPi && order.stripePaymentId === targetPi) {
         hasAccess = true;
       }
     }

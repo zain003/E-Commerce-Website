@@ -201,6 +201,27 @@ describe("Order Access Control & Query Service (Unit)", () => {
       expect(res.success).toBe(false);
       expect(res.error?.code).toBe("FORBIDDEN");
     });
+
+    it("allows access to guest order when matching paymentIntentId is provided (proof of checkout)", async () => {
+      vi.mocked(prisma.order.findUnique).mockResolvedValue(mockOrderGuest as any);
+
+      const res = await getOrderByNumber(
+        "ORD-GUEST-1",
+        undefined,
+        undefined,
+        "pi_guest_1"
+      );
+      expect(res.success).toBe(true);
+      expect(res.data?.orderNumber).toBe("ORD-GUEST-1");
+    });
+
+    it("allows access when querying directly by stripePaymentId starting with pi_", async () => {
+      vi.mocked(prisma.order.findUnique).mockResolvedValue(mockOrderGuest as any);
+
+      const res = await getOrderByNumber("pi_guest_1");
+      expect(res.success).toBe(true);
+      expect(res.data?.orderNumber).toBe("ORD-GUEST-1");
+    });
   });
 
   describe("getUserOrders", () => {

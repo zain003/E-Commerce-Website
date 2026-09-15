@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getOrderByNumber } from "@/lib/services/orders";
 import { OrderReceipt } from "@/components/orders/order-receipt";
 import { serializeData } from "@/lib/utils";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { AlertCircle, ShoppingBag, Package } from "lucide-react";
+import { OrderConfirmationSkeleton } from "@/components/orders/order-confirmation-skeleton";
 
 export const metadata: Metadata = {
   title: "Order Confirmation — E-Commerce Store",
@@ -21,7 +23,17 @@ interface OrderConfirmationPageProps {
   }>;
 }
 
-export default async function OrderConfirmationPage({
+export default function OrderConfirmationPage({
+  searchParams,
+}: OrderConfirmationPageProps) {
+  return (
+    <Suspense fallback={<OrderConfirmationSkeleton />}>
+      <OrderConfirmationContent searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
+async function OrderConfirmationContent({
   searchParams,
 }: OrderConfirmationPageProps) {
   const resolvedParams = await searchParams;
@@ -68,7 +80,8 @@ export default async function OrderConfirmationPage({
   const result = await getOrderByNumber(
     targetOrderNumber,
     resolvedParams.guestEmail,
-    userId
+    userId,
+    resolvedParams.payment_intent
   );
 
   if (!result.success || !result.data) {

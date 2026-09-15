@@ -450,6 +450,7 @@ export function CheckoutWizard({
                     <StripePaymentForm
                       amount={preview.total}
                       paymentIntentId={paymentIntentId || undefined}
+                      guestEmail={guestEmail}
                     />
                   </StripeWrapper>
                   <div className="pt-2">

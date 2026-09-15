@@ -20,6 +20,7 @@ import {
 export interface StripePaymentFormProps {
   amount: number;
   paymentIntentId?: string;
+  guestEmail?: string;
   onSuccess?: (paymentIntent: any) => void;
   onError?: (error: any) => void;
   className?: string;
@@ -28,6 +29,7 @@ export interface StripePaymentFormProps {
 export function StripePaymentForm({
   amount,
   paymentIntentId,
+  guestEmail,
   onSuccess,
   onError,
   className = "",
@@ -54,8 +56,9 @@ export function StripePaymentForm({
     setIsNetworkError(false);
 
     try {
+      const emailQuery = guestEmail ? `&guestEmail=${encodeURIComponent(guestEmail)}` : "";
       const returnUrl = typeof window !== "undefined"
-        ? `${window.location.origin}/order-confirmation?orderNumber=${paymentIntentId || "confirmed"}`
+        ? `${window.location.origin}/order-confirmation?orderNumber=${paymentIntentId || "confirmed"}${emailQuery}`
         : "/order-confirmation";
 
       const result = await stripe.confirmPayment({
@@ -93,8 +96,9 @@ export function StripePaymentForm({
         onSuccess?.(paymentIntent);
 
         const targetOrderNumber = paymentIntent.id || paymentIntentId || "confirmed";
+        const guestParam = guestEmail ? `&guestEmail=${encodeURIComponent(guestEmail)}` : "";
         router.push(
-          `/order-confirmation?orderNumber=${targetOrderNumber}&payment_intent=${paymentIntent.id}`
+          `/order-confirmation?orderNumber=${targetOrderNumber}&payment_intent=${paymentIntent.id}${guestParam}`
         );
       } else {
         setIsProcessing(false);
