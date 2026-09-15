@@ -166,11 +166,6 @@ export function StripePaymentForm({
             <Loader2 className="h-4 w-4 animate-spin" />
             <span>Processing payment...</span>
           </>
-        ) : !isStripeReady ? (
-          <>
-            <Loader2 className="h-4 w-4 animate-spin" />
-            <span>Loading payment secure gateway...</span>
-          </>
         ) : (
           <>
             <Lock className="h-4 w-4" />

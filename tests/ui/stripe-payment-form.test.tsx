@@ -84,8 +84,11 @@ describe("StripePaymentForm Component", () => {
       />
     );
 
-    const payButton = screen.getByRole("button", { name: /loading payment secure gateway/i });
+    const payButton = screen.getByRole("button", { name: /pay \$55\.00/i });
     expect(payButton.hasAttribute("disabled")).toBe(true);
+    expect(screen.queryByText(/processing payment/i)).toBeNull();
+    expect(screen.queryByText(/loading payment/i)).toBeNull();
+    expect(document.querySelector(".animate-spin")).toBeNull();
   });
 
   it("disables Pay Now button when Elements has not fully loaded", () => {
@@ -98,8 +101,11 @@ describe("StripePaymentForm Component", () => {
       />
     );
 
-    const payButton = screen.getByRole("button", { name: /loading payment secure gateway/i });
+    const payButton = screen.getByRole("button", { name: /pay \$55\.00/i });
     expect(payButton.hasAttribute("disabled")).toBe(true);
+    expect(screen.queryByText(/processing payment/i)).toBeNull();
+    expect(screen.queryByText(/loading payment/i)).toBeNull();
+    expect(document.querySelector(".animate-spin")).toBeNull();
   });
 
   it("renders 256-bit SSL encrypted checkout security badge", () => {

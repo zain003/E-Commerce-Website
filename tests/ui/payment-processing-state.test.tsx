@@ -57,6 +57,9 @@ describe("Stripe Payment Processing State", () => {
 
     const payButton = screen.getByRole("button", { name: /pay \$75\.00/i });
     expect(payButton.hasAttribute("disabled")).toBe(false);
+    expect(screen.queryByText(/processing payment/i)).toBeNull();
+    expect(screen.queryByText(/loading payment/i)).toBeNull();
+    expect(document.querySelector(".animate-spin")).toBeNull();
 
     // Submit payment
     await user.click(payButton);

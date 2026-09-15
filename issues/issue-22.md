@@ -1,0 +1,1 @@
+now when i go to checkout, payment processing button is already showing a loading spinner, it shouldnt unless i pay for it, it should not show processing
