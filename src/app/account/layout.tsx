@@ -1,7 +1,7 @@
 import React from "react";
 import { StoreLayout } from "@/components/layout/store-layout";
 
-export default function ShopLayout({
+export default function AccountLayout({
   children,
 }: {
   children: React.ReactNode;

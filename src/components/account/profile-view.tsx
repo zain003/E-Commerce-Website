@@ -48,13 +48,22 @@ export function ProfileView({ user }: ProfileViewProps) {
 
   return (
     <div className="space-y-8 max-w-4xl mx-auto">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">
-          My Account
-        </h1>
-        <p className="text-sm text-muted-foreground mt-0.5">
-          View your profile details and manage your shopping preferences
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
+            My Account
+          </h1>
+          <p className="text-sm text-muted-foreground mt-0.5">
+            View your profile details and manage your shopping preferences
+          </p>
+        </div>
+        <Link
+          href="/products"
+          className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground hover:bg-muted hover:text-primary transition-colors shadow-xs w-fit"
+        >
+          <ShoppingBag className="h-4 w-4 text-primary" />
+          <span>Continue Shopping</span>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -179,6 +188,24 @@ export function ProfileView({ user }: ProfileViewProps) {
                     </h3>
                     <p className="text-xs text-muted-foreground mt-1">
                       View your saved products and move to cart
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/products" className="block group">
+              <Card className="h-full transition-all group-hover:border-primary/50 group-hover:shadow-md">
+                <CardContent className="p-5 flex items-start gap-4">
+                  <div className="rounded-lg bg-muted p-2.5 text-foreground group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                    <ShoppingBag className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                      Browse Catalog
+                    </h3>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Discover new arrivals, products, and categories
                     </p>
                   </div>
                 </CardContent>

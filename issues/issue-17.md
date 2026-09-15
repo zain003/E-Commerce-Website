@@ -1,0 +1,1 @@
+when i logged in, i go to direct my account page, i cant go anywhere else. 
