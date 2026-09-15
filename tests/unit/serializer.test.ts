@@ -76,4 +76,32 @@ describe("serializeData Utility (Unit)", () => {
     expect(result.variants[1].priceDelta).toBe(4.5);
     expect(typeof result.variants[1].priceDelta).toBe("number");
   });
+
+  it("converts Decimal-like objects with { d, e, s } structure even without toNumber method", () => {
+    const rawDecimalLike = {
+      d: [48],
+      e: 1,
+      s: 1,
+      toString() {
+        return "48";
+      },
+    };
+
+    const result = serializeData(rawDecimalLike);
+    expect(typeof result).toBe("number");
+    expect(result).toBe(48);
+  });
+
+  it("converts objects whose constructor name is Decimal", () => {
+    class Decimal {
+      toString() {
+        return "99.95";
+      }
+    }
+
+    const customDecimal = new Decimal();
+    const result = serializeData(customDecimal);
+    expect(typeof result).toBe("number");
+    expect(result).toBe(99.95);
+  });
 });

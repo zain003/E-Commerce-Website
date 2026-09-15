@@ -1,5 +1,6 @@
 import { cacheLife } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { serializeData } from "@/lib/utils";
 import type { Category, Product, ProductDetail } from "@/types";
 
 /**
@@ -11,11 +12,12 @@ export async function getCategories(): Promise<Category[]> {
   cacheLife("hours");
 
   try {
-    return await prisma.category.findMany({
+    const categories = await prisma.category.findMany({
       orderBy: {
         name: "asc",
       },
     });
+    return serializeData(categories);
   } catch (error) {
     console.warn("[ProductsService] getCategories database connection issue:", error);
     return [];
@@ -31,7 +33,7 @@ export async function getFeaturedProducts(): Promise<Product[]> {
   cacheLife("hours");
 
   try {
-    return await prisma.product.findMany({
+    const products = await prisma.product.findMany({
       where: {
         featured: true,
         isArchived: false,
@@ -40,6 +42,7 @@ export async function getFeaturedProducts(): Promise<Product[]> {
         createdAt: "desc",
       },
     });
+    return serializeData(products);
   } catch (error) {
     console.warn("[ProductsService] getFeaturedProducts database connection issue:", error);
     return [];
@@ -79,7 +82,7 @@ export async function getProductBySlug(slug: string): Promise<ProductDetail | nu
       },
     });
 
-    return product;
+    return product ? serializeData(product) : null;
   } catch (error) {
     console.warn(`[ProductsService] getProductBySlug error for slug ${slug}:`, error);
     return null;
@@ -104,7 +107,7 @@ export async function getProductsByCategory(categorySlug: string): Promise<Produ
   }
 
   try {
-    return await prisma.product.findMany({
+    const products = await prisma.product.findMany({
       where: {
         category: {
           slug: decodedSlug,
@@ -115,6 +118,7 @@ export async function getProductsByCategory(categorySlug: string): Promise<Produ
         createdAt: "desc",
       },
     });
+    return serializeData(products);
   } catch (error) {
     console.warn(`[ProductsService] getProductsByCategory error for category ${categorySlug}:`, error);
     return [];

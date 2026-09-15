@@ -15,13 +15,20 @@ export function serializeData<T>(data: T): T {
     return data;
   }
 
-  // Handle Prisma Decimal or objects with .toNumber()
+  // Handle Prisma Decimal or objects with .toNumber() or Decimal.js structure
   if (
     typeof data === "object" &&
-    "toNumber" in data &&
-    typeof (data as { toNumber: () => number }).toNumber === "function"
+    (
+      ("toNumber" in data && typeof (data as { toNumber: unknown }).toNumber === "function") ||
+      ("d" in data && "e" in data && "s" in data) ||
+      (data as { constructor?: { name?: string } }).constructor?.name === "Decimal"
+    )
   ) {
-    return (data as { toNumber: () => number }).toNumber() as unknown as T;
+    if ("toNumber" in data && typeof (data as { toNumber: () => number }).toNumber === "function") {
+      return (data as { toNumber: () => number }).toNumber() as unknown as T;
+    }
+    const num = Number(String(data));
+    return (isNaN(num) ? 0 : num) as unknown as T;
   }
 
   // Preserve Date instances (React 19 RSC natively supports Date)

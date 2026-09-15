@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
+import { serializeData } from "@/lib/utils";
 import type { Category, Product, PaginatedResult, SearchFilterParams } from "@/types";
 
 export type ProductWithCategory = Product & {
@@ -117,7 +118,7 @@ export async function searchProducts(
     const totalPages = total === 0 ? 0 : Math.ceil(total / limit);
 
     return {
-      items: items as ProductWithCategory[],
+      items: serializeData(items as ProductWithCategory[]),
       total,
       page,
       limit,
