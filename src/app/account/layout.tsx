@@ -1,10 +1,10 @@
 import React from "react";
-import { StoreLayout } from "@/components/layout/store-layout";
+import ShopLayout from "@/app/(shop)/layout";
 
-export default function AccountLayout({
+export default async function AccountLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <StoreLayout>{children}</StoreLayout>;
+  return await ShopLayout({ children });
 }
