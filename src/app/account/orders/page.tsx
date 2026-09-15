@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -7,6 +7,9 @@ import { getUserOrders } from "@/lib/services/orders";
 import { OrderHistoryList } from "@/components/orders/order-history-list";
 import { serializeData } from "@/lib/utils";
 import { BackButton } from "@/components/ui/back-button";
+import AccountLoading from "@/app/account/loading";
+
+export const instant = false;
 
 export const metadata: Metadata = {
   title: "Order History — E-Commerce Store",
@@ -20,25 +23,9 @@ interface AccountOrdersPageProps {
   }>;
 }
 
-export default async function AccountOrdersPage({
+export default function AccountOrdersPage({
   searchParams,
 }: AccountOrdersPageProps) {
-  const session = await getServerSession(authOptions);
-
-  if (!session || !session.user?.id) {
-    redirect("/login?callbackUrl=/account/orders");
-  }
-
-  const resolvedParams = await searchParams;
-  const page = Math.max(1, parseInt(resolvedParams.page || "1", 10) || 1);
-  const limit = Math.max(1, parseInt(resolvedParams.limit || "10", 10) || 10);
-
-  const result = await getUserOrders(session.user.id, page, limit);
-
-  const ordersData = result.success && result.data
-    ? serializeData(result.data)
-    : { items: [], total: 0, page: 1, limit, totalPages: 1 };
-
   return (
     <div className="container max-w-5xl mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-6">
       {/* Navigation Breadcrumb */}
@@ -57,12 +44,37 @@ export default async function AccountOrdersPage({
       </div>
 
       {/* Order List */}
-      <OrderHistoryList
-        orders={ordersData.items}
-        total={ordersData.total}
-        page={ordersData.page}
-        totalPages={ordersData.totalPages}
-      />
+      <Suspense fallback={<AccountLoading />}>
+        <OrdersContent searchParams={searchParams} />
+      </Suspense>
     </div>
   );
 }
+
+async function OrdersContent({ searchParams }: AccountOrdersPageProps) {
+  const session = await getServerSession(authOptions);
+
+  if (!session || !session.user?.id) {
+    redirect("/login?callbackUrl=/account/orders");
+  }
+
+  const resolvedParams = await searchParams;
+  const page = Math.max(1, parseInt(resolvedParams.page || "1", 10) || 1);
+  const limit = Math.max(1, parseInt(resolvedParams.limit || "10", 10) || 10);
+
+  const result = await getUserOrders(session.user.id, page, limit);
+
+  const ordersData = result.success && result.data
+    ? serializeData(result.data)
+    : { items: [], total: 0, page: 1, limit, totalPages: 1 };
+
+  return (
+    <OrderHistoryList
+      orders={ordersData.items}
+      total={ordersData.total}
+      page={ordersData.page}
+      totalPages={ordersData.totalPages}
+    />
+  );
+}
+

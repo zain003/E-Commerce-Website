@@ -1,6 +1,8 @@
 import React from "react";
 import ShopLayout from "@/app/(shop)/layout";
 
+export const instant = false;
+
 export default async function AccountLayout({
   children,
 }: {
@@ -8,3 +10,4 @@ export default async function AccountLayout({
 }) {
   return await ShopLayout({ children });
 }
+

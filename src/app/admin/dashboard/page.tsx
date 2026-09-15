@@ -18,6 +18,8 @@ import {
   TrendingUp,
 } from "lucide-react";
 
+export const instant = false;
+
 export const metadata: Metadata = {
   title: "Dashboard — Admin Portal",
   description: "Store overview, sales metrics, and recent order fulfillment.",
