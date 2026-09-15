@@ -44,6 +44,10 @@ export default function WishlistPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (status === "loading") {
+      return;
+    }
+
     if (status === "unauthenticated") {
       router.push("/login?callbackUrl=%2Faccount%2Fwishlist");
       return;

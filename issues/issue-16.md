@@ -1,0 +1,1 @@
+when i go to wishlisht, i got logged out

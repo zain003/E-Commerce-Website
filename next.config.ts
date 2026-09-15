@@ -16,6 +16,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/wishlist",
+        destination: "/account/wishlist",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
