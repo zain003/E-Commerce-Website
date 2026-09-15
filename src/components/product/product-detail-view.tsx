@@ -16,7 +16,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-import { useCartStore } from "@/store/cart-store";
+import { useCartStore, registerCartItemDetails } from "@/store/cart-store";
 import { ReviewSection } from "@/components/reviews/review-section";
 import { WishlistButton } from "@/components/wishlist/wishlist-button";
 
@@ -26,7 +26,6 @@ export interface ProductDetailViewProps {
 
 export function ProductDetailView({ product }: ProductDetailViewProps) {
   const addItem = useCartStore((state) => state.addItem);
-  const isMutating = useCartStore((state) => state.isMutating);
 
   // Initial selected variant (first in-stock or first available)
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
@@ -45,8 +44,26 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
     ? selectedVariant.stock === 0
     : false;
 
+  // Register variant details for instant optimistic cart addition
+  React.useEffect(() => {
+    if (product.variants) {
+      product.variants.forEach((v) => {
+        registerCartItemDetails(v.id, {
+          variant: v,
+          product: {
+            id: product.id,
+            name: product.name,
+            slug: product.slug,
+            basePrice: numericBase,
+            images: product.images,
+          },
+        });
+      });
+    }
+  }, [product, numericBase]);
+
   const handleAddToCart = () => {
-    if (isOutOfStock || !selectedVariant || isMutating) return;
+    if (isOutOfStock || !selectedVariant) return;
     addItem(selectedVariant.id, 1);
   };
 

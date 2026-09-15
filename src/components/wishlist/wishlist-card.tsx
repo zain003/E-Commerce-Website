@@ -7,7 +7,7 @@ import { ShoppingBag, Trash2, ShoppingCart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PriceTag } from "@/components/product/price-tag";
-import { useCartStore } from "@/store/cart-store";
+import { useCartStore, registerCartItemDetails } from "@/store/cart-store";
 import { HydratedWishlistItem } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -20,7 +20,6 @@ export interface WishlistCardProps {
 export function WishlistCard({ item, onRemove, className }: WishlistCardProps) {
   const { product } = item;
   const addItem = useCartStore((state) => state.addItem);
-  const isMutating = useCartStore((state) => state.isMutating);
 
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -32,8 +31,23 @@ export function WishlistCard({ item, onRemove, className }: WishlistCardProps) {
   const defaultVariant = inStockVariant || (product.variants && product.variants.length > 0 ? product.variants[0] : null);
   const isAvailable = Boolean(product.inStock && inStockVariant);
 
+  React.useEffect(() => {
+    if (defaultVariant) {
+      registerCartItemDetails(defaultVariant.id, {
+        variant: defaultVariant,
+        product: {
+          id: product.id,
+          name: product.name,
+          slug: product.slug,
+          basePrice: product.basePrice,
+          images: product.images,
+        },
+      });
+    }
+  }, [defaultVariant, product]);
+
   const handleMoveToCart = async () => {
-    if (!isAvailable || !defaultVariant || isProcessing || isMutating) return;
+    if (!isAvailable || !defaultVariant || isProcessing) return;
 
     setIsProcessing(true);
     try {

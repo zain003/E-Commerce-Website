@@ -1,0 +1,1 @@
+add to cart button is sometimes responds late, like when i click, after 4-5 sec or maybe more it appears in cart, sometimes not appear, check, when i click, product should be add instantly

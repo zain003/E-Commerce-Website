@@ -49,6 +49,31 @@ function recalculateCoupon(
   };
 }
 
+export interface OptimisticCartDetails {
+  variant?: {
+    id?: string;
+    name?: string;
+    sku?: string;
+    priceDelta?: number | string | { toNumber?: () => number; toString?: () => string };
+    stock?: number;
+  };
+  product?: {
+    id?: string;
+    name?: string;
+    slug?: string;
+    basePrice?: number | string | { toNumber?: () => number; toString?: () => string };
+    images?: string[];
+  };
+}
+
+export const cartItemRegistry = new Map<string, OptimisticCartDetails>();
+
+export function registerCartItemDetails(variantId: string, details: OptimisticCartDetails) {
+  if (variantId && details) {
+    cartItemRegistry.set(variantId, details);
+  }
+}
+
 export interface CartStoreState {
   cart: HydratedCart | null;
   isOpen: boolean;
@@ -71,7 +96,7 @@ export interface CartStoreState {
   clearCart: () => void;
   fetchCart: () => Promise<void>;
   mergeCart: (guestToken?: string) => Promise<void>;
-  addItem: (variantId: string, quantity?: number) => Promise<void>;
+  addItem: (variantId: string, quantity?: number, options?: OptimisticCartDetails) => Promise<void>;
   updateQuantity: (itemId: string, quantity: number) => Promise<void>;
   removeItem: (itemId: string) => Promise<void>;
 
@@ -169,8 +194,90 @@ export const useCartStore = create<CartStoreState>((set, get) => ({
     }
   },
 
-  addItem: async (variantId: string, quantity = 1) => {
-    set({ isOpen: true, isMutating: true, error: null });
+  addItem: async (variantId: string, quantity = 1, options?: OptimisticCartDetails) => {
+    const details = options || cartItemRegistry.get(variantId);
+    const currentCart = get().cart;
+    const previousCart = currentCart;
+    const previousCoupon = get().appliedCoupon;
+    const previousDiscount = get().discountTotal;
+
+    // Optimistic item update or creation
+    const currentItems = currentCart?.items ? [...currentCart.items] : [];
+    const existingIndex = currentItems.findIndex((it) => it.variantId === variantId);
+
+    let updatedItems: HydratedCartItem[];
+    if (existingIndex > -1) {
+      updatedItems = currentItems.map((it, idx) =>
+        idx === existingIndex ? { ...it, quantity: it.quantity + quantity } : it
+      );
+    } else {
+      const numericPriceDelta =
+        typeof details?.variant?.priceDelta === "object" && details?.variant?.priceDelta !== null && "toNumber" in details.variant.priceDelta
+          ? (details.variant.priceDelta as any).toNumber()
+          : Number(details?.variant?.priceDelta ?? 0);
+
+      const numericBasePrice =
+        typeof details?.product?.basePrice === "object" && details?.product?.basePrice !== null && "toNumber" in details.product.basePrice
+          ? (details.product.basePrice as any).toNumber()
+          : Number(details?.product?.basePrice ?? 0);
+
+      const optimisticItem: HydratedCartItem = {
+        id: `temp-${Date.now()}`,
+        cartId: currentCart?.id || "temp-cart",
+        variantId,
+        quantity,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        variant: {
+          id: variantId,
+          productId: details?.product?.id || "",
+          name: details?.variant?.name || "Standard",
+          sku: details?.variant?.sku || "",
+          priceDelta: numericPriceDelta,
+          stock: Number(details?.variant?.stock ?? 999),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          product: {
+            id: details?.product?.id || "",
+            name: details?.product?.name || "Product",
+            slug: details?.product?.slug || "",
+            basePrice: numericBasePrice,
+            images: details?.product?.images || [],
+            featured: false,
+            isArchived: false,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          } as any,
+        },
+      };
+      updatedItems = [...currentItems, optimisticItem];
+    }
+
+    const { subtotal, itemCount } = calculateTotals(updatedItems);
+    const optimisticCart: HydratedCart = {
+      id: currentCart?.id || "temp-cart",
+      userId: currentCart?.userId || null,
+      guestToken: currentCart?.guestToken || null,
+      items: updatedItems,
+      subtotal,
+      itemCount,
+      createdAt: currentCart?.createdAt || new Date(),
+      updatedAt: new Date(),
+    };
+
+    const optimisticCoupon = recalculateCoupon(previousCoupon, optimisticCart.subtotal);
+
+    // INSTANT UI UPDATE: item immediately appears in cart
+    set({
+      cart: optimisticCart,
+      isOpen: true,
+      isMutating: true,
+      error: null,
+      appliedCoupon: optimisticCoupon.appliedCoupon,
+      discountTotal: optimisticCoupon.discountTotal,
+      ...(optimisticCoupon.couponError ? { couponError: optimisticCoupon.couponError } : {}),
+    });
+
     try {
       const res = await fetch("/api/cart/items", {
         method: "POST",
@@ -181,7 +288,10 @@ export const useCartStore = create<CartStoreState>((set, get) => ({
 
       if (!res.ok || !json.success || !json.data) {
         set({
+          cart: previousCart,
           isMutating: false,
+          appliedCoupon: previousCoupon,
+          discountTotal: previousDiscount,
           error: json.error?.message || "Failed to add item to cart",
         });
         return;
@@ -198,7 +308,10 @@ export const useCartStore = create<CartStoreState>((set, get) => ({
       });
     } catch (err) {
       set({
+        cart: previousCart,
         isMutating: false,
+        appliedCoupon: previousCoupon,
+        discountTotal: previousDiscount,
         error: "Network error occurred while adding to cart",
       });
     }
