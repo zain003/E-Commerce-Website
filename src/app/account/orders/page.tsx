@@ -6,7 +6,7 @@ import { authOptions } from "@/lib/auth";
 import { getUserOrders } from "@/lib/services/orders";
 import { OrderHistoryList } from "@/components/orders/order-history-list";
 import { serializeData } from "@/lib/utils";
-import { ChevronLeft } from "lucide-react";
+import { BackButton } from "@/components/ui/back-button";
 
 export const metadata: Metadata = {
   title: "Order History — E-Commerce Store",
@@ -43,13 +43,7 @@ export default async function AccountOrdersPage({
     <div className="container max-w-5xl mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-6">
       {/* Navigation Breadcrumb */}
       <div>
-        <Link
-          href="/account/profile"
-          className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ChevronLeft className="h-4 w-4" />
-          <span>Back to Account</span>
-        </Link>
+        <BackButton fallbackUrl="/account/profile" label="Back" />
       </div>
 
       {/* Header */}
