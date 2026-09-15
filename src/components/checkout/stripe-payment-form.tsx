@@ -95,7 +95,26 @@ export function StripePaymentForm({
       ) {
         onSuccess?.(paymentIntent);
 
-        const targetOrderNumber = paymentIntent.id || paymentIntentId || "confirmed";
+        let targetOrderNumber = paymentIntent.id || paymentIntentId || "confirmed";
+
+        // Proactively invoke confirm endpoint to ensure immediate order generation
+        try {
+          const confirmRes = await fetch("/api/checkout/confirm", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              paymentIntentId: paymentIntent.id,
+              guestEmail,
+            }),
+          });
+          const confirmJson = await confirmRes.json();
+          if (confirmJson.success && confirmJson.data?.orderNumber) {
+            targetOrderNumber = confirmJson.data.orderNumber;
+          }
+        } catch (confirmErr) {
+          console.warn("[StripePaymentForm] Immediate confirm call failed, relying on server sync:", confirmErr);
+        }
+
         const guestParam = guestEmail ? `&guestEmail=${encodeURIComponent(guestEmail)}` : "";
         router.push(
           `/order-confirmation?orderNumber=${targetOrderNumber}&payment_intent=${paymentIntent.id}${guestParam}`

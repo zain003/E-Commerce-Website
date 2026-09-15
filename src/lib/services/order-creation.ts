@@ -102,134 +102,163 @@ export async function createOrderFromPaymentIntent(
 
   // 3. Concurrency-safe atomic transaction
   try {
-    const order = await prisma.$transaction(async (tx) => {
-      // Fetch cart with items, variants, and product base prices
-      const cart = await tx.cart.findUnique({
-        where: { id: cartId },
-        include: {
-          items: {
-            include: {
-              variant: {
-                include: {
-                  product: true,
+    const order = await prisma.$transaction(
+      async (tx) => {
+        // Fetch cart with items, variants, and product base prices
+        const cart = await tx.cart.findUnique({
+          where: { id: cartId },
+          include: {
+            items: {
+              include: {
+                variant: {
+                  include: {
+                    product: true,
+                  },
                 },
               },
-            },
-          },
-        },
-      });
-
-      if (!cart || cart.items.length === 0) {
-        console.error(
-          `[StripeWebhook] Cart ${cartId} not found or empty during order creation`
-        );
-        return null;
-      }
-
-      // Check stock levels & log admin alert if deficit
-      for (const item of cart.items) {
-        if (item.variant.stock < item.quantity) {
-          console.warn(
-            `[ADMIN ALERT] Stock deficit detected during order creation for variant ${item.variant.sku} (ID: ${item.variant.id}). Required: ${item.quantity}, available: ${item.variant.stock}. Order will proceed with stock decrement and requires manual review.`
-          );
-        }
-      }
-
-      // Calculate item unit prices and line items
-      const orderItemsData = cart.items.map((item) => {
-        const unitPrice = getVariantUnitPrice(item.variant);
-        return {
-          variantId: item.variantId,
-          quantity: item.quantity,
-          unitPrice,
-        };
-      });
-
-      // Compute subtotal, shipping fee, and total
-      const cartTotals = calculateCartTotals(cart.items as any);
-      const shippingMethodId = (
-        metadata.shippingMethodId === "EXPRESS" ? "EXPRESS" : "STANDARD"
-      ) as "STANDARD" | "EXPRESS";
-      const shippingFee = calculateShippingFee(
-        cartTotals.subtotal,
-        shippingMethodId
-      );
-      const rawDiscount = metadata.discountTotal ? parseFloat(metadata.discountTotal) : 0.0;
-      const discountTotal = isNaN(rawDiscount) ? 0.0 : Math.max(0, rawDiscount);
-      const total = Math.round(Math.max(0, cartTotals.subtotal + shippingFee - discountTotal) * 100) / 100;
-
-      // Parse shipping address safely
-      let parsedShippingAddress: any = {};
-      if (typeof metadata.shippingAddress === "string") {
-        try {
-          parsedShippingAddress = JSON.parse(metadata.shippingAddress);
-        } catch {
-          parsedShippingAddress = { raw: metadata.shippingAddress };
-        }
-      } else if (
-        metadata.shippingAddress &&
-        typeof metadata.shippingAddress === "object"
-      ) {
-        parsedShippingAddress = metadata.shippingAddress;
-      }
-
-      const orderNumber = generateOrderNumber();
-
-      // 1. Create Order and OrderItem records
-      const createdOrder = await tx.order.create({
-        data: {
-          orderNumber,
-          userId: metadata.userId ? metadata.userId : (cart.userId || null),
-          guestEmail: metadata.guestEmail || null,
-          status: "PROCESSING",
-          paymentStatus: "PAID",
-          stripePaymentId: paymentIntent.id,
-          subtotal: cartTotals.subtotal,
-          discountTotal,
-          shippingFee,
-          total,
-          shippingAddress: parsedShippingAddress,
-          items: {
-            create: orderItemsData,
-          },
-        },
-        include: {
-          items: {
-            include: {
-              variant: {
-                include: {
-                  product: true,
-                },
-              },
-            },
-          },
-          user: true,
-        },
-      });
-
-      // 2. Decrement stock on ProductVariant records
-      for (const item of cart.items) {
-        await tx.productVariant.update({
-          where: { id: item.variantId },
-          data: {
-            stock: {
-              decrement: item.quantity,
             },
           },
         });
+
+        if (!cart || cart.items.length === 0) {
+          // If cart was already cleared or deleted by a concurrent process, check if order exists
+          const existingDuringTx = await tx.order.findUnique({
+            where: { stripePaymentId: paymentIntent.id },
+            include: {
+              items: {
+                include: {
+                  variant: {
+                    include: {
+                      product: true,
+                    },
+                  },
+                },
+              },
+              user: true,
+            },
+          });
+
+          if (existingDuringTx) {
+            return existingDuringTx;
+          }
+
+          console.error(
+            `[StripeWebhook] Cart ${cartId} not found or empty during order creation`
+          );
+          return null;
+        }
+
+        // Check stock levels & log admin alert if deficit
+        for (const item of cart.items) {
+          if (item.variant.stock < item.quantity) {
+            console.warn(
+              `[ADMIN ALERT] Stock deficit detected during order creation for variant ${item.variant.sku} (ID: ${item.variant.id}). Required: ${item.quantity}, available: ${item.variant.stock}. Order will proceed with stock decrement and requires manual review.`
+            );
+          }
+        }
+
+        // Calculate item unit prices and line items
+        const orderItemsData = cart.items.map((item) => {
+          const unitPrice = getVariantUnitPrice(item.variant);
+          return {
+            variantId: item.variantId,
+            quantity: item.quantity,
+            unitPrice,
+          };
+        });
+
+        // Compute subtotal, shipping fee, and total
+        const cartTotals = calculateCartTotals(cart.items as any);
+        const shippingMethodId = (
+          metadata.shippingMethodId === "EXPRESS" ? "EXPRESS" : "STANDARD"
+        ) as "STANDARD" | "EXPRESS";
+        const shippingFee = calculateShippingFee(
+          cartTotals.subtotal,
+          shippingMethodId
+        );
+        const rawDiscount = metadata.discountTotal ? parseFloat(metadata.discountTotal) : 0.0;
+        const discountTotal = isNaN(rawDiscount) ? 0.0 : Math.max(0, rawDiscount);
+        const total = Math.round(Math.max(0, cartTotals.subtotal + shippingFee - discountTotal) * 100) / 100;
+
+        // Parse shipping address safely
+        let parsedShippingAddress: any = {};
+        if (typeof metadata.shippingAddress === "string") {
+          try {
+            parsedShippingAddress = JSON.parse(metadata.shippingAddress);
+          } catch {
+            parsedShippingAddress = { raw: metadata.shippingAddress };
+          }
+        } else if (
+          metadata.shippingAddress &&
+          typeof metadata.shippingAddress === "object"
+        ) {
+          parsedShippingAddress = metadata.shippingAddress;
+        }
+
+        const orderNumber = generateOrderNumber();
+
+        // 1. Create Order and OrderItem records
+        const createdOrder = await tx.order.create({
+          data: {
+            orderNumber,
+            userId: metadata.userId ? metadata.userId : (cart.userId || null),
+            guestEmail: metadata.guestEmail || null,
+            status: "PROCESSING",
+            paymentStatus: "PAID",
+            stripePaymentId: paymentIntent.id,
+            subtotal: cartTotals.subtotal,
+            discountTotal,
+            shippingFee,
+            total,
+            shippingAddress: parsedShippingAddress,
+            items: {
+              create: orderItemsData,
+            },
+          },
+          include: {
+            items: {
+              include: {
+                variant: {
+                  include: {
+                    product: true,
+                  },
+                },
+              },
+            },
+            user: true,
+          },
+        });
+
+        // 2. Decrement stock on ProductVariant records in parallel
+        await Promise.all(
+          cart.items.map((item) =>
+            tx.productVariant.update({
+              where: { id: item.variantId },
+              data: {
+                stock: {
+                  decrement: item.quantity,
+                },
+              },
+            })
+          )
+        );
+
+        // 3. Clear CartItem records and delete Cart
+        await tx.cartItem.deleteMany({
+          where: { cartId: cart.id },
+        });
+
+        await tx.cart.delete({
+          where: { id: cart.id },
+        });
+
+        return createdOrder;
+      },
+      {
+        maxWait: 15000,
+        timeout: 30000,
       }
-
-      // 3. Clear CartItem records and delete Cart
-      await tx.cartItem.deleteMany({
-        where: { cartId: cart.id },
-      });
-
-      await tx.cart.delete({
-        where: { id: cart.id },
-      });
-
-      return createdOrder;
-    });
+    );
 
     if (order) {
       if (metadata.couponCode && metadata.couponCode.trim()) {

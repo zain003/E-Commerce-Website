@@ -89,7 +89,7 @@ export async function createPaymentIntent(
           amount: amountInCents,
           currency: "usd",
           metadata,
-          automatic_payment_methods: { enabled: true },
+          payment_method_types: ["card"],
         },
         idempotencyKey ? { idempotencyKey } : undefined
       );
