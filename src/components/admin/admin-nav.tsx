@@ -9,7 +9,9 @@ import {
   ShoppingBag,
   ExternalLink,
   ShieldCheck,
+  LogOut,
 } from "lucide-react";
+import { signOut } from "next-auth/react";
 import { cn } from "@/lib/utils";
 
 export function AdminNav() {
@@ -88,6 +90,16 @@ export function AdminNav() {
             <span>Storefront</span>
             <ExternalLink className="h-3.5 w-3.5" />
           </Link>
+
+          <button
+            type="button"
+            onClick={() => signOut({ callbackUrl: "/login" })}
+            className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors cursor-pointer"
+            aria-label="Sign out of admin account"
+          >
+            <LogOut className="h-3.5 w-3.5" />
+            <span>Sign Out</span>
+          </button>
         </nav>
       </div>
     </header>
