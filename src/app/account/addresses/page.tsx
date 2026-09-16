@@ -8,7 +8,7 @@ import { AddressesView } from "@/components/account/addresses-view";
 import { BackButton } from "@/components/ui/back-button";
 import AccountLoading from "@/app/account/loading";
 
-export const instant = false;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Saved Shipping Addresses — E-Commerce Store",

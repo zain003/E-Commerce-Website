@@ -9,7 +9,7 @@ import { serializeData } from "@/lib/utils";
 import { BackButton } from "@/components/ui/back-button";
 import AccountLoading from "@/app/account/loading";
 
-export const instant = false;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Order History — E-Commerce Store",

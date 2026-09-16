@@ -20,7 +20,7 @@ import {
   Inbox,
 } from "lucide-react";
 
-export const instant = false;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Dashboard — Admin Portal",

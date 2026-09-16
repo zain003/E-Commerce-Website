@@ -7,7 +7,7 @@ import { getCurrentUser } from "@/lib/services/auth-service";
 import { ProfileView } from "@/components/account/profile-view";
 import AccountLoading from "@/app/account/loading";
 
-export const instant = false;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "My Account Profile — E-Commerce Store",

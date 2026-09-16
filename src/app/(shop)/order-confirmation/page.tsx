@@ -10,6 +10,8 @@ import { Card } from "@/components/ui/card";
 import { AlertCircle, ShoppingBag, Package } from "lucide-react";
 import { OrderConfirmationSkeleton } from "@/components/orders/order-confirmation-skeleton";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Order Confirmation — E-Commerce Store",
   description: "View and print your itemized purchase receipt and tracking details",

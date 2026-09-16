@@ -7,6 +7,8 @@ import { CheckoutWizard } from "@/components/checkout/checkout-wizard";
 import { CheckoutSkeleton } from "@/components/checkout/checkout-skeleton";
 import { Address } from "@/types";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Checkout — E-Commerce Store",
   description: "Secure, mobile-first multi-step checkout",
