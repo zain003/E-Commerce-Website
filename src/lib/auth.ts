@@ -5,8 +5,11 @@ import { prisma } from "@/lib/prisma";
 import { loginSchema } from "@/lib/validators/auth";
 import { Role } from "@/types";
 
-// Automatically adapt to Vercel deployment URL if NEXTAUTH_URL is not explicitly set
-if (process.env.VERCEL_URL && !process.env.NEXTAUTH_URL) {
+// Automatically adapt to Vercel deployment URL if NEXTAUTH_URL is not set or points to localhost
+if (
+  process.env.VERCEL_URL &&
+  (!process.env.NEXTAUTH_URL || process.env.NEXTAUTH_URL.includes("localhost"))
+) {
   process.env.NEXTAUTH_URL = `https://${process.env.VERCEL_URL}`;
 }
 
