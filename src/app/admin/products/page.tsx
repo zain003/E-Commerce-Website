@@ -52,8 +52,7 @@ export default async function AdminProductsPage({
       : { items: [], total: 0, page: 1, limit, totalPages: 1 };
 
   return (
-    <div className="min-h-screen bg-background text-foreground py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <AdminNav />
+    <div className="space-y-6">
       <AdminProductsManager
         initialProducts={productsData.items}
         categories={categories}

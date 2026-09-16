@@ -39,12 +39,12 @@ export default async function ShopLayout({
 
       {/* Floating Frosted Glass Header */}
       <header className="sticky top-0 z-30 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl shadow-2xs transition-all">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-          <div className="flex items-center gap-8">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 sm:gap-6 lg:gap-8 px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-6 lg:gap-8 min-w-0">
             {/* Brand Logo */}
             <Link
               href="/"
-              className="flex items-center gap-2.5 transition-opacity hover:opacity-85"
+              className="flex shrink-0 items-center gap-2.5 transition-opacity hover:opacity-85"
             >
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-xs">
                 <ShoppingBag className="h-4 w-4" />
@@ -55,36 +55,30 @@ export default async function ShopLayout({
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden items-center gap-6 text-sm font-medium text-muted-foreground md:flex">
+            <nav className="hidden items-center gap-5 lg:gap-7 text-sm font-medium text-muted-foreground md:flex">
               <MegaMenu />
               <Link
                 href="/#categories"
-                className="transition-colors hover:text-foreground py-2"
+                className="whitespace-nowrap transition-colors hover:text-foreground py-2"
               >
                 Categories
               </Link>
               <Link
                 href="/account/orders"
-                className="transition-colors hover:text-foreground py-2"
+                className="whitespace-nowrap transition-colors hover:text-foreground py-2"
               >
                 Orders
               </Link>
               <Link
-                href="/account/wishlist"
-                className="transition-colors hover:text-foreground py-2"
-              >
-                Wishlist
-              </Link>
-              <Link
                 href="/account/addresses"
-                className="transition-colors hover:text-foreground py-2"
+                className="whitespace-nowrap transition-colors hover:text-foreground py-2"
               >
                 Saved Addresses
               </Link>
             </nav>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex shrink-0 items-center gap-2.5 sm:gap-3">
             {/* Spotlight Search Pill */}
             <SpotlightSearch />
 
@@ -157,7 +151,7 @@ export default async function ShopLayout({
 
       {/* Storefront Editorial Footer */}
       <footer className="border-t border-border bg-card py-12 pb-24 text-sm text-muted-foreground md:pb-12">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-10 md:grid-cols-12 md:gap-8">
             {/* Brand Column */}
             <div className="md:col-span-4 flex flex-col items-start gap-3">

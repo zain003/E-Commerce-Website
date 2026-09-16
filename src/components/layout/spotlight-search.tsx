@@ -72,7 +72,7 @@ export function SpotlightSearch() {
         type="button"
         onClick={() => setIsOpen(true)}
         aria-label="Open search spotlight"
-        className="group relative inline-flex h-9 items-center gap-2 rounded-full border border-border/80 bg-muted/40 px-3 text-xs text-muted-foreground transition-all hover:border-foreground/30 hover:bg-muted/70 hover:text-foreground cursor-pointer md:w-56 lg:w-64"
+        className="group relative inline-flex h-9 items-center gap-2 rounded-full border border-border/80 bg-muted/40 px-3 text-xs text-muted-foreground transition-all hover:border-foreground/30 hover:bg-muted/70 hover:text-foreground cursor-pointer sm:w-40 md:w-48 lg:w-56 xl:w-64"
       >
         <Search className="h-3.5 w-3.5 text-muted-foreground transition-colors group-hover:text-foreground" />
         <span className="hidden sm:inline truncate">Search essentials...</span>

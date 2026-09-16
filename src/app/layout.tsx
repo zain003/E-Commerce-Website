@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Playfair_Display } from "next/font/google";
+import { Roboto } from "next/font/google";
 import { SessionProvider } from "@/components/providers/session-provider";
 import "./globals.css";
 
-const plusJakartaSans = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta-sans",
+const roboto = Roboto({
+  variable: "--font-roboto",
   subsets: ["latin"],
-});
-
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
-  subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -30,7 +27,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${plusJakartaSans.variable} ${playfair.variable} h-full antialiased`}
+      className={`${roboto.variable} h-full antialiased`}
     >
       <body
         suppressHydrationWarning

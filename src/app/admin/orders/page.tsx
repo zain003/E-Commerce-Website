@@ -70,8 +70,7 @@ export default async function AdminOrdersPage({
       : { totalRevenue: 0, totalOrders: 0, processingOrders: 0, deliveredOrders: 0 };
 
   return (
-    <div className="min-h-screen bg-background text-foreground py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <AdminNav />
+    <div className="space-y-6">
       <AdminOrdersManager
         initialOrders={ordersData.items}
         metrics={metricsData}
