@@ -36,7 +36,7 @@ export function CheckoutOrderSummary({
 
   return (
     <div
-      className={`flex flex-col gap-5 rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-xs ${className}`}
+      className={`flex flex-col gap-5 rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-atelier ${className}`}
     >
       {/* Mobile Collapsible Header */}
       <div className="flex items-center justify-between lg:hidden border-b border-border pb-3">

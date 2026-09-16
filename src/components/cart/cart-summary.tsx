@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, Truck } from "lucide-react";
+import { ArrowRight, ShieldCheck, Truck, Sparkles, CheckCircle2 } from "lucide-react";
 import { formatCurrency } from "@/components/product/price-tag";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -38,31 +38,44 @@ export function CartSummary({
   return (
     <div
       className={cn(
-        "flex flex-col gap-4 rounded-2xl border border-border bg-card p-5 shadow-xs",
+        "flex flex-col gap-4 rounded-2xl border border-border bg-card p-5 shadow-atelier",
         className
       )}
     >
-      {/* Free Shipping Progress Indicator */}
-      <div className="rounded-xl bg-muted/60 p-3 text-xs">
-        <div className="flex items-center gap-2 font-medium text-foreground mb-1.5">
-          <Truck className="h-4 w-4 text-primary shrink-0" />
+      {/* Gamified Free Shipping Progress Meter */}
+      <div
+        className={cn(
+          "rounded-xl p-3.5 text-xs transition-colors",
+          isFreeShipping
+            ? "border border-emerald-500/30 bg-emerald-500/10 text-emerald-950"
+            : "border border-border/80 bg-muted/40 text-foreground"
+        )}
+      >
+        <div className="flex items-center gap-2 font-medium mb-2">
           {isFreeShipping ? (
-            <span className="text-emerald-600 font-semibold">
-              You qualify for Free Standard Shipping!
-            </span>
+            <div className="flex items-center gap-2 text-emerald-700 font-semibold">
+              <Sparkles className="h-4 w-4 text-emerald-600 animate-pulse shrink-0" />
+              <span>Complimentary Carbon-Neutral Shipping Unlocked!</span>
+            </div>
           ) : (
-            <span>
-              Add{" "}
-              <strong className="text-foreground">
-                {formatCurrency(amountNeeded)}
-              </strong>{" "}
-              more for Free Shipping
-            </span>
+            <div className="flex items-center gap-2">
+              <Truck className="h-4 w-4 text-accent shrink-0" />
+              <span>
+                Add{" "}
+                <strong className="text-foreground font-bold">
+                  {formatCurrency(amountNeeded)}
+                </strong>{" "}
+                more for Complimentary Delivery
+              </span>
+            </div>
           )}
         </div>
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-border">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-border/80">
           <div
-            className="h-full rounded-full bg-primary transition-all duration-300"
+            className={cn(
+              "h-full rounded-full transition-all duration-500 ease-out",
+              isFreeShipping ? "bg-emerald-600" : "bg-accent"
+            )}
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -79,7 +92,7 @@ export function CartSummary({
           <span>Subtotal ({itemCount} {itemCount === 1 ? "item" : "items"})</span>
           <span
             data-testid="cart-subtotal"
-            className="font-semibold text-foreground"
+            className="font-semibold text-foreground tabular-nums tracking-tight"
           >
             {formatCurrency(subtotal)}
           </span>
@@ -90,7 +103,7 @@ export function CartSummary({
             <span>
               Discount{appliedCoupon ? ` (${appliedCoupon.code})` : ""}
             </span>
-            <span data-testid="discount-amount">
+            <span data-testid="discount-amount" className="tabular-nums tracking-tight">
               -{formatCurrency(discountTotal)}
             </span>
           </div>
@@ -100,7 +113,10 @@ export function CartSummary({
           <span>Estimated Shipping</span>
           <span className="font-medium text-foreground">
             {isFreeShipping ? (
-              <span className="text-emerald-600 font-semibold">Free</span>
+              <span className="text-emerald-600 font-semibold flex items-center gap-1">
+                <CheckCircle2 className="h-3.5 w-3.5 inline" />
+                <span>Complimentary</span>
+              </span>
             ) : (
               "Calculated at checkout"
             )}
@@ -111,21 +127,48 @@ export function CartSummary({
           <span className="text-base font-bold text-foreground">Estimated Total</span>
           <span
             data-testid="cart-estimated-total"
-            className="text-lg font-extrabold text-foreground"
+            className="text-lg font-extrabold text-foreground tabular-nums tracking-tight"
           >
             {formatCurrency(estimatedTotal)}
           </span>
         </div>
       </div>
 
-      {/* Checkout CTA */}
+      {/* Express Checkout & Standard CTA */}
       <div className="space-y-2 pt-2">
+        {/* Express Checkout Row */}
+        {itemCount > 0 && (
+          <div className="space-y-1.5 pb-1">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground text-center">
+              Express Checkout
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <Link href="/checkout" onClick={onCheckoutClick} className="block">
+                <button
+                  type="button"
+                  className="flex h-10 w-full items-center justify-center rounded-xl bg-black text-white font-medium text-xs hover:bg-neutral-800 transition-colors shadow-xs cursor-pointer"
+                >
+                  <span>Pay</span>
+                </button>
+              </Link>
+              <Link href="/checkout" onClick={onCheckoutClick} className="block">
+                <button
+                  type="button"
+                  className="flex h-10 w-full items-center justify-center rounded-xl border border-border bg-white text-neutral-900 font-semibold text-xs hover:bg-neutral-50 transition-colors shadow-xs cursor-pointer"
+                >
+                  <span>G Pay</span>
+                </button>
+              </Link>
+            </div>
+          </div>
+        )}
+
         <Link href="/checkout" onClick={onCheckoutClick} className="w-full block">
           <Button
             type="button"
             size="lg"
             disabled={itemCount === 0}
-            className="w-full gap-2 font-semibold shadow-sm cursor-pointer"
+            className="w-full gap-2 font-semibold shadow-sm cursor-pointer rounded-full h-11 bg-primary text-primary-foreground hover:bg-primary/90"
           >
             <span>Proceed to Checkout</span>
             <ArrowRight className="h-4 w-4" />
@@ -143,11 +186,25 @@ export function CartSummary({
         )}
       </div>
 
-      {/* Trust Signal */}
-      <div className="flex items-center justify-center gap-1.5 pt-1 text-[11px] text-muted-foreground">
-        <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
-        <span>Guaranteed safe & secure checkout</span>
+      {/* Payment Trust Row & Badges */}
+      <div className="flex flex-col items-center gap-1.5 pt-1 border-t border-border/60 text-[11px] text-muted-foreground">
+        <div className="flex items-center gap-1.5 text-foreground font-medium">
+          <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+          <span>Encrypted 256-bit SSL Checkout</span>
+        </div>
+        <div className="flex items-center gap-2 text-[10px] text-muted-foreground opacity-80">
+          <span>Visa</span>
+          <span>•</span>
+          <span>Mastercard</span>
+          <span>•</span>
+          <span>Amex</span>
+          <span>•</span>
+          <span>Apple Pay</span>
+          <span>•</span>
+          <span>Stripe</span>
+        </div>
       </div>
     </div>
   );
 }
+

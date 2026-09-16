@@ -8,6 +8,10 @@ import {
   ShieldCheck,
   Heart,
   Package,
+  Sparkles,
+  Truck,
+  RotateCcw,
+  CheckCircle2,
 } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -17,6 +21,9 @@ import {
 } from "@/components/layout/header-cart-button";
 import { HeaderAccountButton } from "@/components/layout/header-account-button";
 import { CartDrawer } from "@/components/cart/cart-drawer";
+import { AnnouncementBar } from "@/components/layout/announcement-bar";
+import { SpotlightSearch } from "@/components/layout/spotlight-search";
+import { MegaMenu } from "@/components/layout/mega-menu";
 
 export default async function ShopLayout({
   children,
@@ -27,48 +34,50 @@ export default async function ShopLayout({
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
-      {/* Universal Store Header */}
-      <header className="sticky top-0 z-30 w-full border-b border-border bg-background/85 backdrop-blur-md">
+      {/* 36px Slim Luxury Rotating Announcement Strip */}
+      <AnnouncementBar />
+
+      {/* Floating Frosted Glass Header */}
+      <header className="sticky top-0 z-30 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl shadow-2xs transition-all">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-8">
+            {/* Brand Logo */}
             <Link
               href="/"
-              className="flex items-center gap-2 text-xl font-bold tracking-tight text-foreground transition-opacity hover:opacity-85"
+              className="flex items-center gap-2.5 transition-opacity hover:opacity-85"
             >
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-xs">
                 <ShoppingBag className="h-4 w-4" />
               </div>
-              <span>Store</span>
+              <span className="font-serif text-lg font-bold tracking-[0.2em] uppercase text-foreground">
+                Atelier
+              </span>
             </Link>
 
+            {/* Desktop Navigation */}
             <nav className="hidden items-center gap-6 text-sm font-medium text-muted-foreground md:flex">
-              <Link
-                href="/products"
-                className="transition-colors hover:text-foreground"
-              >
-                Catalog
-              </Link>
+              <MegaMenu />
               <Link
                 href="/#categories"
-                className="transition-colors hover:text-foreground"
+                className="transition-colors hover:text-foreground py-2"
               >
                 Categories
               </Link>
               <Link
                 href="/account/orders"
-                className="transition-colors hover:text-foreground"
+                className="transition-colors hover:text-foreground py-2"
               >
                 Orders
               </Link>
               <Link
                 href="/account/wishlist"
-                className="transition-colors hover:text-foreground"
+                className="transition-colors hover:text-foreground py-2"
               >
                 Wishlist
               </Link>
               <Link
                 href="/account/addresses"
-                className="transition-colors hover:text-foreground"
+                className="transition-colors hover:text-foreground py-2"
               >
                 Saved Addresses
               </Link>
@@ -76,27 +85,21 @@ export default async function ShopLayout({
           </div>
 
           <div className="flex items-center gap-3">
-            <Link
-              href="/products"
-              aria-label="Search products"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground md:h-9 md:w-auto md:px-3 md:gap-1.5"
-            >
-              <Search className="h-4 w-4" />
-              <span className="hidden text-sm md:inline">Search</span>
-            </Link>
+            {/* Spotlight Search Pill */}
+            <SpotlightSearch />
 
             <Link
               href="/account/wishlist"
               aria-label="View wishlist"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              className="group relative inline-flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-all hover:bg-muted hover:text-foreground active:scale-95"
             >
-              <Heart className="h-4 w-4" />
+              <Heart className="h-4 w-4 transition-transform group-hover:scale-110" />
             </Link>
 
             {session?.user?.role === "ADMIN" && (
               <Link
                 href="/admin/dashboard"
-                className="hidden sm:inline-flex h-8 items-center gap-1.5 rounded-md border border-primary/20 bg-primary/10 px-2.5 text-xs font-medium text-primary transition-colors hover:bg-primary/20"
+                className="hidden sm:inline-flex h-8 items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3 text-xs font-medium text-primary transition-colors hover:bg-primary/20"
               >
                 <ShieldCheck className="h-3.5 w-3.5" />
                 <span>Admin</span>
@@ -152,25 +155,41 @@ export default async function ShopLayout({
         </Link>
       </nav>
 
-      {/* Storefront Footer */}
-      <footer className="border-t border-border bg-card py-10 pb-24 text-sm text-muted-foreground md:pb-10">
+      {/* Storefront Editorial Footer */}
+      <footer className="border-t border-border bg-card py-12 pb-24 text-sm text-muted-foreground md:pb-12">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="flex flex-col items-center justify-between gap-8 sm:flex-row sm:items-start">
-            <div className="flex flex-col items-center sm:items-start gap-2">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-12 md:gap-8">
+            {/* Brand Column */}
+            <div className="md:col-span-4 flex flex-col items-start gap-3">
               <div className="flex items-center gap-2">
-                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground text-xs font-bold">
-                  S
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold font-serif">
+                  A
                 </div>
-                <span className="font-semibold text-foreground">Modern Store</span>
+                <span className="font-serif text-base font-bold tracking-[0.2em] uppercase text-foreground">
+                  Atelier
+                </span>
               </div>
-              <p className="text-xs text-muted-foreground text-center sm:text-left max-w-xs">
-                Sub-second catalog & seamless checkout built with Next.js 16 and Tailwind v4.
+              <p className="text-xs leading-relaxed text-muted-foreground max-w-sm">
+                Curated collection of modern luxury essentials, designed for timeless longevity and crafted with ethical supply chain integrity.
               </p>
+              <div className="flex items-center gap-4 text-xs text-muted-foreground pt-1">
+                <div className="flex items-center gap-1">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-accent" />
+                  <span>Carbon Neutral</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+                  <span>Verified SQA</span>
+                </div>
+              </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-8 text-xs sm:gap-12">
-              <div className="flex flex-col gap-2.5 text-center sm:text-left">
-                <span className="font-semibold text-foreground">Shop</span>
+            {/* Navigation Columns */}
+            <div className="grid grid-cols-2 gap-8 text-xs sm:grid-cols-3 md:col-span-8">
+              <div className="flex flex-col gap-3">
+                <span className="font-bold tracking-wider uppercase text-foreground">
+                  Collections
+                </span>
                 <Link href="/products" className="transition-colors hover:text-foreground">
                   All Products
                 </Link>
@@ -178,12 +197,17 @@ export default async function ShopLayout({
                   Categories
                 </Link>
                 <Link href="/products?featured=true" className="transition-colors hover:text-foreground">
-                  Featured
+                  Featured Atelier
+                </Link>
+                <Link href="/products?sort=newest" className="transition-colors hover:text-foreground">
+                  New Season Arrivals
                 </Link>
               </div>
 
-              <div className="flex flex-col gap-2.5 text-center sm:text-left">
-                <span className="font-semibold text-foreground">Account</span>
+              <div className="flex flex-col gap-3">
+                <span className="font-bold tracking-wider uppercase text-foreground">
+                  Customer Care
+                </span>
                 <Link href="/account/orders" className="transition-colors hover:text-foreground">
                   My Orders
                 </Link>
@@ -197,18 +221,36 @@ export default async function ShopLayout({
                   Profile Settings
                 </Link>
               </div>
+
+              <div className="flex flex-col gap-3 col-span-2 sm:col-span-1">
+                <span className="font-bold tracking-wider uppercase text-foreground">
+                  Pillars & Trust
+                </span>
+                <span className="text-muted-foreground">Artisanal Craftsmanship</span>
+                <span className="text-muted-foreground">Complimentary $100+ Delivery</span>
+                <span className="text-muted-foreground">30-Day Hassle-Free Returns</span>
+                <span className="text-muted-foreground">256-Bit SSL Encryption</span>
+              </div>
             </div>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-border/60 flex flex-col items-center justify-between gap-4 text-xs sm:flex-row">
-            <div className="flex items-center gap-1.5 text-emerald-600">
-              <ShieldCheck className="h-3.5 w-3.5" />
-              <span>Verified SQA Quality Gate</span>
+          <div className="mt-12 pt-8 border-t border-border/60 flex flex-col items-center justify-between gap-4 text-xs sm:flex-row">
+            <p>© {new Date().getFullYear()} Modern Atelier Store. All rights reserved.</p>
+            <div className="flex items-center gap-3 text-muted-foreground text-[11px]">
+              <span>Visa</span>
+              <span>•</span>
+              <span>Mastercard</span>
+              <span>•</span>
+              <span>Amex</span>
+              <span>•</span>
+              <span>Apple Pay</span>
+              <span>•</span>
+              <span>Stripe</span>
             </div>
-            <p>© {new Date().getFullYear()} Modern Store. All rights reserved.</p>
           </div>
         </div>
       </footer>
     </div>
   );
 }
+

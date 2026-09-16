@@ -2,11 +2,38 @@
 
 import React, { useEffect, useId } from "react";
 import { useRouter } from "next/navigation";
-import { X, ShoppingBag, AlertCircle, ArrowRight } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { X, ShoppingBag, AlertCircle, ArrowRight, Sparkles, Plus } from "lucide-react";
 import { useCartStore } from "@/store/cart-store";
 import { CartItemRow } from "@/components/cart/cart-item";
 import { CartSummary } from "@/components/cart/cart-summary";
 import { Button } from "@/components/ui/button";
+import { formatCurrency } from "@/components/product/price-tag";
+
+const UPSELL_ITEMS = [
+  {
+    id: "upsell-1",
+    name: "Cashmere Ribbed Beanie",
+    price: 65,
+    slug: "classic-organic-cotton-tee",
+    image: "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=300",
+  },
+  {
+    id: "upsell-2",
+    name: "Artisanal Leather Belt",
+    price: 85,
+    slug: "performance-hoodie",
+    image: "https://images.unsplash.com/photo-1624222247344-550fb60583dc?w=300",
+  },
+  {
+    id: "upsell-3",
+    name: "Organic Cotton Socks",
+    price: 24,
+    slug: "classic-organic-cotton-tee",
+    image: "https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?w=300",
+  },
+];
 
 export function CartDrawer() {
   const router = useRouter();
@@ -78,7 +105,7 @@ export function CartDrawer() {
         <div className="flex items-center justify-between border-b border-border px-6 py-4">
           <div className="flex items-center gap-2">
             <ShoppingBag className="h-5 w-5 text-primary" />
-            <h2 id={titleId} className="text-base font-bold text-foreground">
+            <h2 id={titleId} className="font-serif text-base font-bold text-foreground">
               Shopping Cart
             </h2>
             {itemCount > 0 && (
@@ -123,18 +150,18 @@ export function CartDrawer() {
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted/60 text-muted-foreground mb-4">
               <ShoppingBag className="h-8 w-8" />
             </div>
-            <h3 className="text-lg font-bold text-foreground">
+            <h3 className="font-serif text-lg font-bold text-foreground">
               Your cart is empty
             </h3>
             <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground max-w-xs">
               Looks like you haven't added anything to your cart yet. Explore our
-              collection to find something you love!
+              collection to find artisanal pieces you love!
             </p>
             <Button
               type="button"
               size="md"
               onClick={handleStartShopping}
-              className="mt-6 gap-2 font-semibold shadow-xs cursor-pointer"
+              className="mt-6 gap-2 font-semibold shadow-xs cursor-pointer rounded-full"
             >
               <span>Start Shopping</span>
               <ArrowRight className="h-4 w-4" />
@@ -154,6 +181,54 @@ export function CartDrawer() {
               ))}
             </div>
 
+            {/* Complete the Look Upsell Strip */}
+            <div className="border-t border-border/70 bg-muted/20 px-6 py-3">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-muted-foreground flex items-center gap-1">
+                  <Sparkles className="h-3 w-3 text-accent" />
+                  <span>Complete the Look</span>
+                </span>
+                <Link
+                  href="/products"
+                  onClick={closeCart}
+                  className="text-[10px] font-semibold text-primary hover:underline"
+                >
+                  All Pieces &rarr;
+                </Link>
+              </div>
+              <div className="flex items-center gap-2 overflow-x-auto pb-1">
+                {UPSELL_ITEMS.map((upsell) => (
+                  <Link
+                    key={upsell.id}
+                    href={`/products/${upsell.slug}`}
+                    onClick={closeCart}
+                    className="flex shrink-0 items-center gap-2 rounded-xl border border-border/60 bg-card p-1.5 shadow-2xs hover:border-foreground/30 transition-colors w-40"
+                  >
+                    <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg bg-muted">
+                      <Image
+                        src={upsell.image}
+                        alt={upsell.name}
+                        fill
+                        sizes="36px"
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-[11px] font-semibold text-foreground">
+                        {upsell.name}
+                      </div>
+                      <div className="text-[10px] text-muted-foreground">
+                        {formatCurrency(upsell.price)}
+                      </div>
+                    </div>
+                    <div className="rounded-full bg-muted p-1 text-muted-foreground shrink-0">
+                      <Plus className="h-3 w-3" />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
             {/* Sticky Drawer Footer Summary */}
             <div className="border-t border-border bg-card p-5">
               <CartSummary
@@ -169,3 +244,4 @@ export function CartDrawer() {
     </div>
   );
 }
+

@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Playfair_Display } from "next/font/google";
 import { SessionProvider } from "@/components/providers/session-provider";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Modern E-Commerce Store",
-  description: "Fast, trustworthy, mobile-first online shopping experience",
+  title: "Modern Atelier | Luxury Essentials & Artisanal Craft",
+  description: "Curated collection of modern luxury essentials, crafted with artisanal care and carbon-neutral delivery.",
   icons: {
     icon: "/favicon.ico",
   },
@@ -30,7 +30,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${plusJakartaSans.variable} ${playfair.variable} h-full antialiased`}
     >
       <body
         suppressHydrationWarning
@@ -41,3 +41,4 @@ export default function RootLayout({
     </html>
   );
 }
+
